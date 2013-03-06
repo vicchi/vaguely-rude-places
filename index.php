@@ -1,11 +1,11 @@
 <?php
-$path = dirname(dirname(__FILE__)) . '/mobile-detect';
+$path = dirname(__FILE__) . '/mobile-detect';
 set_include_path(get_include_path() . PATH_SEPARATOR . $path);
 require_once('Mobile_Detect.php');
 ?>
 <html>
 <head>
-	<title>Maps | Vaguely Rude</title>
+	<title>Maps | Vaguely Rude Places</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.5/leaflet.css" />
 	<!--[if lte IE 8]>
@@ -83,7 +83,7 @@ if (!$detect->isMobile() && !$detect->isTablet() && !$detect->isiOS()) {
 	<div id="map"></div>
 	<div id="footer">
 		<div id="credits">
-			This is a code thing by <a href="http://www.garygale.com/" target="_blank">Gary Gale</a>, made out of PHP, HTML, CSS and jQuery. <a href="/images/signpost-icon.png" target="_blank">Signpost icon</a> <a href="http://creativecommons.org/licenses/by-sa/3.0" target="_blank">CC BY SA 3.0</a>; based on an original by <a href="http://mapicons.nicolasmollet.com/" target="_blank">Nicolas Mollet</a>.
+			<a href="/">More Maps</a>. This is a code thing by <a href="http://www.garygale.com/" target="_blank">Gary Gale</a>, made out of PHP, HTML, CSS and jQuery. <a href="/images/signpost-icon.png" target="_blank">Signpost icon</a> <a href="http://creativecommons.org/licenses/by-sa/3.0" target="_blank">CC BY SA 3.0</a>; based on an original by <a href="http://mapicons.nicolasmollet.com/" target="_blank">Nicolas Mollet</a>.
 		</div>
 		<div id="attribution">
 			<a href="http://maps.stamen.com/" target="_blank">Map tiles</a> by <a href="http://stamen.com/" target="_blank">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0" target="_blank">CC BY 3.0</a>. &copy; <a href="http://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors.
