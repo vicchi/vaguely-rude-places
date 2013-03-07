@@ -38,6 +38,8 @@ a:link, a:visited {
 	height: 5%;
 	padding-top: 10px;
 	font-size: 50%;
+	padding-left: 10px;
+	padding-right: 10px;
 }
 
 #credits {
@@ -45,6 +47,7 @@ a:link, a:visited {
 }
 
 #attribution {
+	padding-top: 5px;
 	float: right;
 }
 
