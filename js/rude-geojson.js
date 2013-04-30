@@ -3786,6 +3786,34 @@ var places = {
                 "detail": "Wankham, Austria",
                 "id": "252"
             }            
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -78.180833,
+                    39.701944
+                ]
+            },
+            "properties": {
+                "label": "Hancock, Maryland, United States",
+                "detail": "Hancock, MD, USA"
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -76.626667,
+                    39.473333
+                ]
+            },
+            "properties": {
+                "label": "Cockeysville, Maryland, United States",
+                "detail": "Cockeysville, MD, USA"
+            }
         }
 
     ]
