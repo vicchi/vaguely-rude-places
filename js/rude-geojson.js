@@ -408,7 +408,7 @@ var places = {
             },
             "properties": {
                 "label": "Buger, Majorca, Spain",
-                "detail": "07311 B\u00c3\u00bager, Balearic Islands, Spain",
+                "detail": "07311 B\u00fager, Balearic Islands, Spain",
                 "id": "27"
             }
         },
@@ -588,7 +588,7 @@ var places = {
             },
             "properties": {
                 "label": "Clit, Salja, Romania",
-                "detail": "B\u00c4\u0192beni, Romania",
+                "detail": "B\u0103beni, Romania",
                 "id": "39"
             }
         },
@@ -722,7 +722,7 @@ var places = {
                 ]
             },
             "properties": {
-                "label": "Condom, Aveyron, Midi-Pyr\u00c3\u00a9n\u00c3\u00a9es, France",
+                "label": "Condom, Aveyron, Midi-Pyr\u00e9n\u00e9es, France",
                 "detail": "Condom, 12470 Condom-d'Aubrac, France",
                 "id": "48"
             }
@@ -798,7 +798,7 @@ var places = {
             },
             "properties": {
                 "label": "Cum, Wanderlandia, Tocantins, Brazil",
-                "detail": "Cum, Wanderl\u00c3\u00a2ndia - Tocantins, Brazil",
+                "detail": "Cum, Wanderl\u00e2ndia - Tocantins, Brazil",
                 "id": "53"
             }
         },
@@ -1293,7 +1293,7 @@ var places = {
             },
             "properties": {
                 "label": "Fist, Lezhe, Albania",
-                "detail": "E 762, Lezh\u00c3\u00ab District, Albania",
+                "detail": "E 762, Lezh\u00eb District, Albania",
                 "id": "86"
             }
         },
@@ -1487,7 +1487,7 @@ var places = {
                 ]
             },
             "properties": {
-                "label": "Horn, Br\u00c3\u00b8nn\u00c3\u00b8y, Nordland, Norway",
+                "label": "Horn, Br\u00f8nn\u00f8y, Nordland, Norway",
                 "detail": "Horn, Norway",
                 "id": "99"
             }
@@ -1742,8 +1742,8 @@ var places = {
                 ]
             },
             "properties": {
-                "label": "Ming\u00c4\u2014, Klaip\u00c4\u2014da County, Lithuania",
-                "detail": "Ming\u00c4\u2014 99360, Lithuania",
+                "label": "Ming\u0117, Klaip\u0117da County, Lithuania",
+                "detail": "Ming\u011799360, Lithuania",
                 "id": "116"
             }
         },
@@ -1922,7 +1922,7 @@ var places = {
                 ]
             },
             "properties": {
-                "label": "Pis, Gers, Midi-Pyr\u00c3\u00a9n\u00c3\u00a9es, France",
+                "label": "Pis, Gers, Midi-Pyr\u00e9n\u00e9es, France",
                 "detail": "Pis, France",
                 "id": "128"
             }
@@ -1938,7 +1938,7 @@ var places = {
             },
             "properties": {
                 "label": "Poo, Asturias, Principado de Asturias, Spain",
-                "detail": "P\u00c3\u00b3o, Asturias, Spain",
+                "detail": "P\u00f3o, Asturias, Spain",
                 "id": "129"
             }
         },
@@ -1997,8 +1997,8 @@ var places = {
                 ]
             },
             "properties": {
-                "label": "Pussy, Savoie, Rh\u00c3\u00b4ne-Alpes, France",
-                "detail": "Pussy, 73260 La L\u00c3\u00a9ch\u00c3\u00a8re, France",
+                "label": "Pussy, Savoie, Rh\u00f4ne-Alpes, France",
+                "detail": "Pussy, 73260 La L\u00e9ch\u00e8re, France",
                 "id": "133"
             }
         },
@@ -2058,7 +2058,7 @@ var places = {
             },
             "properties": {
                 "label": "Ring, Ringville, Waterford, Ireland",
-                "detail": "Ring, P\u00c3\u00a1irc An Bh\u00c3\u00b3thair, Co. Waterford, Ireland",
+                "detail": "Ring, P\u00e1irc An Bh\u00f3thair, Co. Waterford, Ireland",
                 "id": "137"
             }
         },
@@ -2163,7 +2163,7 @@ var places = {
             },
             "properties": {
                 "label": "Seymen, Turkey",
-                "detail": "Seymen\/Tekirda\u00c4\u0178 Province, Turkey",
+                "detail": "Seymen\/Tekirda\u011f Province, Turkey",
                 "id": "144"
             }
         },
@@ -2687,7 +2687,7 @@ var places = {
                 ]
             },
             "properties": {
-                "label": "Wank, Bayern (Ostallg\u00c3\u00a4u, Nesselwang), Germany",
+                "label": "Wank, Bayern (Ostallg\u00e4u, Nesselwang), Germany",
                 "detail": "Wank, 87484 Nesselwang, Germany",
                 "id": "179"
             }
