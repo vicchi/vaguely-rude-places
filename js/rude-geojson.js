@@ -588,7 +588,7 @@ var places = {
             },
             "properties": {
                 "label": "Clit, Salja, Romania",
-                "detail": "B\u00c4\u0192beni, Romania",
+                "detail": "B\u0103beni, Romania",
                 "id": "39"
             }
         },
@@ -1742,8 +1742,8 @@ var places = {
                 ]
             },
             "properties": {
-                "label": "Ming\u00c4\u2014, Klaip\u00c4\u2014da County, Lithuania",
-                "detail": "Ming\u00c4\u2014 99360, Lithuania",
+                "label": "Ming\u0117, Klaip\u0117da County, Lithuania",
+                "detail": "Ming\u011799360, Lithuania",
                 "id": "116"
             }
         },
@@ -2163,7 +2163,7 @@ var places = {
             },
             "properties": {
                 "label": "Seymen, Turkey",
-                "detail": "Seymen\/Tekirda\u00c4\u0178 Province, Turkey",
+                "detail": "Seymen\/Tekirda\u011f Province, Turkey",
                 "id": "144"
             }
         },
