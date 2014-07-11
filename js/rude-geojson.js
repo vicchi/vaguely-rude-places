@@ -3786,6 +3786,20 @@ var places = {
                 "detail": "Wankham, Austria",
                 "id": "252"
             }            
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+            	"type": "Point",
+            	"coordinates": [
+            	    40.54564,
+            	    -74.460817
+            	]
+            },
+            "properties": {
+            	"label": "Piscataway, New Jersey, United States",
+            	"detail": "Piscataway, NJ, United States"
+            }
         }
 
     ]
