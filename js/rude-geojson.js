@@ -3792,13 +3792,41 @@ var places = {
             "geometry": {
             	"type": "Point",
             	"coordinates": [
-            	    40.54564,
-            	    -74.460817
+            	    46.2393,
+            	    -63.5005
             	]
             },
             "properties": {
-            	"label": "Piscataway, New Jersey, United States",
-            	"detail": "Piscataway, NJ, United States"
+            	"label": "Crapaud, Prince Edwards Island, Canada",
+            	"detail": "Crapaud, PE, Canada"
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+            	"type": "Point",
+            	"coordinates": [
+            	    47.8362138,
+            	    -53.9871628
+            	]
+            },
+            "properties": {
+            	"label": "Come By Chance, Newfoundland and Labrador, Canada",
+            	"detail": "Come By Chance, NL, Canada"
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+            	"type": "Point",
+            	"coordinates": [
+            	    49.5027285,
+            	    -57.916273
+            	]
+            },
+            "properties": {
+            	"label": "Woody Point, Newfoundland and Labrador, Canada",
+            	"detail": "Woody Point, NL, Canada"
             }
         }
 
