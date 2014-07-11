@@ -3792,8 +3792,8 @@ var places = {
             "geometry": {
             	"type": "Point",
             	"coordinates": [
-            	    46.2393,
             	    -63.5005
+            	    46.2393
             	]
             },
             "properties": {
@@ -3806,8 +3806,8 @@ var places = {
             "geometry": {
             	"type": "Point",
             	"coordinates": [
-            	    47.8362138,
-            	    -53.9871628
+            	    -53.9871628,
+            	    47.8362138
             	]
             },
             "properties": {
@@ -3820,8 +3820,8 @@ var places = {
             "geometry": {
             	"type": "Point",
             	"coordinates": [
-            	    49.5027285,
-            	    -57.916273
+            	    -57.916273,
+            	    49.5027285
             	]
             },
             "properties": {
