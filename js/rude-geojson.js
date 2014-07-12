@@ -3786,6 +3786,21 @@ var places = {
                 "detail": "Wankham, Austria",
                 "id": "252"
             }            
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                	-3.4,
+                	55.016667
+                ]
+            },
+            "properties": {
+                "label": "Twathats, Dumfries And Galloway, United Kingdom",
+                "detail": "Twathats, Dumfries And Galloway, United Kingdom",
+                "id": "253"
+            }            
         }
 
     ]
