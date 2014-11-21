@@ -1962,6 +1962,20 @@ var places = {
             "geometry": {
                 "type": "Point",
                 "coordinates": [
+                    -122.00766,
+                    47.49942
+                ]
+            },
+            "properties": {
+                "label": "Poo Poo Point, West Tiger Mountain",
+                "detail": "Poo Poo Point, West Tiger Mountain, Washington, USA"
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
                     0.11171,
                     51.3398
                 ]
