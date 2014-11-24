@@ -1617,6 +1617,20 @@ var places = {
             "geometry": {
                 "type": "Point",
                 "coordinates": [
+                    -0.664458,
+                    51.02315
+                ]
+            },
+            "properties": {
+                "label": "Lickfold, West Sussex, United Kingdom",
+                "detail": "Lickfold, West Sussex, UK"
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
                     -63.037202,
                     18.2325129
                 ]
