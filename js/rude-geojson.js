@@ -4,7 +4,7 @@
 // When adding new places, don't create an "id" property ... this is done by ../tools/assign-ids.php
 
 var places = {
-    "last_id": "270",
+    "last_id": "271",
     "type": "FeatureCollection",
     "features": [
     {
@@ -4056,7 +4056,21 @@ var places = {
             "detail": "Assawoman, VA, USA",
             "id": "270"
         }
+    },
+    {
+        "type": "Feature",
+        "geometry": {
+            "type": "Point",
+            "coordinates": [
+            -122.00766,
+            47.49942
+            ]
+        },
+        "properties": {
+            "label": "Poo Poo Point, West Tiger Mountain, Washington, USA",
+            "detail": "Poo Poo Point, West Tiger Mountain, WA, USA",
+            "id": "271"
+        }
     }
-
     ]
 };
