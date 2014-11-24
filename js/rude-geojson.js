@@ -4,7 +4,7 @@
 // When adding new places, don't create an "id" property ... this is done by ../tools/assign-ids.php
 
 var places = {
-    "last_id": "252",
+    "last_id": "254",
     "type": "FeatureCollection",
     "features": [
         {
@@ -3650,7 +3650,7 @@ var places = {
                 "label": "Mt Aso, Kurokawa, Aso, Kumamoto Prefecture, Japan",
                 "detail": "Mt Aso, Kurokawa, Aso, Kumamoto Prefecture, Japan",
                 "id": "243"
-            }            
+            }
         },
         {
             "type": "Feature",
@@ -3665,7 +3665,7 @@ var places = {
                 "label": "Feltham, London, United Kingdom",
                 "detail": "Feltham, Greater London, United Kingdom",
                 "id": "244"
-            }            
+            }
         },
         {
             "type": "Feature",
@@ -3680,7 +3680,7 @@ var places = {
                 "label": "Brest, Germany",
                 "detail": "Brest, Germany",
                 "id": "245"
-            }            
+            }
         },
         {
             "type": "Feature",
@@ -3695,7 +3695,7 @@ var places = {
                 "label": "Cum, Co. Mayo, Ireland",
                 "detail": "Cum, Co. Mayo, Ireland",
                 "id": "246"
-            }            
+            }
         },
         {
             "type": "Feature",
@@ -3710,7 +3710,7 @@ var places = {
                 "label": "Fingringhoe, Essex, United Kingdom",
                 "detail": "Fingringhoe, Essex, CO5, United Kingdom",
                 "id": "247"
-            }            
+            }
         },
         {
             "type": "Feature",
@@ -3725,7 +3725,7 @@ var places = {
                 "label": "Clitheroe, Lancashire, United Kingdom",
                 "detail": "Clitheroe, Lancashire, BB7, United Kingdom",
                 "id": "248"
-            }            
+            }
         },
         {
             "type": "Feature",
@@ -3740,7 +3740,7 @@ var places = {
                 "label": "Cocking, West Sussex, United Kingdom",
                 "detail": "Cocking, West Sussex, GU29, United Kingdom",
                 "id": "249"
-            }            
+            }
         },
         {
             "type": "Feature",
@@ -3755,7 +3755,7 @@ var places = {
                 "label": "Beaverton, Oregon, United States",
                 "detail": "Beaverton, OR, United States",
                 "id": "250"
-            }            
+            }
         },
         {
             "type": "Feature",
@@ -3770,7 +3770,7 @@ var places = {
                 "label": "Lynsore Bottom, Kent, United Kingdom",
                 "detail": "Lynsore Bottom, Kent, United Kingdom",
                 "id": "251"
-            }            
+            }
         },
         {
             "type": "Feature",
@@ -3785,8 +3785,37 @@ var places = {
                 "label": "Wankham, Austria",
                 "detail": "Wankham, Austria",
                 "id": "252"
-            }            
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -78.180833,
+                    39.701944
+                ]
+            },
+            "properties": {
+                "label": "Hancock, Maryland, United States",
+                "detail": "Hancock, MD, USA",
+                "id": "253"
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -76.626667,
+                    39.473333
+                ]
+            },
+            "properties": {
+                "label": "Cockeysville, Maryland, United States",
+                "detail": "Cockeysville, MD, USA",
+                "id": "254"
+            }
         }
-
     ]
 };
