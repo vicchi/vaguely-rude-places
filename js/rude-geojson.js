@@ -4,7 +4,7 @@
 // When adding new places, don't create an "id" property ... this is done by ../tools/assign-ids.php
 
 var places = {
-    "last_id": "268",
+    "last_id": "269",
     "type": "FeatureCollection",
     "features": [
     {
@@ -4025,6 +4025,21 @@ var places = {
             "label": "Whiskey Dick Mountain, Washington, USA",
             "detail": "Whiskey Dick Mountain, Washington, USA",
             "id": "268"
+        }
+    },
+    {
+        "type": "Feature",
+        "geometry": {
+            "type": "Point",
+            "coordinates": [
+            -3.4,
+            55.016667
+            ]
+        },
+        "properties": {
+            "label": "Twathats, Dumfries And Galloway, United Kingdom",
+            "detail": "Twathats, Dumfries And Galloway, United Kingdom",
+            "id": "269"
         }
     }
     ]
