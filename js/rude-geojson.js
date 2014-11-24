@@ -4,7 +4,7 @@
 // When adding new places, don't create an "id" property ... this is done by ../tools/assign-ids.php
 
 var places = {
-    "last_id": "269",
+    "last_id": "270",
     "type": "FeatureCollection",
     "features": [
     {
@@ -4041,6 +4041,22 @@ var places = {
             "detail": "Twathats, Dumfries And Galloway, United Kingdom",
             "id": "269"
         }
+    },
+    {
+        "type": "Feature",
+        "geometry": {
+            "type": "Point",
+            "coordinates": [
+            -75.523573,
+            37.8740354
+            ]
+        },
+        "properties": {
+            "label": "Assawoman, Virginia, United States",
+            "detail": "Assawoman, VA, USA",
+            "id": "270"
+        }
     }
+
     ]
 };
