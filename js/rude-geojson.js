@@ -4,7 +4,7 @@
 // When adding new places, don't create an "id" property ... this is done by ../tools/assign-ids.php
 
 var places = {
-    "last_id": "255",
+    "last_id": "263",
     "type": "FeatureCollection",
     "features": [
         {
@@ -3830,6 +3830,126 @@ var places = {
                 "label": "Lickfold, West Sussex, United Kingdom",
                 "detail": "Lickfold, West Sussex, UK",
                 "id": "255"
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                19.075361,
+                48.278421
+                ]
+            },
+            "properties": {
+                "label": "Horn\u00FD Bad\u00edn, Slovakia",
+                "detail": "Horn\u00FD Bad\u00edn, Slovakia",
+                "id": "256"
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                17.464036,
+                47.947080
+                ]
+            },
+            "properties": {
+                "label": "Horn\u00FD Bar, Slovakia",
+                "detail": "Horn\u00FD Bar, Slovakia",
+                "id": "257"
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                18.659153,
+                49.257664
+                ]
+            },
+            "properties": {
+                "label": "Horn\u00FD Hričov, Slovakia",
+                "detail": "Horn\u00FD Hričov, Slovakia",
+                "id": "258"
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                18.970012,
+                49.033494
+                ]
+            },
+            "properties": {
+                "label": "Horn\u00FD Kaln\u00edk, Slovakia",
+                "detail": "Horn\u00FD Kaln\u00edk, Slovakia",
+                "id": "259"
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                18.433363,
+                49.065343
+                ]
+            },
+            "properties": {
+                "label": "Horn\u00FD Lieskov, Slovakia",
+                "detail": "Horn\u00FD Lieskov, Slovakia",
+                "id": "260"
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                18.449922,
+                48.156698
+                ]
+            },
+            "properties": {
+                "label": "Horn\u00FD Pial, Slovakia",
+                "detail": "Horn\u00FD Pial, Slovakia",
+                "id": "261"
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                19.363150,
+                48.415608
+                ]
+            },
+            "properties": {
+                "label": "Horn\u00FD Tisovn\u00edk, Slovakia",
+                "detail": "Horn\u00FD Tisovn\u00edk, Slovakia",
+                "id": "262"
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                18.880737,
+                49.265769
+                ]
+            },
+            "properties": {
+                "label": "Horn\u00FD Vadičov, Slovakia",
+                "detail": "Horn\u00FD Vadičov, Slovakia",
+                "id": "263"
             }
         }
     ]
