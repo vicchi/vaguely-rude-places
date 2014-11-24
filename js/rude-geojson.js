@@ -4,7 +4,7 @@
 // When adding new places, don't create an "id" property ... this is done by ../tools/assign-ids.php
 
 var places = {
-    "last_id": "273",
+    "last_id": "274",
     "type": "FeatureCollection",
     "features": [
     {
@@ -4100,6 +4100,21 @@ var places = {
             "label": "Glory Hole Recreation Area, Angels Camp, California, United States",
             "detail": "Glory Hole Recreation Area, CA, United States",
             "id": "273"
+        }
+    },
+    {
+        "type": "Feature",
+        "geometry": {
+            "type": "Point",
+            "coordinates": [
+            -3.15065,
+            55.921896
+            ]
+        },
+        "properties": {
+            "label": "Bellenden Gardens, Edinburgh, United Kingdom",
+            "detail": "Bellenden Gardens, Edinburgh, United Kingdom",
+            "id": "274"
         }
     }
 
