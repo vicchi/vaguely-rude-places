@@ -62,7 +62,7 @@ var places = {
             ]
         },
         "properties": {
-            "label": "Cascade d'Ars, Pyrenees, France",
+            "label": "Cascade d'Ars, Pyrénées, France",
             "detail": "La Cascade d'Ars, 09140 Aulus-les-Bains, France",
             "id": "4"
         }
