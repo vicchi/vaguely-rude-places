@@ -3,7 +3,7 @@
 // Don't update the "last_id" property, this is done by ../tools/assign-ids.php
 // When adding new places, don't create an "id" property ... this is done by ../tools/assign-ids.php
 
-var places = {
+{
     "last_id": "274",
     "type": "FeatureCollection",
     "features": [
@@ -4119,4 +4119,4 @@ var places = {
     }
 
     ]
-};
+}
