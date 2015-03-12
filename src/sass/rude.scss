@@ -3,6 +3,10 @@
 @import "bower_components/bootstrap-sass-official/assets/stylesheets/bootstrap";
 @import "leaflet";
 @import "L.Control.Locate";
+@import "MarkerCluster";
+@import "MarkerCluster.Default";
+@import "leaflet.groupedlayercontrol";
+@import "L.Control.MousePosition";
 
 html, body, #container {
   height: 100%;

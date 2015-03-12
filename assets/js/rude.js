@@ -21430,6 +21430,361 @@ You can find the project at: https://github.com/domoritz/leaflet-locatecontrol
     return L.Control.Locate;
 }, window));
 
+/*
+ Leaflet.markercluster, Provides Beautiful Animated Marker Clustering functionality for Leaflet, a JS library for interactive maps.
+ https://github.com/Leaflet/Leaflet.markercluster
+ (c) 2012-2013, Dave Leaver, smartrak
+*/
+!function(t,e){L.MarkerClusterGroup=L.FeatureGroup.extend({options:{maxClusterRadius:80,iconCreateFunction:null,spiderfyOnMaxZoom:!0,showCoverageOnHover:!0,zoomToBoundsOnClick:!0,singleMarkerMode:!1,disableClusteringAtZoom:null,removeOutsideVisibleBounds:!0,animateAddingMarkers:!1,spiderfyDistanceMultiplier:1,polygonOptions:{}},initialize:function(t){L.Util.setOptions(this,t),this.options.iconCreateFunction||(this.options.iconCreateFunction=this._defaultIconCreateFunction),this._featureGroup=L.featureGroup(),this._featureGroup.on(L.FeatureGroup.EVENTS,this._propagateEvent,this),this._nonPointGroup=L.featureGroup(),this._nonPointGroup.on(L.FeatureGroup.EVENTS,this._propagateEvent,this),this._inZoomAnimation=0,this._needsClustering=[],this._needsRemoving=[],this._currentShownBounds=null,this._queue=[]},addLayer:function(t){if(t instanceof L.LayerGroup){var e=[];for(var i in t._layers)e.push(t._layers[i]);return this.addLayers(e)}if(!t.getLatLng)return this._nonPointGroup.addLayer(t),this;if(!this._map)return this._needsClustering.push(t),this;if(this.hasLayer(t))return this;this._unspiderfy&&this._unspiderfy(),this._addLayer(t,this._maxZoom);var n=t,s=this._map.getZoom();if(t.__parent)for(;n.__parent._zoom>=s;)n=n.__parent;return this._currentShownBounds.contains(n.getLatLng())&&(this.options.animateAddingMarkers?this._animationAddLayer(t,n):this._animationAddLayerNonAnimated(t,n)),this},removeLayer:function(t){if(t instanceof L.LayerGroup){var e=[];for(var i in t._layers)e.push(t._layers[i]);return this.removeLayers(e)}return t.getLatLng?this._map?t.__parent?(this._unspiderfy&&(this._unspiderfy(),this._unspiderfyLayer(t)),this._removeLayer(t,!0),this._featureGroup.hasLayer(t)&&(this._featureGroup.removeLayer(t),t.setOpacity&&t.setOpacity(1)),this):this:(!this._arraySplice(this._needsClustering,t)&&this.hasLayer(t)&&this._needsRemoving.push(t),this):(this._nonPointGroup.removeLayer(t),this)},addLayers:function(t){var e,i,n,s=this._map,r=this._featureGroup,o=this._nonPointGroup;for(e=0,i=t.length;i>e;e++)if(n=t[e],n.getLatLng){if(!this.hasLayer(n))if(s){if(this._addLayer(n,this._maxZoom),n.__parent&&2===n.__parent.getChildCount()){var a=n.__parent.getAllChildMarkers(),h=a[0]===n?a[1]:a[0];r.removeLayer(h)}}else this._needsClustering.push(n)}else o.addLayer(n);return s&&(r.eachLayer(function(t){t instanceof L.MarkerCluster&&t._iconNeedsUpdate&&t._updateIcon()}),this._topClusterLevel._recursivelyAddChildrenToMap(null,this._zoom,this._currentShownBounds)),this},removeLayers:function(t){var e,i,n,s=this._featureGroup,r=this._nonPointGroup;if(!this._map){for(e=0,i=t.length;i>e;e++)n=t[e],this._arraySplice(this._needsClustering,n),r.removeLayer(n);return this}for(e=0,i=t.length;i>e;e++)n=t[e],n.__parent?(this._removeLayer(n,!0,!0),s.hasLayer(n)&&(s.removeLayer(n),n.setOpacity&&n.setOpacity(1))):r.removeLayer(n);return this._topClusterLevel._recursivelyAddChildrenToMap(null,this._zoom,this._currentShownBounds),s.eachLayer(function(t){t instanceof L.MarkerCluster&&t._updateIcon()}),this},clearLayers:function(){return this._map||(this._needsClustering=[],delete this._gridClusters,delete this._gridUnclustered),this._noanimationUnspiderfy&&this._noanimationUnspiderfy(),this._featureGroup.clearLayers(),this._nonPointGroup.clearLayers(),this.eachLayer(function(t){delete t.__parent}),this._map&&this._generateInitialClusters(),this},getBounds:function(){var t=new L.LatLngBounds;if(this._topClusterLevel)t.extend(this._topClusterLevel._bounds);else for(var e=this._needsClustering.length-1;e>=0;e--)t.extend(this._needsClustering[e].getLatLng());return t.extend(this._nonPointGroup.getBounds()),t},eachLayer:function(t,e){var i,n=this._needsClustering.slice();for(this._topClusterLevel&&this._topClusterLevel.getAllChildMarkers(n),i=n.length-1;i>=0;i--)t.call(e,n[i]);this._nonPointGroup.eachLayer(t,e)},getLayers:function(){var t=[];return this.eachLayer(function(e){t.push(e)}),t},getLayer:function(t){var e=null;return this.eachLayer(function(i){L.stamp(i)===t&&(e=i)}),e},hasLayer:function(t){if(!t)return!1;var e,i=this._needsClustering;for(e=i.length-1;e>=0;e--)if(i[e]===t)return!0;for(i=this._needsRemoving,e=i.length-1;e>=0;e--)if(i[e]===t)return!1;return!(!t.__parent||t.__parent._group!==this)||this._nonPointGroup.hasLayer(t)},zoomToShowLayer:function(t,e){var i=function(){if((t._icon||t.__parent._icon)&&!this._inZoomAnimation)if(this._map.off("moveend",i,this),this.off("animationend",i,this),t._icon)e();else if(t.__parent._icon){var n=function(){this.off("spiderfied",n,this),e()};this.on("spiderfied",n,this),t.__parent.spiderfy()}};t._icon&&this._map.getBounds().contains(t.getLatLng())?e():t.__parent._zoom<this._map.getZoom()?(this._map.on("moveend",i,this),this._map.panTo(t.getLatLng())):(this._map.on("moveend",i,this),this.on("animationend",i,this),this._map.setView(t.getLatLng(),t.__parent._zoom+1),t.__parent.zoomToBounds())},onAdd:function(t){this._map=t;var e,i,n;if(!isFinite(this._map.getMaxZoom()))throw"Map has no maxZoom specified";for(this._featureGroup.onAdd(t),this._nonPointGroup.onAdd(t),this._gridClusters||this._generateInitialClusters(),e=0,i=this._needsRemoving.length;i>e;e++)n=this._needsRemoving[e],this._removeLayer(n,!0);for(this._needsRemoving=[],e=0,i=this._needsClustering.length;i>e;e++)n=this._needsClustering[e],n.getLatLng?n.__parent||this._addLayer(n,this._maxZoom):this._featureGroup.addLayer(n);this._needsClustering=[],this._map.on("zoomend",this._zoomEnd,this),this._map.on("moveend",this._moveEnd,this),this._spiderfierOnAdd&&this._spiderfierOnAdd(),this._bindEvents(),this._zoom=this._map.getZoom(),this._currentShownBounds=this._getExpandedVisibleBounds(),this._topClusterLevel._recursivelyAddChildrenToMap(null,this._zoom,this._currentShownBounds)},onRemove:function(t){t.off("zoomend",this._zoomEnd,this),t.off("moveend",this._moveEnd,this),this._unbindEvents(),this._map._mapPane.className=this._map._mapPane.className.replace(" leaflet-cluster-anim",""),this._spiderfierOnRemove&&this._spiderfierOnRemove(),this._hideCoverage(),this._featureGroup.onRemove(t),this._nonPointGroup.onRemove(t),this._featureGroup.clearLayers(),this._map=null},getVisibleParent:function(t){for(var e=t;e&&!e._icon;)e=e.__parent;return e||null},_arraySplice:function(t,e){for(var i=t.length-1;i>=0;i--)if(t[i]===e)return t.splice(i,1),!0},_removeLayer:function(t,e,i){var n=this._gridClusters,s=this._gridUnclustered,r=this._featureGroup,o=this._map;if(e)for(var a=this._maxZoom;a>=0&&s[a].removeObject(t,o.project(t.getLatLng(),a));a--);var h,_=t.__parent,u=_._markers;for(this._arraySplice(u,t);_&&(_._childCount--,!(_._zoom<0));)e&&_._childCount<=1?(h=_._markers[0]===t?_._markers[1]:_._markers[0],n[_._zoom].removeObject(_,o.project(_._cLatLng,_._zoom)),s[_._zoom].addObject(h,o.project(h.getLatLng(),_._zoom)),this._arraySplice(_.__parent._childClusters,_),_.__parent._markers.push(h),h.__parent=_.__parent,_._icon&&(r.removeLayer(_),i||r.addLayer(h))):(_._recalculateBounds(),i&&_._icon||_._updateIcon()),_=_.__parent;delete t.__parent},_isOrIsParent:function(t,e){for(;e;){if(t===e)return!0;e=e.parentNode}return!1},_propagateEvent:function(t){if(t.layer instanceof L.MarkerCluster){if(t.originalEvent&&this._isOrIsParent(t.layer._icon,t.originalEvent.relatedTarget))return;t.type="cluster"+t.type}this.fire(t.type,t)},_defaultIconCreateFunction:function(t){var e=t.getChildCount(),i=" marker-cluster-";return i+=10>e?"small":100>e?"medium":"large",new L.DivIcon({html:"<div><span>"+e+"</span></div>",className:"marker-cluster"+i,iconSize:new L.Point(40,40)})},_bindEvents:function(){var t=this._map,e=this.options.spiderfyOnMaxZoom,i=this.options.showCoverageOnHover,n=this.options.zoomToBoundsOnClick;(e||n)&&this.on("clusterclick",this._zoomOrSpiderfy,this),i&&(this.on("clustermouseover",this._showCoverage,this),this.on("clustermouseout",this._hideCoverage,this),t.on("zoomend",this._hideCoverage,this))},_zoomOrSpiderfy:function(t){var e=this._map;e.getMaxZoom()===e.getZoom()?this.options.spiderfyOnMaxZoom&&t.layer.spiderfy():this.options.zoomToBoundsOnClick&&t.layer.zoomToBounds(),t.originalEvent&&13===t.originalEvent.keyCode&&e._container.focus()},_showCoverage:function(t){var e=this._map;this._inZoomAnimation||(this._shownPolygon&&e.removeLayer(this._shownPolygon),t.layer.getChildCount()>2&&t.layer!==this._spiderfied&&(this._shownPolygon=new L.Polygon(t.layer.getConvexHull(),this.options.polygonOptions),e.addLayer(this._shownPolygon)))},_hideCoverage:function(){this._shownPolygon&&(this._map.removeLayer(this._shownPolygon),this._shownPolygon=null)},_unbindEvents:function(){var t=this.options.spiderfyOnMaxZoom,e=this.options.showCoverageOnHover,i=this.options.zoomToBoundsOnClick,n=this._map;(t||i)&&this.off("clusterclick",this._zoomOrSpiderfy,this),e&&(this.off("clustermouseover",this._showCoverage,this),this.off("clustermouseout",this._hideCoverage,this),n.off("zoomend",this._hideCoverage,this))},_zoomEnd:function(){this._map&&(this._mergeSplitClusters(),this._zoom=this._map._zoom,this._currentShownBounds=this._getExpandedVisibleBounds())},_moveEnd:function(){if(!this._inZoomAnimation){var t=this._getExpandedVisibleBounds();this._topClusterLevel._recursivelyRemoveChildrenFromMap(this._currentShownBounds,this._zoom,t),this._topClusterLevel._recursivelyAddChildrenToMap(null,this._map._zoom,t),this._currentShownBounds=t}},_generateInitialClusters:function(){var t=this._map.getMaxZoom(),e=this.options.maxClusterRadius;this.options.disableClusteringAtZoom&&(t=this.options.disableClusteringAtZoom-1),this._maxZoom=t,this._gridClusters={},this._gridUnclustered={};for(var i=t;i>=0;i--)this._gridClusters[i]=new L.DistanceGrid(e),this._gridUnclustered[i]=new L.DistanceGrid(e);this._topClusterLevel=new L.MarkerCluster(this,-1)},_addLayer:function(t,e){var i,n,s=this._gridClusters,r=this._gridUnclustered;for(this.options.singleMarkerMode&&(t.options.icon=this.options.iconCreateFunction({getChildCount:function(){return 1},getAllChildMarkers:function(){return[t]}}));e>=0;e--){i=this._map.project(t.getLatLng(),e);var o=s[e].getNearObject(i);if(o)return o._addChild(t),t.__parent=o,void 0;if(o=r[e].getNearObject(i)){var a=o.__parent;a&&this._removeLayer(o,!1);var h=new L.MarkerCluster(this,e,o,t);s[e].addObject(h,this._map.project(h._cLatLng,e)),o.__parent=h,t.__parent=h;var _=h;for(n=e-1;n>a._zoom;n--)_=new L.MarkerCluster(this,n,_),s[n].addObject(_,this._map.project(o.getLatLng(),n));for(a._addChild(_),n=e;n>=0&&r[n].removeObject(o,this._map.project(o.getLatLng(),n));n--);return}r[e].addObject(t,i)}this._topClusterLevel._addChild(t),t.__parent=this._topClusterLevel},_enqueue:function(t){this._queue.push(t),this._queueTimeout||(this._queueTimeout=setTimeout(L.bind(this._processQueue,this),300))},_processQueue:function(){for(var t=0;t<this._queue.length;t++)this._queue[t].call(this);this._queue.length=0,clearTimeout(this._queueTimeout),this._queueTimeout=null},_mergeSplitClusters:function(){this._processQueue(),this._zoom<this._map._zoom&&this._currentShownBounds.contains(this._getExpandedVisibleBounds())?(this._animationStart(),this._topClusterLevel._recursivelyRemoveChildrenFromMap(this._currentShownBounds,this._zoom,this._getExpandedVisibleBounds()),this._animationZoomIn(this._zoom,this._map._zoom)):this._zoom>this._map._zoom?(this._animationStart(),this._animationZoomOut(this._zoom,this._map._zoom)):this._moveEnd()},_getExpandedVisibleBounds:function(){if(!this.options.removeOutsideVisibleBounds)return this.getBounds();var t=this._map,e=t.getBounds(),i=e._southWest,n=e._northEast,s=L.Browser.mobile?0:Math.abs(i.lat-n.lat),r=L.Browser.mobile?0:Math.abs(i.lng-n.lng);return new L.LatLngBounds(new L.LatLng(i.lat-s,i.lng-r,!0),new L.LatLng(n.lat+s,n.lng+r,!0))},_animationAddLayerNonAnimated:function(t,e){if(e===t)this._featureGroup.addLayer(t);else if(2===e._childCount){e._addToMap();var i=e.getAllChildMarkers();this._featureGroup.removeLayer(i[0]),this._featureGroup.removeLayer(i[1])}else e._updateIcon()}}),L.MarkerClusterGroup.include(L.DomUtil.TRANSITION?{_animationStart:function(){this._map._mapPane.className+=" leaflet-cluster-anim",this._inZoomAnimation++},_animationEnd:function(){this._map&&(this._map._mapPane.className=this._map._mapPane.className.replace(" leaflet-cluster-anim","")),this._inZoomAnimation--,this.fire("animationend")},_animationZoomIn:function(t,e){var i,n=this._getExpandedVisibleBounds(),s=this._featureGroup;this._topClusterLevel._recursively(n,t,0,function(r){var o,a=r._latlng,h=r._markers;for(n.contains(a)||(a=null),r._isSingleParent()&&t+1===e?(s.removeLayer(r),r._recursivelyAddChildrenToMap(null,e,n)):(r.setOpacity(0),r._recursivelyAddChildrenToMap(a,e,n)),i=h.length-1;i>=0;i--)o=h[i],n.contains(o._latlng)||s.removeLayer(o)}),this._forceLayout(),this._topClusterLevel._recursivelyBecomeVisible(n,e),s.eachLayer(function(t){t instanceof L.MarkerCluster||!t._icon||t.setOpacity(1)}),this._topClusterLevel._recursively(n,t,e,function(t){t._recursivelyRestoreChildPositions(e)}),this._enqueue(function(){this._topClusterLevel._recursively(n,t,0,function(t){s.removeLayer(t),t.setOpacity(1)}),this._animationEnd()})},_animationZoomOut:function(t,e){this._animationZoomOutSingle(this._topClusterLevel,t-1,e),this._topClusterLevel._recursivelyAddChildrenToMap(null,e,this._getExpandedVisibleBounds()),this._topClusterLevel._recursivelyRemoveChildrenFromMap(this._currentShownBounds,t,this._getExpandedVisibleBounds())},_animationZoomOutSingle:function(t,e,i){var n=this._getExpandedVisibleBounds();t._recursivelyAnimateChildrenInAndAddSelfToMap(n,e+1,i);var s=this;this._forceLayout(),t._recursivelyBecomeVisible(n,i),this._enqueue(function(){if(1===t._childCount){var r=t._markers[0];r.setLatLng(r.getLatLng()),r.setOpacity(1)}else t._recursively(n,i,0,function(t){t._recursivelyRemoveChildrenFromMap(n,e+1)});s._animationEnd()})},_animationAddLayer:function(t,e){var i=this,n=this._featureGroup;n.addLayer(t),e!==t&&(e._childCount>2?(e._updateIcon(),this._forceLayout(),this._animationStart(),t._setPos(this._map.latLngToLayerPoint(e.getLatLng())),t.setOpacity(0),this._enqueue(function(){n.removeLayer(t),t.setOpacity(1),i._animationEnd()})):(this._forceLayout(),i._animationStart(),i._animationZoomOutSingle(e,this._map.getMaxZoom(),this._map.getZoom())))},_forceLayout:function(){L.Util.falseFn(e.body.offsetWidth)}}:{_animationStart:function(){},_animationZoomIn:function(t,e){this._topClusterLevel._recursivelyRemoveChildrenFromMap(this._currentShownBounds,t),this._topClusterLevel._recursivelyAddChildrenToMap(null,e,this._getExpandedVisibleBounds())},_animationZoomOut:function(t,e){this._topClusterLevel._recursivelyRemoveChildrenFromMap(this._currentShownBounds,t),this._topClusterLevel._recursivelyAddChildrenToMap(null,e,this._getExpandedVisibleBounds())},_animationAddLayer:function(t,e){this._animationAddLayerNonAnimated(t,e)}}),L.markerClusterGroup=function(t){return new L.MarkerClusterGroup(t)},L.MarkerCluster=L.Marker.extend({initialize:function(t,e,i,n){L.Marker.prototype.initialize.call(this,i?i._cLatLng||i.getLatLng():new L.LatLng(0,0),{icon:this}),this._group=t,this._zoom=e,this._markers=[],this._childClusters=[],this._childCount=0,this._iconNeedsUpdate=!0,this._bounds=new L.LatLngBounds,i&&this._addChild(i),n&&this._addChild(n)},getAllChildMarkers:function(t){t=t||[];for(var e=this._childClusters.length-1;e>=0;e--)this._childClusters[e].getAllChildMarkers(t);for(var i=this._markers.length-1;i>=0;i--)t.push(this._markers[i]);return t},getChildCount:function(){return this._childCount},zoomToBounds:function(){for(var t,e=this._childClusters.slice(),i=this._group._map,n=i.getBoundsZoom(this._bounds),s=this._zoom+1,r=i.getZoom();e.length>0&&n>s;){s++;var o=[];for(t=0;t<e.length;t++)o=o.concat(e[t]._childClusters);e=o}n>s?this._group._map.setView(this._latlng,s):r>=n?this._group._map.setView(this._latlng,r+1):this._group._map.fitBounds(this._bounds)},getBounds:function(){var t=new L.LatLngBounds;return t.extend(this._bounds),t},_updateIcon:function(){this._iconNeedsUpdate=!0,this._icon&&this.setIcon(this)},createIcon:function(){return this._iconNeedsUpdate&&(this._iconObj=this._group.options.iconCreateFunction(this),this._iconNeedsUpdate=!1),this._iconObj.createIcon()},createShadow:function(){return this._iconObj.createShadow()},_addChild:function(t,e){this._iconNeedsUpdate=!0,this._expandBounds(t),t instanceof L.MarkerCluster?(e||(this._childClusters.push(t),t.__parent=this),this._childCount+=t._childCount):(e||this._markers.push(t),this._childCount++),this.__parent&&this.__parent._addChild(t,!0)},_expandBounds:function(t){var e,i=t._wLatLng||t._latlng;t instanceof L.MarkerCluster?(this._bounds.extend(t._bounds),e=t._childCount):(this._bounds.extend(i),e=1),this._cLatLng||(this._cLatLng=t._cLatLng||i);var n=this._childCount+e;this._wLatLng?(this._wLatLng.lat=(i.lat*e+this._wLatLng.lat*this._childCount)/n,this._wLatLng.lng=(i.lng*e+this._wLatLng.lng*this._childCount)/n):this._latlng=this._wLatLng=new L.LatLng(i.lat,i.lng)},_addToMap:function(t){t&&(this._backupLatlng=this._latlng,this.setLatLng(t)),this._group._featureGroup.addLayer(this)},_recursivelyAnimateChildrenIn:function(t,e,i){this._recursively(t,0,i-1,function(t){var i,n,s=t._markers;for(i=s.length-1;i>=0;i--)n=s[i],n._icon&&(n._setPos(e),n.setOpacity(0))},function(t){var i,n,s=t._childClusters;for(i=s.length-1;i>=0;i--)n=s[i],n._icon&&(n._setPos(e),n.setOpacity(0))})},_recursivelyAnimateChildrenInAndAddSelfToMap:function(t,e,i){this._recursively(t,i,0,function(n){n._recursivelyAnimateChildrenIn(t,n._group._map.latLngToLayerPoint(n.getLatLng()).round(),e),n._isSingleParent()&&e-1===i?(n.setOpacity(1),n._recursivelyRemoveChildrenFromMap(t,e)):n.setOpacity(0),n._addToMap()})},_recursivelyBecomeVisible:function(t,e){this._recursively(t,0,e,null,function(t){t.setOpacity(1)})},_recursivelyAddChildrenToMap:function(t,e,i){this._recursively(i,-1,e,function(n){if(e!==n._zoom)for(var s=n._markers.length-1;s>=0;s--){var r=n._markers[s];i.contains(r._latlng)&&(t&&(r._backupLatlng=r.getLatLng(),r.setLatLng(t),r.setOpacity&&r.setOpacity(0)),n._group._featureGroup.addLayer(r))}},function(e){e._addToMap(t)})},_recursivelyRestoreChildPositions:function(t){for(var e=this._markers.length-1;e>=0;e--){var i=this._markers[e];i._backupLatlng&&(i.setLatLng(i._backupLatlng),delete i._backupLatlng)}if(t-1===this._zoom)for(var n=this._childClusters.length-1;n>=0;n--)this._childClusters[n]._restorePosition();else for(var s=this._childClusters.length-1;s>=0;s--)this._childClusters[s]._recursivelyRestoreChildPositions(t)},_restorePosition:function(){this._backupLatlng&&(this.setLatLng(this._backupLatlng),delete this._backupLatlng)},_recursivelyRemoveChildrenFromMap:function(t,e,i){var n,s;this._recursively(t,-1,e-1,function(t){for(s=t._markers.length-1;s>=0;s--)n=t._markers[s],i&&i.contains(n._latlng)||(t._group._featureGroup.removeLayer(n),n.setOpacity&&n.setOpacity(1))},function(t){for(s=t._childClusters.length-1;s>=0;s--)n=t._childClusters[s],i&&i.contains(n._latlng)||(t._group._featureGroup.removeLayer(n),n.setOpacity&&n.setOpacity(1))})},_recursively:function(t,e,i,n,s){var r,o,a=this._childClusters,h=this._zoom;if(e>h)for(r=a.length-1;r>=0;r--)o=a[r],t.intersects(o._bounds)&&o._recursively(t,e,i,n,s);else if(n&&n(this),s&&this._zoom===i&&s(this),i>h)for(r=a.length-1;r>=0;r--)o=a[r],t.intersects(o._bounds)&&o._recursively(t,e,i,n,s)},_recalculateBounds:function(){var t,e=this._markers,i=this._childClusters;for(this._bounds=new L.LatLngBounds,delete this._wLatLng,t=e.length-1;t>=0;t--)this._expandBounds(e[t]);for(t=i.length-1;t>=0;t--)this._expandBounds(i[t])},_isSingleParent:function(){return this._childClusters.length>0&&this._childClusters[0]._childCount===this._childCount}}),L.DistanceGrid=function(t){this._cellSize=t,this._sqCellSize=t*t,this._grid={},this._objectPoint={}},L.DistanceGrid.prototype={addObject:function(t,e){var i=this._getCoord(e.x),n=this._getCoord(e.y),s=this._grid,r=s[n]=s[n]||{},o=r[i]=r[i]||[],a=L.Util.stamp(t);this._objectPoint[a]=e,o.push(t)},updateObject:function(t,e){this.removeObject(t),this.addObject(t,e)},removeObject:function(t,e){var i,n,s=this._getCoord(e.x),r=this._getCoord(e.y),o=this._grid,a=o[r]=o[r]||{},h=a[s]=a[s]||[];for(delete this._objectPoint[L.Util.stamp(t)],i=0,n=h.length;n>i;i++)if(h[i]===t)return h.splice(i,1),1===n&&delete a[s],!0},eachObject:function(t,e){var i,n,s,r,o,a,h,_=this._grid;for(i in _){o=_[i];for(n in o)for(a=o[n],s=0,r=a.length;r>s;s++)h=t.call(e,a[s]),h&&(s--,r--)}},getNearObject:function(t){var e,i,n,s,r,o,a,h,_=this._getCoord(t.x),u=this._getCoord(t.y),l=this._objectPoint,d=this._sqCellSize,p=null;for(e=u-1;u+1>=e;e++)if(s=this._grid[e])for(i=_-1;_+1>=i;i++)if(r=s[i])for(n=0,o=r.length;o>n;n++)a=r[n],h=this._sqDist(l[L.Util.stamp(a)],t),d>h&&(d=h,p=a);return p},_getCoord:function(t){return Math.floor(t/this._cellSize)},_sqDist:function(t,e){var i=e.x-t.x,n=e.y-t.y;return i*i+n*n}},function(){L.QuickHull={getDistant:function(t,e){var i=e[1].lat-e[0].lat,n=e[0].lng-e[1].lng;return n*(t.lat-e[0].lat)+i*(t.lng-e[0].lng)},findMostDistantPointFromBaseLine:function(t,e){var i,n,s,r=0,o=null,a=[];for(i=e.length-1;i>=0;i--)n=e[i],s=this.getDistant(n,t),s>0&&(a.push(n),s>r&&(r=s,o=n));return{maxPoint:o,newPoints:a}},buildConvexHull:function(t,e){var i=[],n=this.findMostDistantPointFromBaseLine(t,e);return n.maxPoint?(i=i.concat(this.buildConvexHull([t[0],n.maxPoint],n.newPoints)),i=i.concat(this.buildConvexHull([n.maxPoint,t[1]],n.newPoints))):[t[0]]},getConvexHull:function(t){var e,i=!1,n=!1,s=null,r=null;for(e=t.length-1;e>=0;e--){var o=t[e];(i===!1||o.lat>i)&&(s=o,i=o.lat),(n===!1||o.lat<n)&&(r=o,n=o.lat)}var a=[].concat(this.buildConvexHull([r,s],t),this.buildConvexHull([s,r],t));return a}}}(),L.MarkerCluster.include({getConvexHull:function(){var t,e,i=this.getAllChildMarkers(),n=[];for(e=i.length-1;e>=0;e--)t=i[e].getLatLng(),n.push(t);return L.QuickHull.getConvexHull(n)}}),L.MarkerCluster.include({_2PI:2*Math.PI,_circleFootSeparation:25,_circleStartAngle:Math.PI/6,_spiralFootSeparation:28,_spiralLengthStart:11,_spiralLengthFactor:5,_circleSpiralSwitchover:9,spiderfy:function(){if(this._group._spiderfied!==this&&!this._group._inZoomAnimation){var t,e=this.getAllChildMarkers(),i=this._group,n=i._map,s=n.latLngToLayerPoint(this._latlng);this._group._unspiderfy(),this._group._spiderfied=this,e.length>=this._circleSpiralSwitchover?t=this._generatePointsSpiral(e.length,s):(s.y+=10,t=this._generatePointsCircle(e.length,s)),this._animationSpiderfy(e,t)}},unspiderfy:function(t){this._group._inZoomAnimation||(this._animationUnspiderfy(t),this._group._spiderfied=null)},_generatePointsCircle:function(t,e){var i,n,s=this._group.options.spiderfyDistanceMultiplier*this._circleFootSeparation*(2+t),r=s/this._2PI,o=this._2PI/t,a=[];for(a.length=t,i=t-1;i>=0;i--)n=this._circleStartAngle+i*o,a[i]=new L.Point(e.x+r*Math.cos(n),e.y+r*Math.sin(n))._round();return a},_generatePointsSpiral:function(t,e){var i,n=this._group.options.spiderfyDistanceMultiplier*this._spiralLengthStart,s=this._group.options.spiderfyDistanceMultiplier*this._spiralFootSeparation,r=this._group.options.spiderfyDistanceMultiplier*this._spiralLengthFactor,o=0,a=[];for(a.length=t,i=t-1;i>=0;i--)o+=s/n+5e-4*i,a[i]=new L.Point(e.x+n*Math.cos(o),e.y+n*Math.sin(o))._round(),n+=this._2PI*r/o;return a},_noanimationUnspiderfy:function(){var t,e,i=this._group,n=i._map,s=i._featureGroup,r=this.getAllChildMarkers();for(this.setOpacity(1),e=r.length-1;e>=0;e--)t=r[e],s.removeLayer(t),t._preSpiderfyLatlng&&(t.setLatLng(t._preSpiderfyLatlng),delete t._preSpiderfyLatlng),t.setZIndexOffset&&t.setZIndexOffset(0),t._spiderLeg&&(n.removeLayer(t._spiderLeg),delete t._spiderLeg);i._spiderfied=null}}),L.MarkerCluster.include(L.DomUtil.TRANSITION?{SVG_ANIMATION:function(){return e.createElementNS("http://www.w3.org/2000/svg","animate").toString().indexOf("SVGAnimate")>-1}(),_animationSpiderfy:function(t,i){var n,s,r,o,a=this,h=this._group,_=h._map,u=h._featureGroup,l=_.latLngToLayerPoint(this._latlng);for(n=t.length-1;n>=0;n--)s=t[n],s.setOpacity?(s.setZIndexOffset(1e6),s.setOpacity(0),u.addLayer(s),s._setPos(l)):u.addLayer(s);h._forceLayout(),h._animationStart();var d=L.Path.SVG?0:.3,p=L.Path.SVG_NS;for(n=t.length-1;n>=0;n--)if(o=_.layerPointToLatLng(i[n]),s=t[n],s._preSpiderfyLatlng=s._latlng,s.setLatLng(o),s.setOpacity&&s.setOpacity(1),r=new L.Polyline([a._latlng,o],{weight:1.5,color:"#222",opacity:d}),_.addLayer(r),s._spiderLeg=r,L.Path.SVG&&this.SVG_ANIMATION){var c=r._path.getTotalLength();r._path.setAttribute("stroke-dasharray",c+","+c);var m=e.createElementNS(p,"animate");m.setAttribute("attributeName","stroke-dashoffset"),m.setAttribute("begin","indefinite"),m.setAttribute("from",c),m.setAttribute("to",0),m.setAttribute("dur",.25),r._path.appendChild(m),m.beginElement(),m=e.createElementNS(p,"animate"),m.setAttribute("attributeName","stroke-opacity"),m.setAttribute("attributeName","stroke-opacity"),m.setAttribute("begin","indefinite"),m.setAttribute("from",0),m.setAttribute("to",.5),m.setAttribute("dur",.25),r._path.appendChild(m),m.beginElement()}if(a.setOpacity(.3),L.Path.SVG)for(this._group._forceLayout(),n=t.length-1;n>=0;n--)s=t[n]._spiderLeg,s.options.opacity=.5,s._path.setAttribute("stroke-opacity",.5);setTimeout(function(){h._animationEnd(),h.fire("spiderfied")},200)},_animationUnspiderfy:function(t){var e,i,n,s=this._group,r=s._map,o=s._featureGroup,a=t?r._latLngToNewLayerPoint(this._latlng,t.zoom,t.center):r.latLngToLayerPoint(this._latlng),h=this.getAllChildMarkers(),_=L.Path.SVG&&this.SVG_ANIMATION;for(s._animationStart(),this.setOpacity(1),i=h.length-1;i>=0;i--)e=h[i],e._preSpiderfyLatlng&&(e.setLatLng(e._preSpiderfyLatlng),delete e._preSpiderfyLatlng,e.setOpacity?(e._setPos(a),e.setOpacity(0)):o.removeLayer(e),_&&(n=e._spiderLeg._path.childNodes[0],n.setAttribute("to",n.getAttribute("from")),n.setAttribute("from",0),n.beginElement(),n=e._spiderLeg._path.childNodes[1],n.setAttribute("from",.5),n.setAttribute("to",0),n.setAttribute("stroke-opacity",0),n.beginElement(),e._spiderLeg._path.setAttribute("stroke-opacity",0)));setTimeout(function(){var t=0;for(i=h.length-1;i>=0;i--)e=h[i],e._spiderLeg&&t++;for(i=h.length-1;i>=0;i--)e=h[i],e._spiderLeg&&(e.setOpacity&&(e.setOpacity(1),e.setZIndexOffset(0)),t>1&&o.removeLayer(e),r.removeLayer(e._spiderLeg),delete e._spiderLeg);s._animationEnd()},200)}}:{_animationSpiderfy:function(t,e){var i,n,s,r,o=this._group,a=o._map,h=o._featureGroup;for(i=t.length-1;i>=0;i--)r=a.layerPointToLatLng(e[i]),n=t[i],n._preSpiderfyLatlng=n._latlng,n.setLatLng(r),n.setZIndexOffset&&n.setZIndexOffset(1e6),h.addLayer(n),s=new L.Polyline([this._latlng,r],{weight:1.5,color:"#222"}),a.addLayer(s),n._spiderLeg=s;this.setOpacity(.3),o.fire("spiderfied")},_animationUnspiderfy:function(){this._noanimationUnspiderfy()}}),L.MarkerClusterGroup.include({_spiderfied:null,_spiderfierOnAdd:function(){this._map.on("click",this._unspiderfyWrapper,this),this._map.options.zoomAnimation&&this._map.on("zoomstart",this._unspiderfyZoomStart,this),this._map.on("zoomend",this._noanimationUnspiderfy,this),L.Path.SVG&&!L.Browser.touch&&this._map._initPathRoot()},_spiderfierOnRemove:function(){this._map.off("click",this._unspiderfyWrapper,this),this._map.off("zoomstart",this._unspiderfyZoomStart,this),this._map.off("zoomanim",this._unspiderfyZoomAnim,this),this._unspiderfy()},_unspiderfyZoomStart:function(){this._map&&this._map.on("zoomanim",this._unspiderfyZoomAnim,this)},_unspiderfyZoomAnim:function(t){L.DomUtil.hasClass(this._map._mapPane,"leaflet-touching")||(this._map.off("zoomanim",this._unspiderfyZoomAnim,this),this._unspiderfy(t))},_unspiderfyWrapper:function(){this._unspiderfy()},_unspiderfy:function(t){this._spiderfied&&this._spiderfied.unspiderfy(t)},_noanimationUnspiderfy:function(){this._spiderfied&&this._spiderfied._noanimationUnspiderfy()},_unspiderfyLayer:function(t){t._spiderLeg&&(this._featureGroup.removeLayer(t),t.setOpacity(1),t.setZIndexOffset(0),this._map.removeLayer(t._spiderLeg),delete t._spiderLeg)}})}(window,document);
+/* global L */
+
+// A layer control which provides for layer groupings.
+// Author: Ishmael Smyrnow
+L.Control.GroupedLayers = L.Control.extend({
+  
+  options: {
+    collapsed: true,
+    position: 'topright',
+    autoZIndex: true,
+    exclusiveGroups: []
+  },
+
+  initialize: function (baseLayers, groupedOverlays, options) {
+    var i, j;
+    L.Util.setOptions(this, options);
+
+    this._layers = {};
+    this._lastZIndex = 0;
+    this._handlingClick = false;
+    this._groupList = [];
+    this._domGroups = [];
+
+    for (i in baseLayers) {
+      this._addLayer(baseLayers[i], i);
+    }
+
+    for (i in groupedOverlays) {
+      for (var j in groupedOverlays[i]) {
+        this._addLayer(groupedOverlays[i][j], j, i, true);
+      }
+    }
+  },
+
+  onAdd: function (map) {
+    this._initLayout();
+    this._update();
+
+    map
+        .on('layeradd', this._onLayerChange, this)
+        .on('layerremove', this._onLayerChange, this);
+
+    return this._container;
+  },
+
+  onRemove: function (map) {
+    map
+        .off('layeradd', this._onLayerChange)
+        .off('layerremove', this._onLayerChange);
+  },
+
+  addBaseLayer: function (layer, name) {
+    this._addLayer(layer, name);
+    this._update();
+    return this;
+  },
+
+  addOverlay: function (layer, name, group) {
+    this._addLayer(layer, name, group, true);
+    this._update();
+    return this;
+  },
+
+  removeLayer: function (layer) {
+    var id = L.Util.stamp(layer);
+    delete this._layers[id];
+    this._update();
+    return this;
+  },
+
+  _initLayout: function () {
+    var className = 'leaflet-control-layers',
+        container = this._container = L.DomUtil.create('div', className);
+
+    //Makes this work on IE10 Touch devices by stopping it from firing a mouseout event when the touch is released
+    container.setAttribute('aria-haspopup', true);
+
+    if (!L.Browser.touch) {
+      L.DomEvent.disableClickPropagation(container);
+      L.DomEvent.on(container, 'wheel', L.DomEvent.stopPropagation);
+    } else {
+      L.DomEvent.on(container, 'click', L.DomEvent.stopPropagation);
+    }
+
+    var form = this._form = L.DomUtil.create('form', className + '-list');
+
+    if (this.options.collapsed) {
+      if (!L.Browser.android) {
+        L.DomEvent
+            .on(container, 'mouseover', this._expand, this)
+            .on(container, 'mouseout', this._collapse, this);
+      }
+      var link = this._layersLink = L.DomUtil.create('a', className + '-toggle', container);
+      link.href = '#';
+      link.title = 'Layers';
+
+      if (L.Browser.touch) {
+        L.DomEvent
+            .on(link, 'click', L.DomEvent.stop)
+            .on(link, 'click', this._expand, this);
+      }
+      else {
+        L.DomEvent.on(link, 'focus', this._expand, this);
+      }
+
+      this._map.on('click', this._collapse, this);
+      // TODO keyboard accessibility
+    } else {
+      this._expand();
+    }
+
+    this._baseLayersList = L.DomUtil.create('div', className + '-base', form);
+    this._separator = L.DomUtil.create('div', className + '-separator', form);
+    this._overlaysList = L.DomUtil.create('div', className + '-overlays', form);
+
+    container.appendChild(form);
+  },
+
+  _addLayer: function (layer, name, group, overlay) {
+    var id = L.Util.stamp(layer);
+
+    this._layers[id] = {
+      layer: layer,
+      name: name,
+      overlay: overlay
+    };
+
+    group = group || '';
+    var groupId = this._groupList.indexOf(group);
+
+    if (groupId === -1) {
+      groupId = this._groupList.push(group) - 1;
+    }
+
+    var exclusive = (this.options.exclusiveGroups.indexOf(group) != -1);
+
+    this._layers[id].group = {
+      name: group,
+      id: groupId,
+      exclusive: exclusive
+    };
+
+    if (this.options.autoZIndex && layer.setZIndex) {
+      this._lastZIndex++;
+      layer.setZIndex(this._lastZIndex);
+    }
+  },
+
+  _update: function () {
+    if (!this._container) {
+      return;
+    }
+
+    this._baseLayersList.innerHTML = '';
+    this._overlaysList.innerHTML = '';
+    this._domGroups.length = 0;
+
+    var baseLayersPresent = false,
+        overlaysPresent = false,
+        i, obj;
+
+    for (i in this._layers) {
+      obj = this._layers[i];
+      this._addItem(obj);
+      overlaysPresent = overlaysPresent || obj.overlay;
+      baseLayersPresent = baseLayersPresent || !obj.overlay;
+    }
+
+    this._separator.style.display = overlaysPresent && baseLayersPresent ? '' : 'none';
+  },
+
+  _onLayerChange: function (e) {
+    var obj = this._layers[L.Util.stamp(e.layer)];
+
+    if (!obj) { return; }
+
+    if (!this._handlingClick) {
+      this._update();
+    }
+
+    var type = obj.overlay ?
+      (e.type === 'layeradd' ? 'overlayadd' : 'overlayremove') :
+      (e.type === 'layeradd' ? 'baselayerchange' : null);
+
+    if (type) {
+      this._map.fire(type, obj);
+    }
+  },
+
+  // IE7 bugs out if you create a radio dynamically, so you have to do it this hacky way (see http://bit.ly/PqYLBe)
+  _createRadioElement: function (name, checked) {
+
+    var radioHtml = '<input type="radio" class="leaflet-control-layers-selector" name="' + name + '"';
+    if (checked) {
+      radioHtml += ' checked="checked"';
+    }
+    radioHtml += '/>';
+
+    var radioFragment = document.createElement('div');
+    radioFragment.innerHTML = radioHtml;
+
+    return radioFragment.firstChild;
+  },
+
+  _addItem: function (obj) {
+    var label = document.createElement('label'),
+        input,
+        checked = this._map.hasLayer(obj.layer),
+        container;
+
+    if (obj.overlay) {
+      if (obj.group.exclusive) {
+        groupRadioName = 'leaflet-exclusive-group-layer-' + obj.group.id;
+        input = this._createRadioElement(groupRadioName, checked);
+      } else {
+        input = document.createElement('input');
+        input.type = 'checkbox';
+        input.className = 'leaflet-control-layers-selector';
+        input.defaultChecked = checked;
+      }
+    } else {
+      input = this._createRadioElement('leaflet-base-layers', checked);
+    }
+
+    input.layerId = L.Util.stamp(obj.layer);
+
+    L.DomEvent.on(input, 'click', this._onInputClick, this);
+
+    var name = document.createElement('span');
+    name.innerHTML = ' ' + obj.name;
+
+    label.appendChild(input);
+    label.appendChild(name);
+
+    if (obj.overlay) {
+      container = this._overlaysList;
+
+      var groupContainer = this._domGroups[obj.group.id];
+
+      // Create the group container if it doesn't exist
+      if (!groupContainer) {
+        groupContainer = document.createElement('div');
+        groupContainer.className = 'leaflet-control-layers-group';
+        groupContainer.id = 'leaflet-control-layers-group-' + obj.group.id;
+
+        var groupLabel = document.createElement('span');
+        groupLabel.className = 'leaflet-control-layers-group-name';
+        groupLabel.innerHTML = obj.group.name;
+
+        groupContainer.appendChild(groupLabel);
+        container.appendChild(groupContainer);
+
+        this._domGroups[obj.group.id] = groupContainer;
+      }
+
+      container = groupContainer;
+    } else {
+      container = this._baseLayersList;
+    }
+
+    container.appendChild(label);
+
+    return label;
+  },
+
+  _onInputClick: function () {
+    var i, input, obj,
+        inputs = this._form.getElementsByTagName('input'),
+        inputsLen = inputs.length;
+
+    this._handlingClick = true;
+
+    for (i = 0; i < inputsLen; i++) {
+      input = inputs[i];
+      obj = this._layers[input.layerId];
+
+      if (input.checked && !this._map.hasLayer(obj.layer)) {
+        this._map.addLayer(obj.layer);
+
+      } else if (!input.checked && this._map.hasLayer(obj.layer)) {
+        this._map.removeLayer(obj.layer);
+      }
+    }
+
+    this._handlingClick = false;
+  },
+
+  _expand: function () {
+    L.DomUtil.addClass(this._container, 'leaflet-control-layers-expanded');
+  },
+
+  _collapse: function () {
+    this._container.className = this._container.className.replace(' leaflet-control-layers-expanded', '');
+  }
+});
+
+L.control.groupedLayers = function (baseLayers, groupedOverlays, options) {
+  return new L.Control.GroupedLayers(baseLayers, groupedOverlays, options);
+};
+
+L.Control.MousePosition = L.Control.extend({
+  options: {
+    position: 'bottomleft',
+    separator: ' : ',
+    emptyString: 'Unavailable',
+    lngFirst: false,
+    numDigits: 5,
+    lngFormatter: undefined,
+    latFormatter: undefined,
+    prefix: ""
+  },
+
+  onAdd: function (map) {
+    this._container = L.DomUtil.create('div', 'leaflet-control-mouseposition');
+    L.DomEvent.disableClickPropagation(this._container);
+    map.on('mousemove', this._onMouseMove, this);
+    this._container.innerHTML=this.options.emptyString;
+    return this._container;
+  },
+
+  onRemove: function (map) {
+    map.off('mousemove', this._onMouseMove)
+  },
+
+  _onMouseMove: function (e) {
+    var lng = this.options.lngFormatter ? this.options.lngFormatter(e.latlng.lng) : L.Util.formatNum(e.latlng.lng, this.options.numDigits);
+    var lat = this.options.latFormatter ? this.options.latFormatter(e.latlng.lat) : L.Util.formatNum(e.latlng.lat, this.options.numDigits);
+    var value = this.options.lngFirst ? lng + this.options.separator + lat : lat + this.options.separator + lng;
+    var prefixAndValue = this.options.prefix + ' ' + value;
+    this._container.innerHTML = prefixAndValue;
+  }
+
+});
+
+L.Map.mergeOptions({
+    positionControl: false
+});
+
+L.Map.addInitHook(function () {
+    if (this.options.positionControl) {
+        this.positionControl = new L.Control.MousePosition();
+        this.addControl(this.positionControl);
+    }
+});
+
+L.control.mousePosition = function (options) {
+    return new L.Control.MousePosition(options);
+};
+
 /*!
  * typeahead.js 0.10.5
  * https://github.com/twitter/typeahead.js
@@ -23212,90 +23567,1758 @@ You can find the project at: https://github.com/domoritz/leaflet-locatecontrol
         };
     })();
 })(window.jQuery);
+;(function(){
+
+/**
+ * Require the given path.
+ *
+ * @param {String} path
+ * @return {Object} exports
+ * @api public
+ */
+
+function require(path, parent, orig) {
+  var resolved = require.resolve(path);
+
+  // lookup failed
+  if (null == resolved) {
+    orig = orig || path;
+    parent = parent || 'root';
+    var err = new Error('Failed to require "' + orig + '" from "' + parent + '"');
+    err.path = orig;
+    err.parent = parent;
+    err.require = true;
+    throw err;
+  }
+
+  var module = require.modules[resolved];
+
+  // perform real require()
+  // by invoking the module's
+  // registered function
+  if (!module._resolving && !module.exports) {
+    var mod = {};
+    mod.exports = {};
+    mod.client = mod.component = true;
+    module._resolving = true;
+    module.call(this, mod.exports, require.relative(resolved), mod);
+    delete module._resolving;
+    module.exports = mod.exports;
+  }
+
+  return module.exports;
+}
+
+/**
+ * Registered modules.
+ */
+
+require.modules = {};
+
+/**
+ * Registered aliases.
+ */
+
+require.aliases = {};
+
+/**
+ * Resolve `path`.
+ *
+ * Lookup:
+ *
+ *   - PATH/index.js
+ *   - PATH.js
+ *   - PATH
+ *
+ * @param {String} path
+ * @return {String} path or null
+ * @api private
+ */
+
+require.resolve = function(path) {
+  if (path.charAt(0) === '/') path = path.slice(1);
+
+  var paths = [
+    path,
+    path + '.js',
+    path + '.json',
+    path + '/index.js',
+    path + '/index.json'
+  ];
+
+  for (var i = 0; i < paths.length; i++) {
+    var path = paths[i];
+    if (require.modules.hasOwnProperty(path)) return path;
+    if (require.aliases.hasOwnProperty(path)) return require.aliases[path];
+  }
+};
+
+/**
+ * Normalize `path` relative to the current path.
+ *
+ * @param {String} curr
+ * @param {String} path
+ * @return {String}
+ * @api private
+ */
+
+require.normalize = function(curr, path) {
+  var segs = [];
+
+  if ('.' != path.charAt(0)) return path;
+
+  curr = curr.split('/');
+  path = path.split('/');
+
+  for (var i = 0; i < path.length; ++i) {
+    if ('..' == path[i]) {
+      curr.pop();
+    } else if ('.' != path[i] && '' != path[i]) {
+      segs.push(path[i]);
+    }
+  }
+
+  return curr.concat(segs).join('/');
+};
+
+/**
+ * Register module at `path` with callback `definition`.
+ *
+ * @param {String} path
+ * @param {Function} definition
+ * @api private
+ */
+
+require.register = function(path, definition) {
+  require.modules[path] = definition;
+};
+
+/**
+ * Alias a module definition.
+ *
+ * @param {String} from
+ * @param {String} to
+ * @api private
+ */
+
+require.alias = function(from, to) {
+  if (!require.modules.hasOwnProperty(from)) {
+    throw new Error('Failed to alias "' + from + '", it does not exist');
+  }
+  require.aliases[to] = from;
+};
+
+/**
+ * Return a require function relative to the `parent` path.
+ *
+ * @param {String} parent
+ * @return {Function}
+ * @api private
+ */
+
+require.relative = function(parent) {
+  var p = require.normalize(parent, '..');
+
+  /**
+   * lastIndexOf helper.
+   */
+
+  function lastIndexOf(arr, obj) {
+    var i = arr.length;
+    while (i--) {
+      if (arr[i] === obj) return i;
+    }
+    return -1;
+  }
+
+  /**
+   * The relative require() itself.
+   */
+
+  function localRequire(path) {
+    var resolved = localRequire.resolve(path);
+    return require(resolved, parent, path);
+  }
+
+  /**
+   * Resolve relative to the parent.
+   */
+
+  localRequire.resolve = function(path) {
+    var c = path.charAt(0);
+    if ('/' == c) return path.slice(1);
+    if ('.' == c) return require.normalize(p, path);
+
+    // resolve deps by returning
+    // the dep in the nearest "deps"
+    // directory
+    var segs = parent.split('/');
+    var i = lastIndexOf(segs, 'deps') + 1;
+    if (!i) i = 0;
+    path = segs.slice(0, i + 1).join('/') + '/deps/' + path;
+    return path;
+  };
+
+  /**
+   * Check if module is defined at `path`.
+   */
+
+  localRequire.exists = function(path) {
+    return require.modules.hasOwnProperty(localRequire.resolve(path));
+  };
+
+  return localRequire;
+};
+require.register("component-classes/index.js", function(exports, require, module){
+/**
+ * Module dependencies.
+ */
+
+var index = require('indexof');
+
+/**
+ * Whitespace regexp.
+ */
+
+var re = /\s+/;
+
+/**
+ * toString reference.
+ */
+
+var toString = Object.prototype.toString;
+
+/**
+ * Wrap `el` in a `ClassList`.
+ *
+ * @param {Element} el
+ * @return {ClassList}
+ * @api public
+ */
+
+module.exports = function(el){
+  return new ClassList(el);
+};
+
+/**
+ * Initialize a new ClassList for `el`.
+ *
+ * @param {Element} el
+ * @api private
+ */
+
+function ClassList(el) {
+  if (!el) throw new Error('A DOM element reference is required');
+  this.el = el;
+  this.list = el.classList;
+}
+
+/**
+ * Add class `name` if not already present.
+ *
+ * @param {String} name
+ * @return {ClassList}
+ * @api public
+ */
+
+ClassList.prototype.add = function(name){
+  // classList
+  if (this.list) {
+    this.list.add(name);
+    return this;
+  }
+
+  // fallback
+  var arr = this.array();
+  var i = index(arr, name);
+  if (!~i) arr.push(name);
+  this.el.className = arr.join(' ');
+  return this;
+};
+
+/**
+ * Remove class `name` when present, or
+ * pass a regular expression to remove
+ * any which match.
+ *
+ * @param {String|RegExp} name
+ * @return {ClassList}
+ * @api public
+ */
+
+ClassList.prototype.remove = function(name){
+  if ('[object RegExp]' == toString.call(name)) {
+    return this.removeMatching(name);
+  }
+
+  // classList
+  if (this.list) {
+    this.list.remove(name);
+    return this;
+  }
+
+  // fallback
+  var arr = this.array();
+  var i = index(arr, name);
+  if (~i) arr.splice(i, 1);
+  this.el.className = arr.join(' ');
+  return this;
+};
+
+/**
+ * Remove all classes matching `re`.
+ *
+ * @param {RegExp} re
+ * @return {ClassList}
+ * @api private
+ */
+
+ClassList.prototype.removeMatching = function(re){
+  var arr = this.array();
+  for (var i = 0; i < arr.length; i++) {
+    if (re.test(arr[i])) {
+      this.remove(arr[i]);
+    }
+  }
+  return this;
+};
+
+/**
+ * Toggle class `name`, can force state via `force`.
+ *
+ * For browsers that support classList, but do not support `force` yet,
+ * the mistake will be detected and corrected.
+ *
+ * @param {String} name
+ * @param {Boolean} force
+ * @return {ClassList}
+ * @api public
+ */
+
+ClassList.prototype.toggle = function(name, force){
+  // classList
+  if (this.list) {
+    if ("undefined" !== typeof force) {
+      if (force !== this.list.toggle(name, force)) {
+        this.list.toggle(name); // toggle again to correct
+      }
+    } else {
+      this.list.toggle(name);
+    }
+    return this;
+  }
+
+  // fallback
+  if ("undefined" !== typeof force) {
+    if (!force) {
+      this.remove(name);
+    } else {
+      this.add(name);
+    }
+  } else {
+    if (this.has(name)) {
+      this.remove(name);
+    } else {
+      this.add(name);
+    }
+  }
+
+  return this;
+};
+
+/**
+ * Return an array of classes.
+ *
+ * @return {Array}
+ * @api public
+ */
+
+ClassList.prototype.array = function(){
+  var str = this.el.className.replace(/^\s+|\s+$/g, '');
+  var arr = str.split(re);
+  if ('' === arr[0]) arr.shift();
+  return arr;
+};
+
+/**
+ * Check if class `name` is present.
+ *
+ * @param {String} name
+ * @return {ClassList}
+ * @api public
+ */
+
+ClassList.prototype.has =
+ClassList.prototype.contains = function(name){
+  return this.list
+    ? this.list.contains(name)
+    : !! ~index(this.array(), name);
+};
+
+});
+require.register("segmentio-extend/index.js", function(exports, require, module){
+
+module.exports = function extend (object) {
+    // Takes an unlimited number of extenders.
+    var args = Array.prototype.slice.call(arguments, 1);
+
+    // For each extender, copy their properties on our object.
+    for (var i = 0, source; source = args[i]; i++) {
+        if (!source) continue;
+        for (var property in source) {
+            object[property] = source[property];
+        }
+    }
+
+    return object;
+};
+});
+require.register("component-indexof/index.js", function(exports, require, module){
+module.exports = function(arr, obj){
+  if (arr.indexOf) return arr.indexOf(obj);
+  for (var i = 0; i < arr.length; ++i) {
+    if (arr[i] === obj) return i;
+  }
+  return -1;
+};
+});
+require.register("component-event/index.js", function(exports, require, module){
+var bind = window.addEventListener ? 'addEventListener' : 'attachEvent',
+    unbind = window.removeEventListener ? 'removeEventListener' : 'detachEvent',
+    prefix = bind !== 'addEventListener' ? 'on' : '';
+
+/**
+ * Bind `el` event `type` to `fn`.
+ *
+ * @param {Element} el
+ * @param {String} type
+ * @param {Function} fn
+ * @param {Boolean} capture
+ * @return {Function}
+ * @api public
+ */
+
+exports.bind = function(el, type, fn, capture){
+  el[bind](prefix + type, fn, capture || false);
+  return fn;
+};
+
+/**
+ * Unbind `el` event `type`'s callback `fn`.
+ *
+ * @param {Element} el
+ * @param {String} type
+ * @param {Function} fn
+ * @param {Boolean} capture
+ * @return {Function}
+ * @api public
+ */
+
+exports.unbind = function(el, type, fn, capture){
+  el[unbind](prefix + type, fn, capture || false);
+  return fn;
+};
+});
+require.register("timoxley-to-array/index.js", function(exports, require, module){
+/**
+ * Convert an array-like object into an `Array`.
+ * If `collection` is already an `Array`, then will return a clone of `collection`.
+ *
+ * @param {Array | Mixed} collection An `Array` or array-like object to convert e.g. `arguments` or `NodeList`
+ * @return {Array} Naive conversion of `collection` to a new `Array`.
+ * @api public
+ */
+
+module.exports = function toArray(collection) {
+  if (typeof collection === 'undefined') return []
+  if (collection === null) return [null]
+  if (collection === window) return [window]
+  if (typeof collection === 'string') return [collection]
+  if (isArray(collection)) return collection
+  if (typeof collection.length != 'number') return [collection]
+  if (typeof collection === 'function' && collection instanceof Function) return [collection]
+
+  var arr = []
+  for (var i = 0; i < collection.length; i++) {
+    if (Object.prototype.hasOwnProperty.call(collection, i) || i in collection) {
+      arr.push(collection[i])
+    }
+  }
+  if (!arr.length) return []
+  return arr
+}
+
+function isArray(arr) {
+  return Object.prototype.toString.call(arr) === "[object Array]";
+}
+
+});
+require.register("javve-events/index.js", function(exports, require, module){
+var events = require('event'),
+  toArray = require('to-array');
+
+/**
+ * Bind `el` event `type` to `fn`.
+ *
+ * @param {Element} el, NodeList, HTMLCollection or Array
+ * @param {String} type
+ * @param {Function} fn
+ * @param {Boolean} capture
+ * @api public
+ */
+
+exports.bind = function(el, type, fn, capture){
+  el = toArray(el);
+  for ( var i = 0; i < el.length; i++ ) {
+    events.bind(el[i], type, fn, capture);
+  }
+};
+
+/**
+ * Unbind `el` event `type`'s callback `fn`.
+ *
+ * @param {Element} el, NodeList, HTMLCollection or Array
+ * @param {String} type
+ * @param {Function} fn
+ * @param {Boolean} capture
+ * @api public
+ */
+
+exports.unbind = function(el, type, fn, capture){
+  el = toArray(el);
+  for ( var i = 0; i < el.length; i++ ) {
+    events.unbind(el[i], type, fn, capture);
+  }
+};
+
+});
+require.register("javve-get-by-class/index.js", function(exports, require, module){
+/**
+ * Find all elements with class `className` inside `container`.
+ * Use `single = true` to increase performance in older browsers
+ * when only one element is needed.
+ *
+ * @param {String} className
+ * @param {Element} container
+ * @param {Boolean} single
+ * @api public
+ */
+
+module.exports = (function() {
+  if (document.getElementsByClassName) {
+    return function(container, className, single) {
+      if (single) {
+        return container.getElementsByClassName(className)[0];
+      } else {
+        return container.getElementsByClassName(className);
+      }
+    };
+  } else if (document.querySelector) {
+    return function(container, className, single) {
+      className = '.' + className;
+      if (single) {
+        return container.querySelector(className);
+      } else {
+        return container.querySelectorAll(className);
+      }
+    };
+  } else {
+    return function(container, className, single) {
+      var classElements = [],
+        tag = '*';
+      if (container == null) {
+        container = document;
+      }
+      var els = container.getElementsByTagName(tag);
+      var elsLen = els.length;
+      var pattern = new RegExp("(^|\\s)"+className+"(\\s|$)");
+      for (var i = 0, j = 0; i < elsLen; i++) {
+        if ( pattern.test(els[i].className) ) {
+          if (single) {
+            return els[i];
+          } else {
+            classElements[j] = els[i];
+            j++;
+          }
+        }
+      }
+      return classElements;
+    };
+  }
+})();
+
+});
+require.register("javve-get-attribute/index.js", function(exports, require, module){
+/**
+ * Return the value for `attr` at `element`.
+ *
+ * @param {Element} el
+ * @param {String} attr
+ * @api public
+ */
+
+module.exports = function(el, attr) {
+  var result = (el.getAttribute && el.getAttribute(attr)) || null;
+  if( !result ) {
+    var attrs = el.attributes;
+    var length = attrs.length;
+    for(var i = 0; i < length; i++) {
+      if (attr[i] !== undefined) {
+        if(attr[i].nodeName === attr) {
+          result = attr[i].nodeValue;
+        }
+      }
+    }
+  }
+  return result;
+}
+});
+require.register("javve-natural-sort/index.js", function(exports, require, module){
+/*
+ * Natural Sort algorithm for Javascript - Version 0.7 - Released under MIT license
+ * Author: Jim Palmer (based on chunking idea from Dave Koelle)
+ */
+
+module.exports = function(a, b, options) {
+  var re = /(^-?[0-9]+(\.?[0-9]*)[df]?e?[0-9]?$|^0x[0-9a-f]+$|[0-9]+)/gi,
+    sre = /(^[ ]*|[ ]*$)/g,
+    dre = /(^([\w ]+,?[\w ]+)?[\w ]+,?[\w ]+\d+:\d+(:\d+)?[\w ]?|^\d{1,4}[\/\-]\d{1,4}[\/\-]\d{1,4}|^\w+, \w+ \d+, \d{4})/,
+    hre = /^0x[0-9a-f]+$/i,
+    ore = /^0/,
+    options = options || {},
+    i = function(s) { return options.insensitive && (''+s).toLowerCase() || ''+s },
+    // convert all to strings strip whitespace
+    x = i(a).replace(sre, '') || '',
+    y = i(b).replace(sre, '') || '',
+    // chunk/tokenize
+    xN = x.replace(re, '\0$1\0').replace(/\0$/,'').replace(/^\0/,'').split('\0'),
+    yN = y.replace(re, '\0$1\0').replace(/\0$/,'').replace(/^\0/,'').split('\0'),
+    // numeric, hex or date detection
+    xD = parseInt(x.match(hre)) || (xN.length != 1 && x.match(dre) && Date.parse(x)),
+    yD = parseInt(y.match(hre)) || xD && y.match(dre) && Date.parse(y) || null,
+    oFxNcL, oFyNcL,
+    mult = options.desc ? -1 : 1;
+  // first try and sort Hex codes or Dates
+  if (yD)
+    if ( xD < yD ) return -1 * mult;
+    else if ( xD > yD ) return 1 * mult;
+  // natural sorting through split numeric strings and default strings
+  for(var cLoc=0, numS=Math.max(xN.length, yN.length); cLoc < numS; cLoc++) {
+    // find floats not starting with '0', string or 0 if not defined (Clint Priest)
+    oFxNcL = !(xN[cLoc] || '').match(ore) && parseFloat(xN[cLoc]) || xN[cLoc] || 0;
+    oFyNcL = !(yN[cLoc] || '').match(ore) && parseFloat(yN[cLoc]) || yN[cLoc] || 0;
+    // handle numeric vs string comparison - number < string - (Kyle Adams)
+    if (isNaN(oFxNcL) !== isNaN(oFyNcL)) { return (isNaN(oFxNcL)) ? 1 : -1; }
+    // rely on string comparison if different types - i.e. '02' < 2 != '02' < '2'
+    else if (typeof oFxNcL !== typeof oFyNcL) {
+      oFxNcL += '';
+      oFyNcL += '';
+    }
+    if (oFxNcL < oFyNcL) return -1 * mult;
+    if (oFxNcL > oFyNcL) return 1 * mult;
+  }
+  return 0;
+};
+
+/*
+var defaultSort = getSortFunction();
+
+module.exports = function(a, b, options) {
+  if (arguments.length == 1) {
+    options = a;
+    return getSortFunction(options);
+  } else {
+    return defaultSort(a,b);
+  }
+}
+*/
+});
+require.register("javve-to-string/index.js", function(exports, require, module){
+module.exports = function(s) {
+    s = (s === undefined) ? "" : s;
+    s = (s === null) ? "" : s;
+    s = s.toString();
+    return s;
+};
+
+});
+require.register("component-type/index.js", function(exports, require, module){
+/**
+ * toString ref.
+ */
+
+var toString = Object.prototype.toString;
+
+/**
+ * Return the type of `val`.
+ *
+ * @param {Mixed} val
+ * @return {String}
+ * @api public
+ */
+
+module.exports = function(val){
+  switch (toString.call(val)) {
+    case '[object Date]': return 'date';
+    case '[object RegExp]': return 'regexp';
+    case '[object Arguments]': return 'arguments';
+    case '[object Array]': return 'array';
+    case '[object Error]': return 'error';
+  }
+
+  if (val === null) return 'null';
+  if (val === undefined) return 'undefined';
+  if (val !== val) return 'nan';
+  if (val && val.nodeType === 1) return 'element';
+
+  return typeof val.valueOf();
+};
+
+});
+require.register("list.js/index.js", function(exports, require, module){
+/*
+ListJS with beta 1.0.0
+By Jonny Strömberg (www.jonnystromberg.com, www.listjs.com)
+*/
+(function( window, undefined ) {
+"use strict";
+
+var document = window.document,
+    getByClass = require('get-by-class'),
+    extend = require('extend'),
+    indexOf = require('indexof');
+
+var List = function(id, options, values) {
+
+    var self = this,
+		init,
+        Item = require('./src/item')(self),
+        addAsync = require('./src/add-async')(self),
+        parse = require('./src/parse')(self);
+
+    init = {
+        start: function() {
+            self.listClass      = "list";
+            self.searchClass    = "search";
+            self.sortClass      = "sort";
+            self.page           = 200;
+            self.i              = 1;
+            self.items          = [];
+            self.visibleItems   = [];
+            self.matchingItems  = [];
+            self.searched       = false;
+            self.filtered       = false;
+            self.handlers       = { 'updated': [] };
+            self.plugins        = {};
+            self.helpers        = {
+                getByClass: getByClass,
+                extend: extend,
+                indexOf: indexOf
+            };
+
+            extend(self, options);
+
+            self.listContainer = (typeof(id) === 'string') ? document.getElementById(id) : id;
+            if (!self.listContainer) { return; }
+            self.list           = getByClass(self.listContainer, self.listClass, true);
+
+            self.templater      = require('./src/templater')(self);
+            self.search         = require('./src/search')(self);
+            self.filter         = require('./src/filter')(self);
+            self.sort           = require('./src/sort')(self);
+
+            this.items();
+            self.update();
+            this.plugins();
+        },
+        items: function() {
+            parse(self.list);
+            if (values !== undefined) {
+                self.add(values);
+            }
+        },
+        plugins: function() {
+            for (var i = 0; i < self.plugins.length; i++) {
+                var plugin = self.plugins[i];
+                self[plugin.name] = plugin;
+                plugin.init(self);
+            }
+        }
+    };
+
+
+    /*
+    * Add object to list
+    */
+    this.add = function(values, callback) {
+        if (callback) {
+            addAsync(values, callback);
+            return;
+        }
+        var added = [],
+            notCreate = false;
+        if (values[0] === undefined){
+            values = [values];
+        }
+        for (var i = 0, il = values.length; i < il; i++) {
+            var item = null;
+            if (values[i] instanceof Item) {
+                item = values[i];
+                item.reload();
+            } else {
+                notCreate = (self.items.length > self.page) ? true : false;
+                item = new Item(values[i], undefined, notCreate);
+            }
+            self.items.push(item);
+            added.push(item);
+        }
+        self.update();
+        return added;
+    };
+
+	this.show = function(i, page) {
+		this.i = i;
+		this.page = page;
+		self.update();
+        return self;
+	};
+
+    /* Removes object from list.
+    * Loops through the list and removes objects where
+    * property "valuename" === value
+    */
+    this.remove = function(valueName, value, options) {
+        var found = 0;
+        for (var i = 0, il = self.items.length; i < il; i++) {
+            if (self.items[i].values()[valueName] == value) {
+                self.templater.remove(self.items[i], options);
+                self.items.splice(i,1);
+                il--;
+                i--;
+                found++;
+            }
+        }
+        self.update();
+        return found;
+    };
+
+    /* Gets the objects in the list which
+    * property "valueName" === value
+    */
+    this.get = function(valueName, value) {
+        var matchedItems = [];
+        for (var i = 0, il = self.items.length; i < il; i++) {
+            var item = self.items[i];
+            if (item.values()[valueName] == value) {
+                matchedItems.push(item);
+            }
+        }
+        return matchedItems;
+    };
+
+    /*
+    * Get size of the list
+    */
+    this.size = function() {
+        return self.items.length;
+    };
+
+    /*
+    * Removes all items from the list
+    */
+    this.clear = function() {
+        self.templater.clear();
+        self.items = [];
+        return self;
+    };
+
+    this.on = function(event, callback) {
+        self.handlers[event].push(callback);
+        return self;
+    };
+
+    this.off = function(event, callback) {
+        var e = self.handlers[event];
+        var index = indexOf(e, callback);
+        if (index > -1) {
+            e.splice(index, 1);
+        }
+        return self;
+    };
+
+    this.trigger = function(event) {
+        var i = self.handlers[event].length;
+        while(i--) {
+            self.handlers[event][i](self);
+        }
+        return self;
+    };
+
+    this.reset = {
+        filter: function() {
+            var is = self.items,
+                il = is.length;
+            while (il--) {
+                is[il].filtered = false;
+            }
+            return self;
+        },
+        search: function() {
+            var is = self.items,
+                il = is.length;
+            while (il--) {
+                is[il].found = false;
+            }
+            return self;
+        }
+    };
+
+    this.update = function() {
+        var is = self.items,
+			il = is.length;
+
+        self.visibleItems = [];
+        self.matchingItems = [];
+        self.templater.clear();
+        for (var i = 0; i < il; i++) {
+            if (is[i].matching() && ((self.matchingItems.length+1) >= self.i && self.visibleItems.length < self.page)) {
+                is[i].show();
+                self.visibleItems.push(is[i]);
+                self.matchingItems.push(is[i]);
+			} else if (is[i].matching()) {
+                self.matchingItems.push(is[i]);
+                is[i].hide();
+			} else {
+                is[i].hide();
+			}
+        }
+        self.trigger('updated');
+        return self;
+    };
+
+    init.start();
+};
+
+module.exports = List;
+
+})(window);
+
+});
+require.register("list.js/src/search.js", function(exports, require, module){
+var events = require('events'),
+    getByClass = require('get-by-class'),
+    toString = require('to-string');
+
+module.exports = function(list) {
+    var item,
+        text,
+        columns,
+        searchString,
+        customSearch;
+
+    var prepare = {
+        resetList: function() {
+            list.i = 1;
+            list.templater.clear();
+            customSearch = undefined;
+        },
+        setOptions: function(args) {
+            if (args.length == 2 && args[1] instanceof Array) {
+                columns = args[1];
+            } else if (args.length == 2 && typeof(args[1]) == "function") {
+                customSearch = args[1];
+            } else if (args.length == 3) {
+                columns = args[1];
+                customSearch = args[2];
+            }
+        },
+        setColumns: function() {
+            columns = (columns === undefined) ? prepare.toArray(list.items[0].values()) : columns;
+        },
+        setSearchString: function(s) {
+            s = toString(s).toLowerCase();
+            s = s.replace(/[-[\]{}()*+?.,\\^$|#]/g, "\\$&"); // Escape regular expression characters
+            searchString = s;
+        },
+        toArray: function(values) {
+            var tmpColumn = [];
+            for (var name in values) {
+                tmpColumn.push(name);
+            }
+            return tmpColumn;
+        }
+    };
+    var search = {
+        list: function() {
+            for (var k = 0, kl = list.items.length; k < kl; k++) {
+                search.item(list.items[k]);
+            }
+        },
+        item: function(item) {
+            item.found = false;
+            for (var j = 0, jl = columns.length; j < jl; j++) {
+                if (search.values(item.values(), columns[j])) {
+                    item.found = true;
+                    return;
+                }
+            }
+        },
+        values: function(values, column) {
+            if (values.hasOwnProperty(column)) {
+                text = toString(values[column]).toLowerCase();
+                if ((searchString !== "") && (text.search(searchString) > -1)) {
+                    return true;
+                }
+            }
+            return false;
+        },
+        reset: function() {
+            list.reset.search();
+            list.searched = false;
+        }
+    };
+
+    var searchMethod = function(str) {
+        list.trigger('searchStart');
+
+        prepare.resetList();
+        prepare.setSearchString(str);
+        prepare.setOptions(arguments); // str, cols|searchFunction, searchFunction
+        prepare.setColumns();
+
+        if (searchString === "" ) {
+            search.reset();
+        } else {
+            list.searched = true;
+            if (customSearch) {
+                customSearch(searchString, columns);
+            } else {
+                search.list();
+            }
+        }
+
+        list.update();
+        list.trigger('searchComplete');
+        return list.visibleItems;
+    };
+
+    list.handlers.searchStart = list.handlers.searchStart || [];
+    list.handlers.searchComplete = list.handlers.searchComplete || [];
+
+    events.bind(getByClass(list.listContainer, list.searchClass), 'keyup', function(e) {
+        var target = e.target || e.srcElement, // IE have srcElement
+            alreadyCleared = (target.value === "" && !list.searched);
+        if (!alreadyCleared) { // If oninput already have resetted the list, do nothing
+            searchMethod(target.value);
+        }
+    });
+
+    // Used to detect click on HTML5 clear button
+    events.bind(getByClass(list.listContainer, list.searchClass), 'input', function(e) {
+        var target = e.target || e.srcElement;
+        if (target.value === "") {
+            searchMethod('');
+        }
+    });
+
+    list.helpers.toString = toString;
+    return searchMethod;
+};
+
+});
+require.register("list.js/src/sort.js", function(exports, require, module){
+var naturalSort = require('natural-sort'),
+    classes = require('classes'),
+    events = require('events'),
+    getByClass = require('get-by-class'),
+    getAttribute = require('get-attribute');
+
+module.exports = function(list) {
+    list.sortFunction = list.sortFunction || function(itemA, itemB, options) {
+        options.desc = options.order == "desc" ? true : false; // Natural sort uses this format
+        return naturalSort(itemA.values()[options.valueName], itemB.values()[options.valueName], options);
+    };
+
+    var buttons = {
+        els: undefined,
+        clear: function() {
+            for (var i = 0, il = buttons.els.length; i < il; i++) {
+                classes(buttons.els[i]).remove('asc');
+                classes(buttons.els[i]).remove('desc');
+            }
+        },
+        getOrder: function(btn) {
+            var predefinedOrder = getAttribute(btn, 'data-order');
+            if (predefinedOrder == "asc" || predefinedOrder == "desc") {
+                return predefinedOrder;
+            } else if (classes(btn).has('desc')) {
+                return "asc";
+            } else if (classes(btn).has('asc')) {
+                return "desc";
+            } else {
+                return "asc";
+            }
+        },
+        getInSensitive: function(btn, options) {
+            var insensitive = getAttribute(btn, 'data-insensitive');
+            if (insensitive === "true") {
+                options.insensitive = true;
+            } else {
+                options.insensitive = false;
+            }
+        },
+        setOrder: function(options) {
+            for (var i = 0, il = buttons.els.length; i < il; i++) {
+                var btn = buttons.els[i];
+                if (getAttribute(btn, 'data-sort') !== options.valueName) {
+                    continue;
+                }
+                var predefinedOrder = getAttribute(btn, 'data-order');
+                if (predefinedOrder == "asc" || predefinedOrder == "desc") {
+                    if (predefinedOrder == options.order) {
+                        classes(btn).add(options.order);
+                    }
+                } else {
+                    classes(btn).add(options.order);
+                }
+            }
+        }
+    };
+    var sort = function() {
+        list.trigger('sortStart');
+        options = {};
+
+        var target = arguments[0].currentTarget || arguments[0].srcElement || undefined;
+
+        if (target) {
+            options.valueName = getAttribute(target, 'data-sort');
+            buttons.getInSensitive(target, options);
+            options.order = buttons.getOrder(target);
+        } else {
+            options = arguments[1] || options;
+            options.valueName = arguments[0];
+            options.order = options.order || "asc";
+            options.insensitive = (typeof options.insensitive == "undefined") ? true : options.insensitive;
+        }
+        buttons.clear();
+        buttons.setOrder(options);
+
+        options.sortFunction = options.sortFunction || list.sortFunction;
+        list.items.sort(function(a, b) {
+            return options.sortFunction(a, b, options);
+        });
+        list.update();
+        list.trigger('sortComplete');
+    };
+
+    // Add handlers
+    list.handlers.sortStart = list.handlers.sortStart || [];
+    list.handlers.sortComplete = list.handlers.sortComplete || [];
+
+    buttons.els = getByClass(list.listContainer, list.sortClass);
+    events.bind(buttons.els, 'click', sort);
+    list.on('searchStart', buttons.clear);
+    list.on('filterStart', buttons.clear);
+
+    // Helpers
+    list.helpers.classes = classes;
+    list.helpers.naturalSort = naturalSort;
+    list.helpers.events = events;
+    list.helpers.getAttribute = getAttribute;
+
+    return sort;
+};
+
+});
+require.register("list.js/src/item.js", function(exports, require, module){
+module.exports = function(list) {
+    return function(initValues, element, notCreate) {
+        var item = this;
+
+        this._values = {};
+
+        this.found = false; // Show if list.searched == true and this.found == true
+        this.filtered = false;// Show if list.filtered == true and this.filtered == true
+
+        var init = function(initValues, element, notCreate) {
+            if (element === undefined) {
+                if (notCreate) {
+                    item.values(initValues, notCreate);
+                } else {
+                    item.values(initValues);
+                }
+            } else {
+                item.elm = element;
+                var values = list.templater.get(item, initValues);
+                item.values(values);
+            }
+        };
+        this.values = function(newValues, notCreate) {
+            if (newValues !== undefined) {
+                for(var name in newValues) {
+                    item._values[name] = newValues[name];
+                }
+                if (notCreate !== true) {
+                    list.templater.set(item, item.values());
+                }
+            } else {
+                return item._values;
+            }
+        };
+        this.show = function() {
+            list.templater.show(item);
+        };
+        this.hide = function() {
+            list.templater.hide(item);
+        };
+        this.matching = function() {
+            return (
+                (list.filtered && list.searched && item.found && item.filtered) ||
+                (list.filtered && !list.searched && item.filtered) ||
+                (!list.filtered && list.searched && item.found) ||
+                (!list.filtered && !list.searched)
+            );
+        };
+        this.visible = function() {
+            return (item.elm.parentNode == list.list) ? true : false;
+        };
+        init(initValues, element, notCreate);
+    };
+};
+
+});
+require.register("list.js/src/templater.js", function(exports, require, module){
+var getByClass = require('get-by-class');
+
+var Templater = function(list) {
+    var itemSource = getItemSource(list.item),
+        templater = this;
+
+    function getItemSource(item) {
+        if (item === undefined) {
+            var nodes = list.list.childNodes,
+                items = [];
+
+            for (var i = 0, il = nodes.length; i < il; i++) {
+                // Only textnodes have a data attribute
+                if (nodes[i].data === undefined) {
+                    return nodes[i];
+                }
+            }
+            return null;
+        } else if (item.indexOf("<") !== -1) { // Try create html element of list, do not work for tables!!
+            var div = document.createElement('div');
+            div.innerHTML = item;
+            return div.firstChild;
+        } else {
+            return document.getElementById(list.item);
+        }
+    }
+
+    /* Get values from element */
+    this.get = function(item, valueNames) {
+        templater.create(item);
+        var values = {};
+        for(var i = 0, il = valueNames.length; i < il; i++) {
+            var elm = getByClass(item.elm, valueNames[i], true);
+            values[valueNames[i]] = elm ? elm.innerHTML : "";
+        }
+        return values;
+    };
+
+    /* Sets values at element */
+    this.set = function(item, values) {
+        if (!templater.create(item)) {
+            for(var v in values) {
+                if (values.hasOwnProperty(v)) {
+                    // TODO speed up if possible
+                    var elm = getByClass(item.elm, v, true);
+                    if (elm) {
+                        /* src attribute for image tag & text for other tags */
+                        if (elm.tagName === "IMG" && values[v] !== "") {
+                            elm.src = values[v];
+                        } else {
+                            elm.innerHTML = values[v];
+                        }
+                    }
+                }
+            }
+        }
+    };
+
+    this.create = function(item) {
+        if (item.elm !== undefined) {
+            return false;
+        }
+        /* If item source does not exists, use the first item in list as
+        source for new items */
+        var newItem = itemSource.cloneNode(true);
+        newItem.removeAttribute('id');
+        item.elm = newItem;
+        templater.set(item, item.values());
+        return true;
+    };
+    this.remove = function(item) {
+        list.list.removeChild(item.elm);
+    };
+    this.show = function(item) {
+        templater.create(item);
+        list.list.appendChild(item.elm);
+    };
+    this.hide = function(item) {
+        if (item.elm !== undefined && item.elm.parentNode === list.list) {
+            list.list.removeChild(item.elm);
+        }
+    };
+    this.clear = function() {
+        /* .innerHTML = ''; fucks up IE */
+        if (list.list.hasChildNodes()) {
+            while (list.list.childNodes.length >= 1)
+            {
+                list.list.removeChild(list.list.firstChild);
+            }
+        }
+    };
+};
+
+module.exports = function(list) {
+    return new Templater(list);
+};
+
+});
+require.register("list.js/src/filter.js", function(exports, require, module){
+module.exports = function(list) {
+
+    // Add handlers
+    list.handlers.filterStart = list.handlers.filterStart || [];
+    list.handlers.filterComplete = list.handlers.filterComplete || [];
+
+    return function(filterFunction) {
+        list.trigger('filterStart');
+        list.i = 1; // Reset paging
+        list.reset.filter();
+        if (filterFunction === undefined) {
+            list.filtered = false;
+        } else {
+            list.filtered = true;
+            var is = list.items;
+            for (var i = 0, il = is.length; i < il; i++) {
+                var item = is[i];
+                if (filterFunction(item)) {
+                    item.filtered = true;
+                } else {
+                    item.filtered = false;
+                }
+            }
+        }
+        list.update();
+        list.trigger('filterComplete');
+        return list.visibleItems;
+    };
+};
+
+});
+require.register("list.js/src/add-async.js", function(exports, require, module){
+module.exports = function(list) {
+    return function(values, callback, items) {
+        var valuesToAdd = values.splice(0, 100);
+        items = items || [];
+        items = items.concat(list.add(valuesToAdd));
+        if (values.length > 0) {
+            setTimeout(function() {
+                addAsync(values, callback, items);
+            }, 10);
+        } else {
+            list.update();
+            callback(items);
+        }
+    };
+};
+});
+require.register("list.js/src/parse.js", function(exports, require, module){
+module.exports = function(list) {
+
+    var Item = require('./item')(list);
+
+    var getChildren = function(parent) {
+        var nodes = parent.childNodes,
+            items = [];
+        for (var i = 0, il = nodes.length; i < il; i++) {
+            // Only textnodes have a data attribute
+            if (nodes[i].data === undefined) {
+                items.push(nodes[i]);
+            }
+        }
+        return items;
+    };
+
+    var parse = function(itemElements, valueNames) {
+        for (var i = 0, il = itemElements.length; i < il; i++) {
+            list.items.push(new Item(valueNames, itemElements[i]));
+        }
+    };
+    var parseAsync = function(itemElements, valueNames) {
+        var itemsToIndex = itemElements.splice(0, 100); // TODO: If < 100 items, what happens in IE etc?
+        parse(itemsToIndex, valueNames);
+        if (itemElements.length > 0) {
+            setTimeout(function() {
+                init.items.indexAsync(itemElements, valueNames);
+            }, 10);
+        } else {
+            list.update();
+            // TODO: Add indexed callback
+        }
+    };
+
+    return function() {
+        var itemsToIndex = getChildren(list.list),
+            valueNames = list.valueNames;
+
+        if (list.indexAsync) {
+            parseAsync(itemsToIndex, valueNames);
+        } else {
+            parse(itemsToIndex, valueNames);
+        }
+    };
+};
+
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+require.alias("component-classes/index.js", "list.js/deps/classes/index.js");
+require.alias("component-classes/index.js", "classes/index.js");
+require.alias("component-indexof/index.js", "component-classes/deps/indexof/index.js");
+
+require.alias("segmentio-extend/index.js", "list.js/deps/extend/index.js");
+require.alias("segmentio-extend/index.js", "extend/index.js");
+
+require.alias("component-indexof/index.js", "list.js/deps/indexof/index.js");
+require.alias("component-indexof/index.js", "indexof/index.js");
+
+require.alias("javve-events/index.js", "list.js/deps/events/index.js");
+require.alias("javve-events/index.js", "events/index.js");
+require.alias("component-event/index.js", "javve-events/deps/event/index.js");
+
+require.alias("timoxley-to-array/index.js", "javve-events/deps/to-array/index.js");
+
+require.alias("javve-get-by-class/index.js", "list.js/deps/get-by-class/index.js");
+require.alias("javve-get-by-class/index.js", "get-by-class/index.js");
+
+require.alias("javve-get-attribute/index.js", "list.js/deps/get-attribute/index.js");
+require.alias("javve-get-attribute/index.js", "get-attribute/index.js");
+
+require.alias("javve-natural-sort/index.js", "list.js/deps/natural-sort/index.js");
+require.alias("javve-natural-sort/index.js", "natural-sort/index.js");
+
+require.alias("javve-to-string/index.js", "list.js/deps/to-string/index.js");
+require.alias("javve-to-string/index.js", "list.js/deps/to-string/index.js");
+require.alias("javve-to-string/index.js", "to-string/index.js");
+require.alias("javve-to-string/index.js", "javve-to-string/index.js");
+require.alias("component-type/index.js", "list.js/deps/type/index.js");
+require.alias("component-type/index.js", "type/index.js");
+if (typeof exports == "object") {
+  module.exports = require("list.js");
+} else if (typeof define == "function" && define.amd) {
+  define(function(){ return require("list.js"); });
+} else {
+  this["List"] = require("list.js");
+}})();
 var map;
 var toner;
+var tonerLite;
+var mapQuestOSM;
 var markers = [];
 var coords = [];
-var json;
+var english;
+var englishLayer;
+var italian;
+var italianLayer;
 var icon;
-var placeSearch = [];
+var icons;
+var iconURLs;
+var englishSearch = [];
+var italianSearch = [];
+var englishLabels = {};
+var italianLabels = {};
+var featureList;
+var markerClusters;
+var permaLink = {
+	id: undefined,
+	lang: 'en'
+};
+
+$(window).resize(function() {
+	sizeLayerControl();
+});
+
+$(document).on('click', '.feature-row', function(e) {
+	sidebarClick(parseInt($(this).attr('id'), 10));
+});
 
 icon = new L.Icon({
 	iconUrl: 'assets/img/signpost-icon.png',
 	iconSize: [32, 37]
 });
 
-json = L.geoJson(null, {
+iconURLs = {
+	en: 'assets/img/United-Kingdom32.png',
+	it: 'assets/img/Italy32.png'
+}
+
+var PlaceIcon = L.Icon.extend({
+	options: {
+		iconSize: [32, 32],
+		iconAnchor: [16, 16],
+		popupAnchor: [0, -32]
+	}
+});
+
+icons = {
+	en: new PlaceIcon({
+		iconUrl: iconURLs.en
+	}),
+	it: new PlaceIcon({
+		iconUrl: iconURLs.it
+	})
+};
+
+markerClusters = new L.MarkerClusterGroup({
+	spiderfyOnMaxZoom: true,
+	showCoverageOnHover: false,
+	zoomToBoundsOnClick: true,
+	disableClusteringAtZoom: 16
+});
+
+englishLayer = L.geoJson(null);
+english = L.geoJson(null, {
+	pointToLayer: function(feature, latlng) {
+		var marker = new L.Marker(latlng, { icon: icons.en });
+		coords.push(latlng);
+		markers[feature.properties.id] = marker;
+
+		// markerClusters.addLayer(marker);
+		return marker;
+	},
 	onEachFeature: function(feature, layer) {
 		if (feature.properties && feature.properties.label) {
 			//var permalink = RudePlacesMap.server_name + '?id=' + feature.properties.id;
-			var permalink = window.location.href + '?id=' + feature.properties.id;
+			var permalink = window.location.pathname + '?id=' + feature.properties.id + '&lang=en';
 
 			var popup = '<div class="rude-place-popup">';
 			popup += '<p>' + feature.properties.label + '</p>';
 			popup += '<p><a href="' + permalink + '">Permalink to this place ...</a></p>';
 			popup += '</div>';
 			layer.bindPopup(popup);
-			layer.on('mouseover', function(e) {
+			// layer.on('mouseover', function(e) {
+			// 	e.target.openPopup();
+			// });
+			layer.on('click', function(e) {
 				e.target.openPopup();
 			});
 
-			$("#feature-list tbody").append('<tr class="feature-row" id="' + L.stamp(layer) + '" lat="' + layer.getLatLng().lat + '" lng="' + layer.getLatLng().lng + '"><td style="vertical-align: middle;"><img width="16" height="18" src="assets/img/signpost-icon.png"></td><td class="feature-name">' + layer.feature.properties.label + '</td><td style="vertical-align: middle;"><i class="fa fa-chevron-right pull-right"></i></td></tr>');
-			placeSearch.push({
+			englishLabels[feature.properties.id] = {
+				stamp: L.stamp(layer),
+				feature: feature,
+				layer: layer
+			};
+
+			englishSearch.push({
+				source: 'English',
 				label: feature.properties.label,
-				id: L.stamp(layer),
+				// id: L.stamp(layer),
+				id: feature.properties.id,
 				lat: feature.geometry.coordinates[1],
-				lng: feature.geometry.coordinates[0]
+				lng: feature.geometry.coordinates[0],
+				popup: popup,
+				marker: layer,
 			});
 		}
-	},
-	pointToLayer: function(feature, latlng) {
-		var marker = new L.Marker(latlng, { icon: icon });
-		coords.push(latlng);
-		markers[feature.properties.id] = marker;
-		return marker;
 	}
 });
 
-$.getJSON('assets/data/rude.geojson', function(data) {
-	json.addData(data);
-	console.log(data);
+$.getJSON('assets/data/rude-en.geojson', function(data) {
+	english.addData(data);
+	map.addLayer(englishLayer);
+	// markerClusters.addLayer(english);
+});
+
+italianLayer = L.geoJson(null);
+italian = L.geoJson(null, {
+	pointToLayer: function(feature, latlng) {
+		var marker = new L.Marker(latlng, { icon: icons.it });
+		coords.push(latlng);
+		markers[feature.properties.id] = marker;
+
+		// markerClusters.addLayer(marker);
+		return marker;
+	},
+	onEachFeature: function(feature, layer) {
+		if (feature.properties && feature.properties.label) {
+			//var permalink = RudePlacesMap.server_name + '?id=' + feature.properties.id;
+			var permalink = window.location.pathname + '?id=' + feature.properties.id + '&lang=it';
+
+			var popup = '<div class="rude-place-popup">';
+			popup += '<p>' + feature.properties.label + '</p>';
+			popup += '<p><a href="' + permalink + '">Permalink to this place ...</a></p>';
+			popup += '</div>';
+			layer.bindPopup(popup);
+			// layer.on('mouseover', function(e) {
+			// 	e.target.openPopup();
+			// });
+			layer.on('click', function(e) {
+				e.target.openPopup();
+			});
+
+			italianLabels[feature.properties.id] = {
+				stamp: L.stamp(layer),
+				feature: feature,
+				layer: layer
+			};
+
+			italianSearch.push({
+				source: 'Italian',
+				label: feature.properties.label,
+				// id: L.stamp(layer),
+				id: feature.properties.id,
+				lat: feature.geometry.coordinates[1],
+				lng: feature.geometry.coordinates[0],
+				popup: popup,
+				marker: layer,
+			});
+		}
+	}
+});
+
+$.getJSON('assets/data/rude-it.geojson', function(data) {
+	italian.addData(data);
+	// map.addLayer(italianLayer);
 });
 
 $(document).one('ajaxStop', function() {
-	console.log('one active');
+	console.log('one:ajaxStop active');
 	$('#loading').hide();
 
-	var placesBH = new Bloodhound({
-		name: 'Places',
-		datumTokenizer: function (d) {
+	// console.log('Rebuild featureList');
+	// featureList = new List("features", {valueNames: ["feature-name"]});
+	// featureList.sort("feature-name", {order:"asc"});
+	rebuildFeatureList(englishLabels);
+
+	// console.log('English Search');
+	// console.log(englishSearch);
+	var englishBH = new Bloodhound({
+		name: 'English',
+		datumTokenizer: function(d) {
 			return Bloodhound.tokenizers.whitespace(d.label);
 		},
 		queryTokenizer: Bloodhound.tokenizers.whitespace,
-		local: placeSearch,
+		local: englishSearch,
 		limit: 10
 	});
 
-	placesBH.initialize();
+	// console.log('Italian Search');
+	// console.log(italianSearch);
+	var italianBH = new Bloodhound({
+		name: 'Italian',
+		datumTokenizer: function(d) {
+			return Bloodhound.tokenizers.whitespace(d.label);
+		},
+		queryTokenizer: Bloodhound.tokenizers.whitespace,
+		local: italianSearch,
+		limit: 10
+	});
+
+	englishBH.initialize();
+	italianBH.initialize();
+
+	// englishLabels = sortLabels(englishLabels);
+	// console.log(Object.keys(englishLabels).length + ' english labels');
+	//
+	// italianLabels = sortLabels(italianLabels);
+	// console.log(Object.keys(italianLabels).length + ' italian labels');
+
+
+	// englishLabels = $.grep(englishLabels,function(n){ return(n) });
+	//
+	// englishLabels.sort(function(a, b) {
+	// 	if (a.properties.label < b.properties.label) {
+	// 		return -1;
+	// 	}
+	// 	if (a.properties.label > b.properties.label) {
+	// 		return 1;
+	// 	}
+	// 	return 0;
+	// });
+	//
+	// $.each(englishLabels, function(index, feature) {
+	// 	$("#feature-list tbody").append('<tr class="feature-row" id="' + L.stamp(layer)'" permalink="' + feature.properties.id + '" lat="' + feature.geometry.coordinates[1] + '" lng="' + feature.geometry.coordinates[0] + '"><td style="vertical-align: middle;"><img width="16" height="18" src="assets/img/signpost-icon.png"></td><td class="feature-name">' + feature.properties.label + '</td><td style="vertical-align: middle;"><i class="fa fa-chevron-right pull-right"></i></td></tr>');
+	// });
 
 	$("#searchbox").typeahead({
 		minLength: 3,
 		highlight: true,
 		hint: false
 	}, {
-		name: "Places",
+		name: "English",
 		displayKey: "label",
-		source: placesBH.ttAdapter(),
+		source: englishBH.ttAdapter(),
 		templates: {
-			header: "<h4 class='typeahead-header'><img src='assets/img/signpost-icon.png' width='24' height='28'>&nbsp;Places</h4>"
+			header: '<h4 class="typeahead-header"><img src="' + iconURLs.en + '" width="24" height="28">&nbsp;English</h4>'
+		}
+	}, {
+		name: 'Italian',
+		displayKey: 'label',
+		source: italianBH.ttAdapter(),
+		templates: {
+			header: '<h4 class="typeahead-header"><img src="' + iconURLs.it + '" width="24" height="28">&nbsp;Italian</h4>'
 		}
 	}).on("typeahead:selected", function (obj, datum) {
-		if (datum.source === "Places") {
-			map.setView([datum.lat, datum.lng], 17);
-			if (map._layers[datum.id]) {
-				map._layers[datum.id].fire("click");
+		if (datum.source === 'English') {
+			if (!map.hasLayer(englishLayer)) {
+				map.addLayer(englishLayer);
 			}
+			if (map.hasLayer(italianLayer)) {
+				map.removeLayer(italianLayer);
+			}
+			map.setView([datum.lat, datum.lng], 10);
+			datum.marker.fire('click');
 		}
+		if (datum.source === 'Italian') {
+			if (!map.hasLayer(italianLayer)) {
+				map.addLayer(italianLayer);
+			}
+			if (map.hasLayer(englishLayer)) {
+				map.removeLayer(englishLayer);
+			}
+			map.setView([datum.lat, datum.lng], 10);
+			datum.marker.fire('click');
+		}
+		// if (datum.source === "English" || datum.source === 'Italian') {
+		// 	// markerClusters.zoomToShowLayer(datum.marker);
+		// 	map.setView([datum.lat, datum.lng], 10);
+		// 	datum.marker.fire('click');
+		// 	// datum.marker.openPopup();
+		// 	// if (map._layers[datum.id]) {
+		// 	// 	map._layers[datum.id].fire("click");
+		// 	// }
+		// }
 		if ($(".navbar-collapse").height() > 50) {
 			$(".navbar-collapse").collapse("hide");
 		}
@@ -23308,6 +25331,51 @@ $(document).one('ajaxStop', function() {
 	});
 	$(".twitter-typeahead").css("position", "static");
 	$(".twitter-typeahead").css("display", "block");
+
+	// console.log('Rebuild featureList');
+	rebuildFeatureList(englishLabels);
+	// featureList = new List("features", {valueNames: ["feature-name"]});
+	// featureList.sort("feature-name", {order:"asc"});
+
+	console.log(permaLink);
+
+	if (permaLink.id && permaLink.lang) {
+		if (permaLink.lang === 'en' && englishLabels.hasOwnProperty(permaLink.id)) {
+			if (!map.hasLayer(englishLayer)) {
+				map.addLayer(englishLayer);
+			}
+			if (map.hasLayer(italianLayer)) {
+				map.removeLayer(italianLayer);
+			}
+			var datum = englishLabels[permaLink.id]
+			console.log(datum);
+			map.setView(datum.layer.getLatLng(), 10);
+			datum.layer.fire('click');
+		}
+
+		if (permaLink.lang === 'it' && italianLabels.hasOwnProperty(permaLink.id)) {
+			if (!map.hasLayer(italianLayer)) {
+				map.addLayer(italianLayer);
+			}
+			if (map.hasLayer(englishLayer)) {
+				map.removeLayer(englishLayer);
+			}
+			var datum = italianLabels[permaLink.id]
+			console.log(datum);
+			map.setView(datum.layer.getLatLng(), 10);
+			datum.layer.fire('click');
+		}
+	}
+	else {
+		console.log('No permalink detected');
+	}
+	console.log('one:ajaxStop complete');
+});
+
+$("#list-btn").click(function() {
+	$('#sidebar').toggle();
+	map.invalidateSize();
+	return false;
 });
 
 $("#sidebar-hide-btn").click(function() {
@@ -23315,20 +25383,269 @@ $("#sidebar-hide-btn").click(function() {
 	map.invalidateSize();
 });
 
+/* Highlight search box text on click */
+$("#searchbox").click(function () {
+	$(this).select();
+});
 
+/* Prevent hitting enter from refreshing the page */
+$("#searchbox").keypress(function (e) {
+	if (e.which == 13) {
+		e.preventDefault();
+	}
+});
 
-toner = L.stamenTileLayer('toner-lite');
+$("#about-btn").click(function() {
+	$("#aboutModal").modal("show");
+	$(".navbar-collapse.in").collapse("hide");
+	return false;
+});
+
+$("#full-extent-btn").click(function() {
+	var layer;
+	if (map.hasLayer(englishLayer)) {
+		layer = english;
+	}
+	else if (map.hasLayer(italianLayer)) {
+		layer = italian;
+	}
+	if (layer) {
+		map.fitBounds(layer.getBounds());
+		$(".navbar-collapse.in").collapse("hide");
+	}
+	return false;
+});
+
+function sidebarClick(id) {
+	console.log('sidebarClick for ', id);
+	var layer = markerClusters.getLayer(id);
+	map.setView([layer.getLatLng().lat, layer.getLatLng().lng], 10);
+	layer.fire("click");
+	/* Hide sidebar and go to the map on small screens */
+	if (document.body.clientWidth <= 767) {
+		$("#sidebar").hide();
+		map.invalidateSize();
+	}
+}
+
+function syncSidebar() {
+	console.log('syncSidebar');
+
+	// $.each(labels, function(index, feature) {
+	// 	$("#feature-list tbody").append('<tr class="feature-row" id="' + L.stamp(layer)'" permalink="' + feature.properties.id + '" lat="' + feature.geometry.coordinates[1] + '" lng="' + feature.geometry.coordinates[0] + '"><td style="vertical-align: middle;"><img width="16" height="18" src="assets/img/signpost-icon.png"></td><td class="feature-name">' + feature.properties.label + '</td><td style="vertical-align: middle;"><i class="fa fa-chevron-right pull-right"></i></td></tr>');
+	// });
+
+	/* Empty sidebar features */
+	console.log('empty sidebar');
+	$("#feature-list tbody").empty();
+	//
+	if (map.hasLayer(englishLayer)) {
+		console.log('has englishLayer');
+		// console.log(englishLayer);
+		// console.log(Object.keys(englishLabels).length + ' labels');
+		$.each(englishLabels, function(index, obj) {
+			// console.log('i:', index, ' s:', obj.stamp, ' p:', obj.feature.properties.id, obj.feature.properties.label);
+			var stamp = obj.stamp;
+			var feature = obj.feature;
+			// console.log('<tr class="feature-row" id="' + stamp + '" permalink="' + feature.properties.id + '" lang="en" lat="' + feature.geometry.coordinates[1] + '" lng="' + feature.geometry.coordinates[0] + '"><td style="vertical-align: middle;"><img width="16" height="18" src="assets/img/signpost-icon.png"></td><td class="feature-name">' + feature.properties.label + '</td><td style="vertical-align: middle;"><i class="fa fa-chevron-right pull-right"></i></td></tr>');
+
+			$("#feature-list tbody").append('<tr class="feature-row" id="' + stamp + '" permalink="' + feature.properties.id + '" lang="en" lat="' + feature.geometry.coordinates[1] + '" lng="' + feature.geometry.coordinates[0] + '"><td style="vertical-align: middle;"><img width="16" height="18" src="' + iconURLs.en + '"></td><td class="feature-name">' + feature.properties.label + '</td><td style="vertical-align: middle;"><i class="fa fa-chevron-right pull-right"></i></td></tr>');
+		});
+		rebuildFeatureList(englishLabels);
+	}
+
+	if (map.hasLayer(italianLayer)) {
+		console.log('has italianLayer');
+		// console.log(italianLayer);
+		// console.log(Object.keys(italianLabels).length + ' labels');
+
+		$.each(italianLabels, function(index, obj) {
+			// console.log('i:', index, ' s:', obj.stamp, ' p:', obj.feature.properties.id, obj.feature.properties.label);
+			// console.log(index, obj);
+			var stamp = obj.stamp;
+			var feature = obj.feature;
+			$("#feature-list tbody").append('<tr class="feature-row" id="' + stamp + '" permalink="' + feature.properties.id + '" lang="it" lat="' + feature.geometry.coordinates[1] + '" lng="' + feature.geometry.coordinates[0] + '"><td style="vertical-align: middle;"><img width="16" height="18" src="' + iconURLs.it + '"></td><td class="feature-name">' + feature.properties.label + '</td><td style="vertical-align: middle;"><i class="fa fa-chevron-right pull-right"></i></td></tr>');
+		});
+
+		rebuildFeatureList(italianLabels);
+	}
+
+	//
+	// if (map.hasLayer(italianLayer)) {
+	// 	$.each(italianLabels, function(index, obj) {
+	// 		console.log(index, obj);
+	// 		var stamp = obj.stamp;
+	// 		var feature = obj.feature;
+	// 		$("#feature-list tbody").append('<tr class="feature-row" id="' + stamp + '" permalink="' + feature.properties.id + '" lat="' + feature.geometry.coordinates[1] + '" lng="' + feature.geometry.coordinates[0] + '"><td style="vertical-align: middle;"><img width="16" height="18" src="assets/img/signpost-icon.png"></td><td class="feature-name">' + feature.properties.label + '</td><td style="vertical-align: middle;"><i class="fa fa-chevron-right pull-right"></i></td></tr>');
+	// 	});
+	// }
+
+	/* Loop through theaters layer and add only features which are in the map bounds */
+	// english.eachLayer(function (layer) {
+	// 	if (map.hasLayer(englishLayer)) {
+	// 		if (map.getBounds().contains(layer.getLatLng())) {
+	// 			$("#feature-list tbody").append('<tr class="feature-row" id="' + L.stamp(layer) + '" lat="' + layer.getLatLng().lat + '" lng="' + layer.getLatLng().lng + '"><td style="vertical-align: middle;"><img width="16" height="18" src="assets/img/theater.png"></td><td class="feature-name">' + layer.feature.properties.NAME + '</td><td style="vertical-align: middle;"><i class="fa fa-chevron-right pull-right"></i></td></tr>');
+	// 		}
+	// 	}
+	// });
+	/* Loop through museums layer and add only features which are in the map bounds */
+	// italian.eachLayer(function (layer) {
+	// 	if (map.hasLayer(italianLayer)) {
+	// 		if (map.getBounds().contains(layer.getLatLng())) {
+	// 			$("#feature-list tbody").append('<tr class="feature-row" id="' + L.stamp(layer) + '" lat="' + layer.getLatLng().lat + '" lng="' + layer.getLatLng().lng + '"><td style="vertical-align: middle;"><img width="16" height="18" src="assets/img/museum.png"></td><td class="feature-name">' + layer.feature.properties.NAME + '</td><td style="vertical-align: middle;"><i class="fa fa-chevron-right pull-right"></i></td></tr>');
+	// 		}
+	// 	}
+	// });
+
+	/* Update list.js featureList */
+	// console.log('Rebuild featureList');
+	// featureList = new List("features", {
+	// 	valueNames: ["feature-name"]
+	// });
+	// featureList.sort("feature-name", {
+	// 	order: "asc"
+	// });
+}
+
+function sortLabels(labels) {
+	console.log('sortLabels');
+	labels = $.grep(labels,function(n){ return(n) });
+
+	labels.sort(function(a, b) {
+		if (a.feature.properties.label < b.feature.properties.label) {
+			return -1;
+		}
+		if (a.feature.properties.label > b.feature.properties.label) {
+			return 1;
+		}
+		return 0;
+	});
+
+	console.log(labels);
+	return labels;
+}
+
+function rebuildFeatureList(list) {
+	// console.log(Object.keys(englishLabels).length + ' english labels');
+
+	/* Update list.js featureList */
+	// console.log('Rebuild featureList');
+	featureList = new List("features", {
+		valueNames: ["feature-name"],
+		page: Object.keys(list).length
+	});
+	featureList.sort("feature-name", {
+		order: "asc"
+	});
+	console.log('Rebuilt featureList with ' + featureList.size() + ' of ' + Object.keys(list).length + ' entries');
+}
+
+function sizeLayerControl() {
+	$(".leaflet-control-layers").css("max-height", $("#map").height() - 50);
+}
+
+// Map Base Layers
+
+toner = L.stamenTileLayer('toner');
+tonerLite = L.stamenTileLayer('toner-lite');
+mapQuestOSM = L.tileLayer("http://{s}.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png", {
+	maxZoom: 19,
+	subdomains: ["otile1", "otile2", "otile3", "otile4"],
+	attribution: 'Tiles courtesy of <a href="http://www.mapquest.com/" target="_blank">MapQuest</a> <img src="http://developer.mapquest.com/content/osm/mq_logo.png">. Map data (c) <a href="http://www.openstreetmap.org/" target="_blank">OpenStreetMap</a> contributors, CC-BY-SA.'
+});
+
 map = L.map('map', {
 	zoom: 3,
 	center: [0,0],
-	layers: [toner, json],
+	layers: [tonerLite, markerClusters],
 	zoomControl: false,
 	attributionControl: false
 });
 
+/* Layer control listeners that allow for a single markerClusters layer */
+map.on("overlayadd", function(e) {
+	console.log('overlayadd');
+	if (e.layer === englishLayer) {
+		console.log('add - english');
+		markerClusters.addLayer(english);
+		syncSidebar();
+	}
+	if (e.layer === italianLayer) {
+		console.log('add - italian');
+		markerClusters.addLayer(italian);
+		syncSidebar();
+	}
+});
+
+map.on("overlayremove", function(e) {
+	console.log('overlayremove');
+	if (e.layer === englishLayer) {
+		console.log('remove - english');
+		markerClusters.removeLayer(english);
+		syncSidebar();
+	}
+	if (e.layer === italianLayer) {
+		console.log('remove - italian');
+		markerClusters.removeLayer(italian);
+		syncSidebar();
+	}
+});
+
+/* Larger screens get expanded layer control and visible sidebar */
+if (document.body.clientWidth <= 767) {
+	var isCollapsed = true;
+} else {
+	var isCollapsed = false;
+}
+
+var baseLayers = {
+	"Toner Lite": tonerLite,
+	"Toner": toner,
+	"Street Map": mapQuestOSM
+};
+
+var groupedOverlays = {
+	"Languages": {
+		'<img src="assets/img/Italy32.png" width="24" height="28">&nbsp;Italian': italianLayer,
+		'<img src="assets/img/United-Kingdom32.png" width="24" height="28">&nbsp;English': englishLayer
+	}
+};
+
+var layerControl = L.control.groupedLayers(baseLayers, groupedOverlays, {
+	exclusiveGroups: ["Places"],
+	collapsed: isCollapsed
+}).addTo(map);
+
+// map.addLayer(markerCluster);
 map.on('zoomend', function() {
 	console.log('Zoom: ' + map.getZoom());
 });
+
+function updateAttribution(e) {
+	$.each(map._layers, function(index, layer) {
+		if (layer.getAttribution) {
+			$('#attribution').html(layer.getAttribution());
+		}
+	});
+}
+
+map.on('layeradd', updateAttribution);
+map.on('layerremove', updateAttribution);
+
+var attributionControl = L.control({
+	position: 'bottomright'
+});
+attributionControl.onAdd = function(map) {
+	var div = L.DomUtil.create('div', 'leaflet-control-attribution');
+	div.innerHTML = '<span class="hidden-hs"><a href="http://maps.geotastic.org">More Maps?</a> | This is a thing by <a href="http://www.garygale.com">Gary Gale</a> | </span><a href="#" onclick="$(\'#attributionModal\').modal(\'show\'); return false;">Attribution</a>';
+	return div;
+};
+map.addControl(attributionControl);
+
+L.control.mousePosition({
+	position: 'topleft',
+	emptyString: 'Position Unavailable'
+}).addTo(map);
 
 var zoomControl = L.control.zoom({
 	position: "bottomright"
@@ -23366,8 +25683,45 @@ var locateControl = L.control.locate({
 	}
 }).addTo(map);
 
+function parsePermaLink(parser) {
+	console.log('origin: ' + window.location.origin);
+	console.log('href: ' + window.location.href);
+	console.log('pathname: ' + window.location.pathname);
+	console.log('search: ' + window.location.search);
+	console.log('hash: ' + window.location.hash);
+	var url = window.location.search.substr(1);
+	if (!url) {
+		console.log('No search string; defaulting to hash');
+		url = window.location.hash.substr(1);
+	}
+	console.log('url: ' + url);
+
+	if (url !== '') {
+		nvps = url.split('&');
+		$.each(nvps, function(index, value) {
+			var nvp = value.split('=');
+			parser(nvp[0], nvp[1]);
+		});
+	}
+}
+
+function paramParser(key, value) {
+	console.log(key + ' = ' + value);
+	switch (key) {
+		case 'id':
+			permaLink.id = parseInt(value);
+			break;
+		case 'lang':
+			permaLink.lang = value;
+			break;
+		default:
+			break;
+	}
+}
+
 $(document).ready(function() {
 	console.log('ready active');
+	parsePermaLink(paramParser);
 
 	// var coords = [];
 	// var markers = new Array();

@@ -34,7 +34,7 @@
                     <a href="#" class="navbar-icon pull-right visible-xs" id="nav-btn"><i class="fa fa-bars fa-lg white"></i></a>
                     <a href="#" class="navbar-icon pull-right visible-xs" id="sidebar-toggle-btn"><i class="fa fa-search fa-lg white"></i></a>
                 </div>
-                <a class="navbar-brand" href="#">Vaguely Rude Places</a>
+                <a class="navbar-brand" href="#">Places</a>
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
@@ -57,7 +57,7 @@
                             <li><a href="data/DOITT_MUSEUM_01_13SEPT2010.geojson" download="museums.geojson" target="_blank" data-toggle="collapse" data-target=".navbar-collapse.in"><i class="fa fa-download"></i>&nbsp;&nbsp;Museums</a></li>
                         </ul>
                     </li>
-                    <li class="hidden-xs"><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="list-btn"><i class="fa fa-list white"></i>&nbsp;&nbsp;POI List</a></li>
+                    <li class="hidden-xs"><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="list-btn"><i class="fa fa-list white"></i>&nbsp;&nbsp;Browse Places</a></li>
                 </ul>
                 <form class="navbar-form navbar-right" role="search">
                     <div class="form-group has-feedback">
@@ -74,7 +74,7 @@
             <div class="sidebar-wrapper">
                 <div class="panel panel-default" id="features">
                     <div class="panel-heading">
-                        <h3 class="panel-title">Places
+                        <h3 class="panel-title">Place Browser
                             <button type="button" class="btn btn-xs btn-default pull-right" id="sidebar-hide-btn"><i class="fa fa-chevron-left"></i></button></h3>
                         </div>
                         <div class="panel-body">
@@ -133,6 +133,7 @@
                                     <li><a href="#museums-tab" data-toggle="tab">Museums</a></li>
                                 </ul>
                             </li>
+                            <li><a href="#media" data-toggle="tab"><i class="fa fa-newspaper-o"></i>&nbsp;In the Media</a></li>
                         </ul>
                         <div class="tab-content" id="aboutTabsContent">
                             <div class="tab-pane fade active in" id="about">
@@ -195,6 +196,9 @@
                             </div>
                             <div class="tab-pane fade" id="museums-tab">
                                 <p>Museum data courtesy of <a href="https://data.cityofnewyork.us/Recreation/Museums-and-Galleries/sat5-adpb" target="_blank">NYC Department of Information & Telecommunications (DoITT)</a></p>
+                            </div>
+                            <div class="tab-pane fade" id="media">
+                                <p>In the media?</p>
                             </div>
                         </div>
                     </div>

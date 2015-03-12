@@ -11,7 +11,11 @@ module.exports = function(grunt) {
                     'bower_components/leaflet/dist/leaflet-src.js',
                     'bower_components/maps.stamen.com/js/tile.stamen.js',
                     'bower_components/leaflet.locatecontrol/src/L.Control.Locate.js',
+                    'bower_components/leaflet.markercluster/dist/leaflet.markercluster.js',
+                    'bower_components/Leaflet.groupedlayercontrol/src/leaflet.groupedlayercontrol.js',
+                    'bower_components/Leaflet.MousePosition/src/L.Control.MousePosition.js',
                     'bower_components/typeahead.js/dist/typeahead.bundle.js',
+                    'bower_components/list.js/dist/list.js',
                     'src/js/rude.js'
                 ],
                 dest: 'assets/js/rude.js'
@@ -31,6 +35,33 @@ module.exports = function(grunt) {
                     {
                         expand: true,
                         cwd: 'bower_components/leaflet.locatecontrol/dist',
+                        src: ['**/*.css', '!**/*.min.css'],
+                        dest: 'src/sass',
+                        filter: 'isFile',
+                        ext: '.scss',
+                        extDot: 'last'
+                    },
+                    {
+                        expand: true,
+                        cwd: 'bower_components/leaflet.markercluster/dist',
+                        src: ['**/*.css', '!**/*.min.css'],
+                        dest: 'src/sass',
+                        filter: 'isFile',
+                        ext: '.scss',
+                        extDot: 'last'
+                    },
+                    {
+                        expand: true,
+                        cwd: 'bower_components/Leaflet.groupedlayercontrol/src',
+                        src: ['**/*.css', '!**/*.min.css'],
+                        dest: 'src/sass',
+                        filter: 'isFile',
+                        ext: '.scss',
+                        extDot: 'last'
+                    },
+                    {
+                        expand: true,
+                        cwd: 'bower_components/Leaflet.MousePosition/src',
                         src: ['**/*.css', '!**/*.min.css'],
                         dest: 'src/sass',
                         filter: 'isFile',
@@ -75,8 +106,17 @@ module.exports = function(grunt) {
         jsonmin: {
             dist: {
                 files: {
-                    'assets/data/rude.geojson': 'src/data/rude.geojson'
+                    'assets/data/rude-en.geojson': 'src/data/rude-en.geojson',
+                    'assets/data/rude-it.geojson': 'src/data/rude-it.geojson'
                 }
+            }
+        },
+        shell: {
+            english: {
+                command: 'ogr2ogr -f "ESRI Shapefile" -overwrite assets/data/rude-en.shp assets/data/rude-en.geojson OGRGeoJSON'
+            },
+            italian: {
+                command: 'ogr2ogr -f "ESRI Shapefile" -overwrite assets/data/rude-it.shp assets/data/rude-it.geojson OGRGeoJSON'
             }
         },
         watch: {
@@ -107,6 +147,6 @@ module.exports = function(grunt) {
             grunt.file.delete(file);
         });
     });
-    grunt.registerTask('build', ['concat', 'copy:csstoscss', 'copy:img', 'copy:fonts', 'sass', 'jsonmin']);
+    grunt.registerTask('build', ['nodsstore', 'concat', 'copy:csstoscss', 'copy:img', 'copy:fonts', 'jsonmin', 'shell', 'sass']);
     grunt.registerTask('deploy', ['build', 'copy:deploy', 'shell:deploy']);
 };
