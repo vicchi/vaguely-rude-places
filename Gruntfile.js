@@ -112,11 +112,17 @@ module.exports = function(grunt) {
             }
         },
         shell: {
-            english: {
+            enshp: {
                 command: 'ogr2ogr -f "ESRI Shapefile" -overwrite assets/data/rude-en.shp assets/data/rude-en.geojson OGRGeoJSON'
             },
-            italian: {
+            itshp: {
                 command: 'ogr2ogr -f "ESRI Shapefile" -overwrite assets/data/rude-it.shp assets/data/rude-it.geojson OGRGeoJSON'
+            },
+            enzip: {
+                command: 'zip assets/data/rude-it.zip assets/data/rude-en.zip assets/data/rude-en.dbf assets/data/rude-en.prj assets/data/rude-en.shx assets/data/rude-en.shp'
+            },
+            itzip: {
+                command: 'zip assets/data/rude-en.zip assets/data/rude-it.zip assets/data/rude-it.dbf assets/data/rude-it.prj assets/data/rude-it.shx assets/data/rude-it.shp'
             }
         },
         watch: {
