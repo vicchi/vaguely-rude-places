@@ -25113,23 +25113,17 @@ english = L.geoJson(null, {
 		var marker = new L.Marker(latlng, { icon: icons.en });
 		coords.push(latlng);
 		markers[feature.properties.id] = marker;
-
-		// markerClusters.addLayer(marker);
 		return marker;
 	},
 	onEachFeature: function(feature, layer) {
 		if (feature.properties && feature.properties.label) {
-			//var permalink = RudePlacesMap.server_name + '?id=' + feature.properties.id;
 			var permalink = window.location.pathname + '?id=' + feature.properties.id + '&lang=en';
-
 			var popup = '<div class="rude-place-popup">';
 			popup += '<p>' + feature.properties.label + '</p>';
 			popup += '<p><a href="' + permalink + '">Permalink to this place ...</a></p>';
 			popup += '</div>';
+
 			layer.bindPopup(popup);
-			// layer.on('mouseover', function(e) {
-			// 	e.target.openPopup();
-			// });
 			layer.on('click', function(e) {
 				e.target.openPopup();
 			});
@@ -25143,7 +25137,6 @@ english = L.geoJson(null, {
 			englishSearch.push({
 				source: 'English',
 				label: feature.properties.label,
-				// id: L.stamp(layer),
 				id: feature.properties.id,
 				lat: feature.geometry.coordinates[1],
 				lng: feature.geometry.coordinates[0],
@@ -25157,7 +25150,6 @@ english = L.geoJson(null, {
 $.getJSON('assets/data/rude-en.geojson', function(data) {
 	english.addData(data);
 	map.addLayer(englishLayer);
-	// markerClusters.addLayer(english);
 });
 
 italianLayer = L.geoJson(null);
@@ -25166,23 +25158,17 @@ italian = L.geoJson(null, {
 		var marker = new L.Marker(latlng, { icon: icons.it });
 		coords.push(latlng);
 		markers[feature.properties.id] = marker;
-
-		// markerClusters.addLayer(marker);
 		return marker;
 	},
 	onEachFeature: function(feature, layer) {
 		if (feature.properties && feature.properties.label) {
-			//var permalink = RudePlacesMap.server_name + '?id=' + feature.properties.id;
 			var permalink = window.location.pathname + '?id=' + feature.properties.id + '&lang=it';
-
 			var popup = '<div class="rude-place-popup">';
 			popup += '<p>' + feature.properties.label + '</p>';
 			popup += '<p><a href="' + permalink + '">Permalink to this place ...</a></p>';
 			popup += '</div>';
+
 			layer.bindPopup(popup);
-			// layer.on('mouseover', function(e) {
-			// 	e.target.openPopup();
-			// });
 			layer.on('click', function(e) {
 				e.target.openPopup();
 			});
@@ -25196,7 +25182,6 @@ italian = L.geoJson(null, {
 			italianSearch.push({
 				source: 'Italian',
 				label: feature.properties.label,
-				// id: L.stamp(layer),
 				id: feature.properties.id,
 				lat: feature.geometry.coordinates[1],
 				lng: feature.geometry.coordinates[0],
@@ -25209,20 +25194,12 @@ italian = L.geoJson(null, {
 
 $.getJSON('assets/data/rude-it.geojson', function(data) {
 	italian.addData(data);
-	// map.addLayer(italianLayer);
 });
 
 $(document).one('ajaxStop', function() {
-	console.log('one:ajaxStop active');
 	$('#loading').hide();
-
-	// console.log('Rebuild featureList');
-	// featureList = new List("features", {valueNames: ["feature-name"]});
-	// featureList.sort("feature-name", {order:"asc"});
 	rebuildFeatureList(englishLabels);
 
-	// console.log('English Search');
-	// console.log(englishSearch);
 	var englishBH = new Bloodhound({
 		name: 'English',
 		datumTokenizer: function(d) {
@@ -25233,8 +25210,6 @@ $(document).one('ajaxStop', function() {
 		limit: 10
 	});
 
-	// console.log('Italian Search');
-	// console.log(italianSearch);
 	var italianBH = new Bloodhound({
 		name: 'Italian',
 		datumTokenizer: function(d) {
@@ -25247,29 +25222,6 @@ $(document).one('ajaxStop', function() {
 
 	englishBH.initialize();
 	italianBH.initialize();
-
-	// englishLabels = sortLabels(englishLabels);
-	// console.log(Object.keys(englishLabels).length + ' english labels');
-	//
-	// italianLabels = sortLabels(italianLabels);
-	// console.log(Object.keys(italianLabels).length + ' italian labels');
-
-
-	// englishLabels = $.grep(englishLabels,function(n){ return(n) });
-	//
-	// englishLabels.sort(function(a, b) {
-	// 	if (a.properties.label < b.properties.label) {
-	// 		return -1;
-	// 	}
-	// 	if (a.properties.label > b.properties.label) {
-	// 		return 1;
-	// 	}
-	// 	return 0;
-	// });
-	//
-	// $.each(englishLabels, function(index, feature) {
-	// 	$("#feature-list tbody").append('<tr class="feature-row" id="' + L.stamp(layer)'" permalink="' + feature.properties.id + '" lat="' + feature.geometry.coordinates[1] + '" lng="' + feature.geometry.coordinates[0] + '"><td style="vertical-align: middle;"><img width="16" height="18" src="assets/img/signpost-icon.png"></td><td class="feature-name">' + feature.properties.label + '</td><td style="vertical-align: middle;"><i class="fa fa-chevron-right pull-right"></i></td></tr>');
-	// });
 
 	$("#searchbox").typeahead({
 		minLength: 3,
@@ -25300,6 +25252,7 @@ $(document).one('ajaxStop', function() {
 			map.setView([datum.lat, datum.lng], 10);
 			datum.marker.fire('click');
 		}
+
 		if (datum.source === 'Italian') {
 			if (!map.hasLayer(italianLayer)) {
 				map.addLayer(italianLayer);
@@ -25310,15 +25263,7 @@ $(document).one('ajaxStop', function() {
 			map.setView([datum.lat, datum.lng], 10);
 			datum.marker.fire('click');
 		}
-		// if (datum.source === "English" || datum.source === 'Italian') {
-		// 	// markerClusters.zoomToShowLayer(datum.marker);
-		// 	map.setView([datum.lat, datum.lng], 10);
-		// 	datum.marker.fire('click');
-		// 	// datum.marker.openPopup();
-		// 	// if (map._layers[datum.id]) {
-		// 	// 	map._layers[datum.id].fire("click");
-		// 	// }
-		// }
+
 		if ($(".navbar-collapse").height() > 50) {
 			$(".navbar-collapse").collapse("hide");
 		}
@@ -25332,12 +25277,7 @@ $(document).one('ajaxStop', function() {
 	$(".twitter-typeahead").css("position", "static");
 	$(".twitter-typeahead").css("display", "block");
 
-	// console.log('Rebuild featureList');
 	rebuildFeatureList(englishLabels);
-	// featureList = new List("features", {valueNames: ["feature-name"]});
-	// featureList.sort("feature-name", {order:"asc"});
-
-	console.log(permaLink);
 
 	if (permaLink.id && permaLink.lang) {
 		if (permaLink.lang === 'en' && englishLabels.hasOwnProperty(permaLink.id)) {
@@ -25348,7 +25288,6 @@ $(document).one('ajaxStop', function() {
 				map.removeLayer(italianLayer);
 			}
 			var datum = englishLabels[permaLink.id]
-			console.log(datum);
 			map.setView(datum.layer.getLatLng(), 10);
 			datum.layer.fire('click');
 		}
@@ -25361,15 +25300,10 @@ $(document).one('ajaxStop', function() {
 				map.removeLayer(englishLayer);
 			}
 			var datum = italianLabels[permaLink.id]
-			console.log(datum);
 			map.setView(datum.layer.getLatLng(), 10);
 			datum.layer.fire('click');
 		}
 	}
-	else {
-		console.log('No permalink detected');
-	}
-	console.log('one:ajaxStop complete');
 });
 
 $("#list-btn").click(function() {
@@ -25390,6 +25324,7 @@ $("#searchbox").click(function () {
 
 /* Prevent hitting enter from refreshing the page */
 $("#searchbox").keypress(function (e) {
+	console.log(e);
 	if (e.which == 13) {
 		e.preventDefault();
 	}
@@ -25417,7 +25352,6 @@ $("#full-extent-btn").click(function() {
 });
 
 function sidebarClick(id) {
-	console.log('sidebarClick for ', id);
 	var layer = markerClusters.getLayer(id);
 	map.setView([layer.getLatLng().lat, layer.getLatLng().lng], 10);
 	layer.fire("click");
@@ -25429,86 +25363,30 @@ function sidebarClick(id) {
 }
 
 function syncSidebar() {
-	console.log('syncSidebar');
-
-	// $.each(labels, function(index, feature) {
-	// 	$("#feature-list tbody").append('<tr class="feature-row" id="' + L.stamp(layer)'" permalink="' + feature.properties.id + '" lat="' + feature.geometry.coordinates[1] + '" lng="' + feature.geometry.coordinates[0] + '"><td style="vertical-align: middle;"><img width="16" height="18" src="assets/img/signpost-icon.png"></td><td class="feature-name">' + feature.properties.label + '</td><td style="vertical-align: middle;"><i class="fa fa-chevron-right pull-right"></i></td></tr>');
-	// });
-
 	/* Empty sidebar features */
 	console.log('empty sidebar');
 	$("#feature-list tbody").empty();
 	//
 	if (map.hasLayer(englishLayer)) {
-		console.log('has englishLayer');
-		// console.log(englishLayer);
-		// console.log(Object.keys(englishLabels).length + ' labels');
 		$.each(englishLabels, function(index, obj) {
-			// console.log('i:', index, ' s:', obj.stamp, ' p:', obj.feature.properties.id, obj.feature.properties.label);
 			var stamp = obj.stamp;
 			var feature = obj.feature;
-			// console.log('<tr class="feature-row" id="' + stamp + '" permalink="' + feature.properties.id + '" lang="en" lat="' + feature.geometry.coordinates[1] + '" lng="' + feature.geometry.coordinates[0] + '"><td style="vertical-align: middle;"><img width="16" height="18" src="assets/img/signpost-icon.png"></td><td class="feature-name">' + feature.properties.label + '</td><td style="vertical-align: middle;"><i class="fa fa-chevron-right pull-right"></i></td></tr>');
-
 			$("#feature-list tbody").append('<tr class="feature-row" id="' + stamp + '" permalink="' + feature.properties.id + '" lang="en" lat="' + feature.geometry.coordinates[1] + '" lng="' + feature.geometry.coordinates[0] + '"><td style="vertical-align: middle;"><img width="16" height="18" src="' + iconURLs.en + '"></td><td class="feature-name">' + feature.properties.label + '</td><td style="vertical-align: middle;"><i class="fa fa-chevron-right pull-right"></i></td></tr>');
 		});
 		rebuildFeatureList(englishLabels);
 	}
 
 	if (map.hasLayer(italianLayer)) {
-		console.log('has italianLayer');
-		// console.log(italianLayer);
-		// console.log(Object.keys(italianLabels).length + ' labels');
-
 		$.each(italianLabels, function(index, obj) {
-			// console.log('i:', index, ' s:', obj.stamp, ' p:', obj.feature.properties.id, obj.feature.properties.label);
-			// console.log(index, obj);
 			var stamp = obj.stamp;
 			var feature = obj.feature;
 			$("#feature-list tbody").append('<tr class="feature-row" id="' + stamp + '" permalink="' + feature.properties.id + '" lang="it" lat="' + feature.geometry.coordinates[1] + '" lng="' + feature.geometry.coordinates[0] + '"><td style="vertical-align: middle;"><img width="16" height="18" src="' + iconURLs.it + '"></td><td class="feature-name">' + feature.properties.label + '</td><td style="vertical-align: middle;"><i class="fa fa-chevron-right pull-right"></i></td></tr>');
 		});
-
 		rebuildFeatureList(italianLabels);
 	}
-
-	//
-	// if (map.hasLayer(italianLayer)) {
-	// 	$.each(italianLabels, function(index, obj) {
-	// 		console.log(index, obj);
-	// 		var stamp = obj.stamp;
-	// 		var feature = obj.feature;
-	// 		$("#feature-list tbody").append('<tr class="feature-row" id="' + stamp + '" permalink="' + feature.properties.id + '" lat="' + feature.geometry.coordinates[1] + '" lng="' + feature.geometry.coordinates[0] + '"><td style="vertical-align: middle;"><img width="16" height="18" src="assets/img/signpost-icon.png"></td><td class="feature-name">' + feature.properties.label + '</td><td style="vertical-align: middle;"><i class="fa fa-chevron-right pull-right"></i></td></tr>');
-	// 	});
-	// }
-
-	/* Loop through theaters layer and add only features which are in the map bounds */
-	// english.eachLayer(function (layer) {
-	// 	if (map.hasLayer(englishLayer)) {
-	// 		if (map.getBounds().contains(layer.getLatLng())) {
-	// 			$("#feature-list tbody").append('<tr class="feature-row" id="' + L.stamp(layer) + '" lat="' + layer.getLatLng().lat + '" lng="' + layer.getLatLng().lng + '"><td style="vertical-align: middle;"><img width="16" height="18" src="assets/img/theater.png"></td><td class="feature-name">' + layer.feature.properties.NAME + '</td><td style="vertical-align: middle;"><i class="fa fa-chevron-right pull-right"></i></td></tr>');
-	// 		}
-	// 	}
-	// });
-	/* Loop through museums layer and add only features which are in the map bounds */
-	// italian.eachLayer(function (layer) {
-	// 	if (map.hasLayer(italianLayer)) {
-	// 		if (map.getBounds().contains(layer.getLatLng())) {
-	// 			$("#feature-list tbody").append('<tr class="feature-row" id="' + L.stamp(layer) + '" lat="' + layer.getLatLng().lat + '" lng="' + layer.getLatLng().lng + '"><td style="vertical-align: middle;"><img width="16" height="18" src="assets/img/museum.png"></td><td class="feature-name">' + layer.feature.properties.NAME + '</td><td style="vertical-align: middle;"><i class="fa fa-chevron-right pull-right"></i></td></tr>');
-	// 		}
-	// 	}
-	// });
-
-	/* Update list.js featureList */
-	// console.log('Rebuild featureList');
-	// featureList = new List("features", {
-	// 	valueNames: ["feature-name"]
-	// });
-	// featureList.sort("feature-name", {
-	// 	order: "asc"
-	// });
 }
 
 function sortLabels(labels) {
-	console.log('sortLabels');
 	labels = $.grep(labels,function(n){ return(n) });
 
 	labels.sort(function(a, b) {
@@ -25521,15 +25399,11 @@ function sortLabels(labels) {
 		return 0;
 	});
 
-	console.log(labels);
 	return labels;
 }
 
 function rebuildFeatureList(list) {
-	// console.log(Object.keys(englishLabels).length + ' english labels');
-
 	/* Update list.js featureList */
-	// console.log('Rebuild featureList');
 	featureList = new List("features", {
 		valueNames: ["feature-name"],
 		page: Object.keys(list).length
@@ -25537,7 +25411,6 @@ function rebuildFeatureList(list) {
 	featureList.sort("feature-name", {
 		order: "asc"
 	});
-	console.log('Rebuilt featureList with ' + featureList.size() + ' of ' + Object.keys(list).length + ' entries');
 }
 
 function sizeLayerControl() {
@@ -25545,7 +25418,6 @@ function sizeLayerControl() {
 }
 
 // Map Base Layers
-
 toner = L.stamenTileLayer('toner');
 tonerLite = L.stamenTileLayer('toner-lite');
 mapQuestOSM = L.tileLayer("http://{s}.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png", {
@@ -25564,28 +25436,22 @@ map = L.map('map', {
 
 /* Layer control listeners that allow for a single markerClusters layer */
 map.on("overlayadd", function(e) {
-	console.log('overlayadd');
 	if (e.layer === englishLayer) {
-		console.log('add - english');
 		markerClusters.addLayer(english);
 		syncSidebar();
 	}
 	if (e.layer === italianLayer) {
-		console.log('add - italian');
 		markerClusters.addLayer(italian);
 		syncSidebar();
 	}
 });
 
 map.on("overlayremove", function(e) {
-	console.log('overlayremove');
 	if (e.layer === englishLayer) {
-		console.log('remove - english');
 		markerClusters.removeLayer(english);
 		syncSidebar();
 	}
 	if (e.layer === italianLayer) {
-		console.log('remove - italian');
 		markerClusters.removeLayer(italian);
 		syncSidebar();
 	}
@@ -25616,11 +25482,6 @@ var layerControl = L.control.groupedLayers(baseLayers, groupedOverlays, {
 	collapsed: isCollapsed
 }).addTo(map);
 
-// map.addLayer(markerCluster);
-map.on('zoomend', function() {
-	console.log('Zoom: ' + map.getZoom());
-});
-
 function updateAttribution(e) {
 	$.each(map._layers, function(index, layer) {
 		if (layer.getAttribution) {
@@ -25637,7 +25498,7 @@ var attributionControl = L.control({
 });
 attributionControl.onAdd = function(map) {
 	var div = L.DomUtil.create('div', 'leaflet-control-attribution');
-	div.innerHTML = '<span class="hidden-hs"><a href="http://maps.geotastic.org">More Maps?</a> | This is a thing by <a href="http://www.garygale.com">Gary Gale</a> | </span><a href="#" onclick="$(\'#attributionModal\').modal(\'show\'); return false;">Attribution</a>';
+	div.innerHTML = '<span class="hidden-hs"><a href="http://maps.geotastic.org">More Maps?</a> | This is a thing by <a href="http://www.garygale.com">Gary Gale</a> | </span><a href="#" onclick="$(\'#attributionModal\').modal(\'show\'); return false;">Credits &amp; Attribution</a>';
 	return div;
 };
 map.addControl(attributionControl);
@@ -25666,7 +25527,6 @@ var locateControl = L.control.locate({
 		weight: 1,
 		clickable: false
 	},
-	// icon: "icon-direction",
 	icon: 'fa fa-location-arrow',
 	metric: false,
 	strings: {
@@ -25684,17 +25544,10 @@ var locateControl = L.control.locate({
 }).addTo(map);
 
 function parsePermaLink(parser) {
-	console.log('origin: ' + window.location.origin);
-	console.log('href: ' + window.location.href);
-	console.log('pathname: ' + window.location.pathname);
-	console.log('search: ' + window.location.search);
-	console.log('hash: ' + window.location.hash);
 	var url = window.location.search.substr(1);
 	if (!url) {
-		console.log('No search string; defaulting to hash');
 		url = window.location.hash.substr(1);
 	}
-	console.log('url: ' + url);
 
 	if (url !== '') {
 		nvps = url.split('&');
@@ -25706,7 +25559,6 @@ function parsePermaLink(parser) {
 }
 
 function paramParser(key, value) {
-	console.log(key + ' = ' + value);
 	switch (key) {
 		case 'id':
 			permaLink.id = parseInt(value);
@@ -25720,65 +25572,5 @@ function paramParser(key, value) {
 }
 
 $(document).ready(function() {
-	console.log('ready active');
 	parsePermaLink(paramParser);
-
-	// var coords = [];
-	// var markers = new Array();
-	// var icon = new L.Icon({
-	// 	iconUrl: '/images/signpost-icon.png',
-	// 	iconSize: [32, 37]
-	// });
-	// var tiles = new L.StamenTileLayer("toner");
-	// var options = {
-	// 	layers: tiles
-	// };
-	//
-	// if (RudePlacesMap.hasOwnProperty('mobile') && RudePlacesMap.mobile) {
-	// 	options.zoomControl = false;
-	// }
-	//
-	// var map = new L.Map("map", options);
-	//
-	// L.geoJson(places, {
-	// 	onEachFeature: function(feature, layer) {
-	// 		if (feature.properties && feature.properties.label) {
-	// 			var permalink = RudePlacesMap.server_name + '?id=' + feature.properties.id;
-	// 			var popup = '<div class="rude-place-popup">';
-	// 			popup += '<p>' + feature.properties.label + '</p>';
-	// 			popup += '<p><a href="' + permalink + '">Permalink to this place ...</a></p>';
-	// 			popup += '</div>';
-	// 			layer.bindPopup(popup);
-	// 			layer.on('mouseover', function(e) {
-	// 				e.target.openPopup();
-	// 			});
-	// 		}
-	// 	},
-	// 	pointToLayer: function(feature, latlng) {
-	// 		var marker = new L.Marker(latlng, { icon: icon });
-	// 		coords.push(latlng);
-	// 		markers[feature.properties.id] = marker;
-	// 		return marker;
-	// 	}
-	// }).addTo(map);
-	//
-	// if (RudePlacesMap.hasOwnProperty('place_id')) {
-	// 	if (markers.hasOwnProperty(RudePlacesMap.place_id)) {
-	// 		map.setView(markers[RudePlacesMap.place_id].getLatLng(), 7);
-	// 		markers[RudePlacesMap.place_id].openPopup();
-	// 	}
-	//
-	// 	else {
-	// 		var bounds = new L.LatLngBounds(coords);
-	// 		map.fitBounds(bounds);
-	// 	}
-	// }
-	//
-	// else {
-	// 	var bounds = new L.LatLngBounds(coords);
-	// 	map.fitBounds(bounds);
-	// 	if (RudePlacesMap.hasOwnProperty('mobile') && RudePlacesMap.mobile) {
-	// 		map.zoomIn();
-	// 	}
-	// }
 });

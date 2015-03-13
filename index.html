@@ -1,6 +1,197 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-	<meta http-equiv="refresh" content="0;url=http://maps.geotastic.org/rude/index.php" />
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+	<meta name="mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="description" content="The Vaguely Rude Places Map">
+	<meta name="author" content="Gary Gale">
+	<title>Maps | Vaguely Rude Places</title>
+	<link rel="stylesheet" href="assets/css/rude.css">
+	<link rel="apple-touch-icon" sizes="76x76" href="assets/img/favicon-76.png">
+	<link rel="apple-touch-icon" sizes="120x120" href="assets/img/favicon-120.png">
+	<link rel="apple-touch-icon" sizes="152x152" href="assets/img/favicon-152.png">
+	<link rel="icon" sizes="196x196" href="assets/img/favicon-196.png">
+	<link rel="icon" type="image/x-icon" href="assets/img/favicon.ico">
+	<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	ga('create', 'UA-10486552-10', 'auto');
+	ga('send', 'pageview');
+	</script>
 </head>
 <body>
-</body>
+	<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<div class="navbar-icon-container">
+					<a href="#" class="navbar-icon pull-right visible-xs" id="nav-btn"><i class="fa fa-bars fa-lg white"></i></a>
+					<a href="#" class="navbar-icon pull-right visible-xs" id="sidebar-toggle-btn"><i class="fa fa-search fa-lg white"></i></a>
+				</div>
+				<a class="navbar-brand" href="#">Places</a>
+			</div>
+			<div class="navbar-collapse collapse">
+				<ul class="nav navbar-nav">
+					<li><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="about-btn"><i class="fa fa-question-circle white"></i>&nbsp;&nbsp;About</a></li>
+					<li class="dropdown">
+						<a class="dropdown-toggle" id="downloadDrop" href="#" role="button" data-toggle="dropdown"><i class="fa fa-cloud-download white"></i>&nbsp;&nbsp;Download <b class="caret"></b></a>
+						<ul class="dropdown-menu">
+							<li><a href="assets/data/rude-en.geojson" download="rude-en.geojson" target="_blank" data-toggle="collapse" data-target=".navbar-collapse.in"><i class="fa fa-download"></i>&nbsp;&nbsp;English Rude Places (GeoJSON)</a></li>
+							<li><a href="assets/data/rude-en.zip" download="rude-en.zip" target="_blank" data-toggle="collapse" data-target=".navbar-collapse.in"><i class="fa fa-download"></i>&nbsp;&nbsp;English Rude Places (ShapeFile)</a></li>
+							<li><a href="assets/data/rude-it.geojson" download="rude-it.geojson" target="_blank" data-toggle="collapse" data-target=".navbar-collapse.in"><i class="fa fa-download"></i>&nbsp;&nbsp;Italian Rude Places (GeoJSON)</a></li>
+							<li><a href="assets/data/rude-it.zip" download="rude-it.zip" target="_blank" data-toggle="collapse" data-target=".navbar-collapse.in"><i class="fa fa-download"></i>&nbsp;&nbsp;Italian Rude Places (ShapeFile)</a></li>
+						</ul>
+					</li>
+					<li class="hidden-xs"><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="full-extent-btn"><i class="fa fa-arrows-alt"></i>&nbsp;&nbsp;Zoom to Full Extent</a></li>
+					<li class="hidden-xs"><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="list-btn"><i class="fa fa-list white"></i>&nbsp;&nbsp;Browse Places</a></li>
+				</ul>
+				<form class="navbar-form navbar-right" role="search">
+					<div class="form-group has-feedback">
+						<input id="searchbox" type="text" placeholder="Search" class="form-control">
+						<span id="searchicon" class="fa fa-search form-control-feedback"></span>
+					</div>
+				</form>
+			</div><!--/.navbar-collapse -->
+		</div>
+	</div>
+
+	<div id="container">
+		<div id="sidebar">
+			<div class="sidebar-wrapper">
+				<div class="panel panel-default" id="features">
+					<div class="panel-heading">
+						<h3 class="panel-title">Place Browser
+							<button type="button" class="btn btn-xs btn-default pull-right" id="sidebar-hide-btn"><i class="fa fa-chevron-left"></i></button></h3>
+						</div>
+						<div class="panel-body">
+							<div class="row">
+								<div class="col-xs-8 col-md-8">
+									<input type="text" class="form-control search" placeholder="Filter" />
+								</div>
+								<div class="col-xs-4 col-md-4">
+									<button type="button" class="btn btn-primary pull-right sort" data-sort="feature-name" id="sort-btn"><i class="fa fa-sort"></i>&nbsp;&nbsp;Sort</button>
+								</div>
+							</div>
+						</div>
+						<div class="sidebar-table">
+							<table class="table table-hover" id="feature-list">
+								<thead class="hidden">
+									<tr>
+										<th>Icon</th>
+										<th>Name</th>
+										<th>Chevron</th>
+									</tr>
+								</thead>
+								<tbody class="list"></tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="map"></div>
+		</div>
+
+		<div id="loading">
+			<div class="loading-indicator">
+				<div class="progress progress-striped active">
+					<div class="progress-bar progress-bar-info progress-bar-full"></div>
+				</div>
+			</div>
+		</div>
+
+		<div class="modal fade" id="aboutModal" tabindex="-1" role="dialog">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button class="close" type="button" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h4 class="modal-title">This is the Vaguely Rude Places Map</h4>
+					</div>
+					<div class="modal-body">
+						<ul class="nav nav-tabs" id="aboutTabs">
+							<li class="active"><a href="#about" data-toggle="tab"><i class="fa fa-question-circle"></i>&nbsp;About</a></li>
+							<li><a href="#contribute" data-toggle="tab"><i class="fa fa-upload"></i>&nbsp;Contribute</a></li>
+							<li><a href="#media" data-toggle="tab"><i class="fa fa-newspaper-o"></i>&nbsp;In the Media</a></li>
+						</ul>
+						<div class="tab-content" id="aboutTabsContent">
+							<div class="tab-pane fade active in" id="about">
+								<p>The Vaguely Rude Places Map is a simple web mash up of places which, to the British sense or humour, sound vaguely rude and thus are, by definition, funny. If you're not British, it might be confusing why this is amusing.</p>
+								<p>Meanwhile, <a href="http://www.vicchi.org/2013/02/06/ooh-that-sounds-rude-mapping-british-innuendo/" target="_blank">here's a blog post</a> which may, or may not, explain how the map came into being.</p>
+							</div>
+							<div class="tab-pane fade" id="contribute">
+								<p>Since launching, the Vaguely Rude Places map has been added to multiple times by many contributors. If you'd like to get involved, here's how.</p>
+								<div class="panel panel-primary">
+									<div class="panel-heading">How to Contribute</div>
+									<ul class="list-group">
+										<li class="list-group-item">If you know your way around GeoJSON and GitHub, fork the map's <a href="https://github.com/vicchi/vaguely-rude-places" target="_blank">repository</a>, add your places (you'll find them in <code>src/data</code>) and submit a pull request.</li>
+										<li class="list-group-item">Alternatively, open an <a href="https://github.com/vicchi/vaguely-rude-places/issues" target="_blank">issue</a>, reporting as much detail as you can.</li>
+										<li class="list-group-item">Otherwise, drop me an email with the details. If you don't have my email address you can find me on Twitter as <a href="https://twitter.com/vicchi" target="_blank">@vicchi</a>.</li>
+									</ul>
+								</div>
+							</div>
+							<div class="tab-pane fade" id="media">
+								<p>Since launching in February of 2013, the Vaguely Rude Places map has been Slashdotted, Farked, B3ta'd and Reddit'd multiple times, clocking up over 22M views in a single month. It's also been featured many times in the more traditional media. Here's a brief selection.</p>
+								<div class="panel panel-primary">
+									<div class="panel-heading">Notable Mentions</div>
+									<ul class="list-group">
+										<li class="list-group-item"><a href="http://visual.ly/vaguely-rude-place-names-world" target="_blank">visual.ly; Vaguely Rude Place Names Map</a></li>
+										<li class="list-group-item"><a href="http://www.huffingtonpost.com/2013/02/13/worlds-rudest-place-names_n_2676935.html" target="_blank">Huffington Post; World's Rudest Place Names: Interactive Map Charts 'Vaguely Rude' Town Names</a></li>
+										<li class="list-group-item"><a href="http://www.telegraph.co.uk/travel/travelnews/9869759/The-worlds-rudest-place-names.html" target="_blank">Daily Telegraph; Londoner Maps The World's Rudest Place Names</a></li>
+										<li class="list-group-item"><a href="http://www.theverge.com/2014/7/11/5889913/map-of-rude-names" target="_blank">The Verge; A Map Of The Most Offensively Named Places In The World</a></li>
+										<li class="list-group-item"><a href="http://googlemapsmania.blogspot.co.uk/2013/12/the-10-funniest-maps-of-year.html" target="_blank">Maps Mania; The 10 Funniest Maps Of The Year</a></li>
+										<li class="list-group-item"><a href="http://www.nzherald.co.nz/nz/news/article.cfm?c_id=1&objectid=10865412" target="_blank">The New Zealand Herald; NZ's Shag Point Charted On 'Rude' Map</a></li>
+										<li class="list-group-item"><a href="http://www.citylab.com/design/2013/02/map-dirty-place-names/4661/" target="_blank">CityLab; A Map Of Dirty Place Names</a></li>
+										<li class="list-group-item"><a href="http://www.independent.co.uk/voices/iv-drip/take-a-trip-to-innuendoland-with-this-interactive-map-of-the-worlds-rudest-place-names-8483442.html" target="_blank">The Independent; Take A Trip To Innuendoland</a></li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					</div>
+				</div><!-- /.modal-content -->
+			</div><!-- /.modal-dialog -->
+		</div><!-- /.modal -->
+
+		<div class="modal fade" id="attributionModal" tabindex="-1" role="dialog">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button class="close" type="button" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h4 class="modal-title">
+							<i class="fa fa-thumbs-up"></i>&nbsp;Credits &amp; Attribution
+						</h4>
+					</div>
+					<div class="modal-body">
+						<p>Mostly hand-coded by <a href="https://github.com/vicchi" target="_blank">Gary Gale</a>, all site content is <a href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">CC-BY-SA</a></p>
+
+						<p>English rude places under <a href="http://opendatacommons.org/licenses/by/summary/" target="_blank">ODC-BY</a>, with thanks to
+							<ul>
+								<li>The Yahoo! Geo Technologies team</li>
+								<li><a href="https://github.com/markiliffe" target="_blank">Mark Iliffe</a></li>
+								<li>Many other contributors via GitHub, Twitter and email</li>
+							</ul>
+						</p>
+
+						<p>Italian rude places under <a href="http://opendatacommons.org/licenses/by/summary/" target="_blank">ODC-BY</a> with thanks to
+							<ul>
+								<li><a href="https://github.com/cortesimone" target="blank">Simone Cortesi</a></li>
+							</ul>
+						</p>
+
+						<p>Inspired by and forked from <a href="https://github.com/bmcbride/bootleaf" target="_blank">BootLeaf</a> by <a href='http://bryanmcbride.com'>bryanmcbride.com</a></p>
+
+						<div id="attribution"></div>
+					</div>
+				</div><!-- /.modal-content -->
+			</div><!-- /.modal-dialog -->
+		</div><!-- /.modal -->
+
+		<script src="assets/js/rude.js"></script>
+	</body>
+	</html>
