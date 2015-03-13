@@ -21,6 +21,9 @@ module.exports = function(grunt) {
                 dest: 'assets/js/rude.js'
             }
         },
+        jshint: {
+            beforeconcat: ['src/js/rude.js']
+        },
         copy: {
             csstoscss: {
                 files: [
@@ -135,7 +138,7 @@ module.exports = function(grunt) {
             },
             js: {
                 files: ['src/js/*'],
-                tasks: ['concat']
+                tasks: ['concat', 'jshint']
             },
             sass: {
                 files: ['src/sass/*'],
@@ -153,6 +156,6 @@ module.exports = function(grunt) {
             grunt.file.delete(file);
         });
     });
-    grunt.registerTask('build', ['nodsstore', 'concat', 'copy:csstoscss', 'copy:img', 'copy:fonts', 'jsonmin', 'shell', 'sass']);
+    grunt.registerTask('build', ['nodsstore', 'concat', 'jshint', 'copy:csstoscss', 'copy:img', 'copy:fonts', 'jsonmin', 'shell', 'sass']);
     grunt.registerTask('deploy', ['build', 'copy:deploy', 'shell:deploy']);
 };

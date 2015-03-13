@@ -38,7 +38,7 @@ icon = new L.Icon({
 iconURLs = {
 	en: 'assets/img/United-Kingdom32.png',
 	it: 'assets/img/Italy32.png'
-}
+};
 
 var PlaceIcon = L.Icon.extend({
 	options: {
@@ -237,6 +237,7 @@ $(document).one('ajaxStop', function() {
 	rebuildFeatureList(englishLabels);
 
 	if (permaLink.id && permaLink.lang) {
+		var datum;
 		if (permaLink.lang === 'en' && englishLabels.hasOwnProperty(permaLink.id)) {
 			if (!map.hasLayer(englishLayer)) {
 				map.addLayer(englishLayer);
@@ -244,7 +245,7 @@ $(document).one('ajaxStop', function() {
 			if (map.hasLayer(italianLayer)) {
 				map.removeLayer(italianLayer);
 			}
-			var datum = englishLabels[permaLink.id]
+			datum = englishLabels[permaLink.id];
 			map.setView(datum.layer.getLatLng(), 10);
 			datum.layer.fire('click');
 		}
@@ -256,7 +257,7 @@ $(document).one('ajaxStop', function() {
 			if (map.hasLayer(englishLayer)) {
 				map.removeLayer(englishLayer);
 			}
-			var datum = italianLabels[permaLink.id]
+			datum = italianLabels[permaLink.id];
 			map.setView(datum.layer.getLatLng(), 10);
 			datum.layer.fire('click');
 		}
@@ -344,7 +345,7 @@ function syncSidebar() {
 }
 
 function sortLabels(labels) {
-	labels = $.grep(labels,function(n){ return(n) });
+	labels = $.grep(labels,function(n){ return(n); });
 
 	labels.sort(function(a, b) {
 		if (a.feature.properties.label < b.feature.properties.label) {
