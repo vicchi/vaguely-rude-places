@@ -25479,7 +25479,7 @@ var groupedOverlays = {
 };
 
 var layerControl = L.control.groupedLayers(baseLayers, groupedOverlays, {
-	exclusiveGroups: ["Places"],
+	exclusiveGroups: ["Languages"],
 	collapsed: isCollapsed
 }).addTo(map);
 

@@ -138,7 +138,7 @@ module.exports = function(grunt) {
             },
             js: {
                 files: ['src/js/*'],
-                tasks: ['concat', 'jshint']
+                tasks: ['jshint', 'concat']
             },
             sass: {
                 files: ['src/sass/*'],
@@ -156,6 +156,6 @@ module.exports = function(grunt) {
             grunt.file.delete(file);
         });
     });
-    grunt.registerTask('build', ['nodsstore', 'concat', 'jshint', 'copy:csstoscss', 'copy:img', 'copy:fonts', 'jsonmin', 'shell', 'sass']);
+    grunt.registerTask('build', ['nodsstore', 'jshint', 'concat', 'copy:csstoscss', 'copy:img', 'copy:fonts', 'jsonmin', 'shell', 'sass']);
     grunt.registerTask('deploy', ['build', 'copy:deploy', 'shell:deploy']);
 };
