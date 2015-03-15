@@ -24,6 +24,19 @@ module.exports = function(grunt) {
         jshint: {
             beforeconcat: ['src/js/rude.js']
         },
+        uglify: {
+            dist: {
+                files: [
+                    {
+                        expand: true,
+                        cwd: 'assets/js',
+                        src: ['*.js', '!*.min.js'],
+                        dest: 'assets/js',
+                        ext: '.min.js'
+                    }
+                ]
+            }
+        },
         copy: {
             csstoscss: {
                 files: [
@@ -128,6 +141,19 @@ module.exports = function(grunt) {
                 command: 'zip assets/data/rude-en.zip assets/data/rude-it.zip assets/data/rude-it.dbf assets/data/rude-it.prj assets/data/rude-it.shx assets/data/rude-it.shp'
             }
         },
+        cssmin: {
+            dist: {
+                files: [
+                    {
+                        expand: true,
+                        cwd: 'assets/css',
+                        src: ['*.css', '!*.min.css'],
+                        dest: 'assets/css',
+                        ext: '.min.css'
+                    }
+                ]
+            }
+        },
         watch: {
             options: {
                 livereload: true
@@ -138,11 +164,11 @@ module.exports = function(grunt) {
             },
             js: {
                 files: ['src/js/*'],
-                tasks: ['jshint', 'concat']
+                tasks: ['jshint', 'concat', 'uglify']
             },
             sass: {
                 files: ['src/sass/*'],
-                tasks: ['sass']
+                tasks: ['sass', 'cssmin']
             }
         }
     });
@@ -156,6 +182,6 @@ module.exports = function(grunt) {
             grunt.file.delete(file);
         });
     });
-    grunt.registerTask('build', ['nodsstore', 'jshint', 'concat', 'copy:csstoscss', 'copy:img', 'copy:fonts', 'jsonmin', 'shell', 'sass']);
+    grunt.registerTask('build', ['nodsstore', 'jshint', 'concat', 'copy:csstoscss', 'copy:img', 'copy:fonts', 'jsonmin', 'shell', 'sass', 'cssmin', 'uglify']);
     grunt.registerTask('deploy', ['build', 'copy:deploy', 'shell:deploy']);
 };

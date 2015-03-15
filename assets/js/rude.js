@@ -25325,7 +25325,6 @@ $("#searchbox").click(function () {
 
 /* Prevent hitting enter from refreshing the page */
 $("#searchbox").keypress(function (e) {
-	console.log(e);
 	if (e.which == 13) {
 		e.preventDefault();
 	}
@@ -25365,9 +25364,7 @@ function sidebarClick(id) {
 
 function syncSidebar() {
 	/* Empty sidebar features */
-	console.log('empty sidebar');
 	$("#feature-list tbody").empty();
-	//
 	if (map.hasLayer(englishLayer)) {
 		$.each(englishLabels, function(index, obj) {
 			var stamp = obj.stamp;
