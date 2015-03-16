@@ -169,6 +169,14 @@ module.exports = function(grunt) {
             sass: {
                 files: ['src/sass/*'],
                 tasks: ['sass', 'cssmin']
+            },
+            json: {
+                files: ['src/data/*.geojson'],
+                tasks: ['jsonmin']
+            },
+            shape: {
+                files: ['assets/data/*.geojson'],
+                tasks: ['shell']
             }
         }
     });
