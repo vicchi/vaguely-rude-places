@@ -23,7 +23,7 @@
     "maps.stamen.com": "git@github.com:stamen/maps.stamen.com.git#~1.3.0",
     "list.js": "~1.1.1",
     "leaflet.markercluster": "~0.4.0",
-    "Leaflet.groupedlayercontrol": "git@github.com:ismyrnow/Leaflet.groupedlayercontrol.git#gh-pages",
-    "Leaflet.MousePosition": "git@github.com:ardhi/Leaflet.MousePosition.git"
+    "Leaflet.MousePosition": "git@github.com:ardhi/Leaflet.MousePosition.git",
+    "leaflet-groupedlayercontrol": "~0.3.0"
   }
 }
