@@ -108,6 +108,15 @@ module.exports = function(grunt) {
                         filter: 'isFile'
                     }
                 ]
+            },
+            deploy: {
+                files: [
+                    {
+                        expand: true,
+                        src: ['index.html', 'assets/**/*'],
+                        dest: 'deploy'
+                    }
+                ]
             }
         },
         sass: {
@@ -191,5 +200,5 @@ module.exports = function(grunt) {
         });
     });
     grunt.registerTask('build', ['nodsstore', 'jshint', 'concat', 'copy:csstoscss', 'copy:img', 'copy:fonts', 'jsonmin', 'shell', 'sass', 'cssmin', 'uglify']);
-    grunt.registerTask('deploy', ['build', 'copy:deploy', 'shell:deploy']);
+    grunt.registerTask('deploy', ['build', 'copy:deploy']);
 };
