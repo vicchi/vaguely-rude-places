@@ -1,0 +1,82 @@
+$marker-text-color: #FFFFFF;
+
+/* Modern browsers use RGBA, IE <=8 use RGB */
+$small-rgba: rgba(89, 89, 89, 0.6);
+$small-hilite-rgba: rgba(137, 137, 137, 0.6);
+$small-rgb: rgb(181, 226, 140);
+$small-hilite-rgb: rgb(110, 204, 57);
+
+$medium-rgba: rgba(83, 83, 83, 0.6);
+$medium-hilite-rgba: rgba(128, 128, 128, 0.6);
+$medium-rgb: rgb(241, 211, 87);
+$medium-hilite-rgb: rgb(240, 194, 12);
+
+$large-rgba: rgba(53, 53, 53, 0.6);
+$large-hilite-rgba: rgba(82, 82, 82, 0.6);
+$large-rgb: rgb(253, 156, 115);
+$large-hilite-rgb: rgb(241, 128, 23);
+
+.marker-cluster-small {
+    background-color: $small-rgba;
+    div {
+        background-color: $small-hilite-rgba;
+    }
+}
+
+.marker-cluster-medium {
+    background-color: $medium-rgba;
+    div {
+        background-color: $medium-hilite-rgba;
+    }
+}
+
+.marker-cluster-large {
+    background-color: $large-rgba;
+    div {
+        background-color: $large-hilite-rgba;
+    }
+}
+
+/* IE 6-8 fallback support */
+.leaflet-oldie {
+    .marker-cluster-small {
+        background-color: $small-rgb;
+        div {
+            background-color: $small-hilite-rgb;
+        }
+    }
+
+    .marker-cluster-medium {
+        background-color: $medium-rgb;
+        div {
+            background-color: $medium-hilite-rgb;
+        }
+    }
+
+    .marker-cluster-large {
+        background-color: $large-rgb;
+        div {
+            background-color: $large-hilite-rgb;
+        }
+    }
+}
+
+.marker-cluster {
+    background-clip: padding-box;
+    border-radius: 20px;
+
+    div {
+        width: 30px;
+        height: 30px;
+        margin-left: 5px;
+        margin-top: 5px;
+        text-align: center;
+        border-radius: 15px;
+        font: 12px "Helvetica Neue", Arial, Helvetica, sans-serif;
+    }
+
+    span {
+        line-height: 30px;
+        color: $marker-text-color;
+    }
+}
