@@ -373,12 +373,19 @@ function sizeLayerControl() {
 }
 
 // Map Base Layers
-toner = L.stamenTileLayer('toner');
-tonerLite = L.stamenTileLayer('toner-lite');
+toner = L.stamenTileLayer('toner', {
+	maptiks_id: 'Vaguely Rude Places Map - Stamen Toner'
+});
+
+tonerLite = L.stamenTileLayer('toner-lite', {
+	maptiks_id: 'Vaguely Rude Places Map - Stamen Toner Lite'
+});
+
 mapQuestOSM = L.tileLayer("http://{s}.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png", {
 	maxZoom: 19,
 	subdomains: ["otile1", "otile2", "otile3", "otile4"],
-	attribution: 'Tiles courtesy of <a href="http://www.mapquest.com/" target="_blank">MapQuest</a> <img src="http://developer.mapquest.com/content/osm/mq_logo.png">. Map data (c) <a href="http://www.openstreetmap.org/" target="_blank">OpenStreetMap</a> contributors, CC-BY-SA.'
+	attribution: 'Tiles courtesy of <a href="http://www.mapquest.com/" target="_blank">MapQuest</a> <img src="http://developer.mapquest.com/content/osm/mq_logo.png">. Map data (c) <a href="http://www.openstreetmap.org/" target="_blank">OpenStreetMap</a> contributors, CC-BY-SA.',
+	maptiks_id: 'Vaguely Rude Places Map - MapQuest OSM'
 });
 
 map = L.map('map', {
@@ -386,7 +393,8 @@ map = L.map('map', {
 	center: [0,0],
 	layers: [tonerLite, markerClusters],
 	zoomControl: false,
-	attributionControl: false
+	attributionControl: false,
+	maptiks_id: 'Vaguely Rude Places Map'
 });
 
 /* Layer control listeners that allow for a single markerClusters layer */

@@ -1,8 +1,24 @@
 module.exports = function(grunt) {
-    require('load-grunt-tasks')(grunt);
+    // require('load-grunt-tasks')(grunt);
+    grunt.loadNpmTasks('grunt-cdndeps');
+    grunt.loadNpmTasks('grunt-contrib-concat');
+    grunt.loadNpmTasks('grunt-contrib-copy');
+    grunt.loadNpmTasks('grunt-contrib-cssmin');
+    grunt.loadNpmTasks('grunt-contrib-jshint');
+    grunt.loadNpmTasks('grunt-contrib-sass');
+    grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-jsonmin');
+    grunt.loadNpmTasks('grunt-shell');
 
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
+        cdndeps: {
+            options: {
+                src: 'src/data/cdn.json',
+                dest: 'src/js/cdn'
+            }
+        },
         concat: {
             js: {
                 src: [
@@ -16,6 +32,8 @@ module.exports = function(grunt) {
                     'bower_components/Leaflet.MousePosition/src/L.Control.MousePosition.js',
                     'bower_components/typeahead.js/dist/typeahead.bundle.js',
                     'bower_components/list.js/dist/list.js',
+                    'src/js/cdn/maptiks-leaflet.min.js',
+                    'src/js/maptiks-tracking.js',
                     'src/js/rude.js'
                 ],
                 dest: 'assets/js/rude.js'
@@ -199,6 +217,6 @@ module.exports = function(grunt) {
             grunt.file.delete(file);
         });
     });
-    grunt.registerTask('build', ['nodsstore', 'jshint', 'concat', 'copy:csstoscss', 'copy:img', 'copy:fonts', 'jsonmin', 'shell', 'sass', 'cssmin', 'uglify']);
+    grunt.registerTask('build', ['nodsstore', 'cdndeps', 'jshint', 'concat', 'copy:csstoscss', 'copy:img', 'copy:fonts', 'jsonmin', 'shell', 'sass', 'cssmin', 'uglify']);
     grunt.registerTask('deploy', ['build', 'copy:deploy']);
 };
