@@ -822,21 +822,6 @@
             "geometry": {
                 "type": "Point",
                 "coordinates": [
-                    9.76089,
-                    45.87934
-                ]
-            },
-            "properties": {
-                "label": "Pian della Mussa, Nesso, Como, Lombardia, Italia",
-                "detail": "Pian della Mussa, Serina, BG, Lombardia",
-                "id": "55"
-            }
-        },
-        {
-            "type": "Feature",
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
                     8.6976,
                     45.83454
                 ]
@@ -844,7 +829,7 @@
             "properties": {
                 "label": "Bardello, Varese, Lombardia, Italia",
                 "detail": "Bardello, VA, Lombardia",
-                "id": "56"
+                "id": "55"
             }
         },
         {
@@ -859,7 +844,7 @@
             "properties": {
                 "label": "Barbona, PD, Veneto, Italia",
                 "detail": "Barbona, PD, Veneto",
-                "id": "57"
+                "id": "56"
             }
         },
         {
@@ -874,7 +859,7 @@
             "properties": {
                 "label": "Bellona, CE, CAM, Italia",
                 "detail": "Bellona, CE, Campania",
-                "id": "58"
+                "id": "57"
             }
         },
         {
@@ -889,7 +874,7 @@
             "properties": {
                 "label": "Bitetto, BA, Puglia, Italia",
                 "detail": "Bitetto, BA, Puglia",
-                "id": "59"
+                "id": "58"
             }
         },
         {
@@ -904,7 +889,7 @@
             "properties": {
                 "label": "Benetutti, Nule, Sassari, Sardegna, Italia",
                 "detail": "Benetutti, SS, Sardegna",
-                "id": "60"
+                "id": "59"
             }
         },
         {
@@ -919,7 +904,7 @@
             "properties": {
                 "label": "Scopa, Como, Lombardia, Italia",
                 "detail": "Scopa, VC, Piemonte",
-                "id": "61"
+                "id": "60"
             }
         },
         {
@@ -934,7 +919,7 @@
             "properties": {
                 "label": "Bettola, PC, EMR, Italia",
                 "detail": "Bettola, PC, Emilia-Romagna",
-                "id": "62"
+                "id": "61"
             }
         },
         {
@@ -949,7 +934,7 @@
             "properties": {
                 "label": "Moscio, Malonno, Comunità montana della valle Camonica, Lombardia, Italia",
                 "detail": "Moscio, BS, Lombardia",
-                "id": "63"
+                "id": "62"
             }
         },
         {
@@ -964,7 +949,7 @@
             "properties": {
                 "label": "Loritto, Comunità montana della valle Camonica, Lombardia, Italia",
                 "detail": "Loritto, BS, Lombardia",
-                "id": "64"
+                "id": "63"
             }
         },
         {
@@ -979,7 +964,7 @@
             "properties": {
                 "label": "Gazzo (Grossa), PD, Veneto, Italia",
                 "detail": "Gazzo (Grossa), PD, Veneto",
-                "id": "65"
+                "id": "64"
             }
         },
         {
@@ -994,7 +979,7 @@
             "properties": {
                 "label": "Orgia, Sovicille, SI, TOS, Italia",
                 "detail": "Orgia, SI, Toscana",
-                "id": "66"
+                "id": "65"
             }
         },
         {
@@ -1009,7 +994,7 @@
             "properties": {
                 "label": "Riu Merd 'e Cani, Oristano, Sardegna, Italia",
                 "detail": "Riu Merd 'e Cani, Italia",
-                "id": "67"
+                "id": "66"
             }
         },
         {
@@ -1024,7 +1009,7 @@
             "properties": {
                 "label": "Loculi, Nuoro, Sardegna, Italia",
                 "detail": "Loculi, NU, Sardinia, Italy",
-                "id": "68"
+                "id": "67"
             }
         },
         {
@@ -1039,7 +1024,7 @@
             "properties": {
                 "label": "Diolaguardia, Roncofreddo, FC, EMR, Italia",
                 "detail": "Diolaguardia, FC, Emilia-Romagna, Italy",
-                "id": "69"
+                "id": "68"
             }
         },
         {
@@ -1054,7 +1039,7 @@
             "properties": {
                 "label": "Figarolo, Golfo Aranci, Olbia-Tempio, Sardegna, Italia",
                 "detail": "Figarolo, Golfo Aranci, Olbia-Tempio, Sardinia, Italia",
-                "id": "70"
+                "id": "69"
             }
         },
         {
@@ -1069,7 +1054,7 @@
             "properties": {
                 "label": "Orino, Comunità Montana Valli del Verbano, Lombardia, Italia",
                 "detail": "Orino, Varese, Lombardy, Italia",
-                "id": "71"
+                "id": "70"
             }
         },
         {
@@ -1084,7 +1069,7 @@
             "properties": {
                 "label": "Madonna in Campagna, Gallarate, Varese, Lombardia, Italia",
                 "detail": "Madonna in Campagna, Gallarate, Lombardy, Italia",
-                "id": "72"
+                "id": "71"
             }
         },
         {
@@ -1099,7 +1084,7 @@
             "properties": {
                 "label": "Bidet della Contessa, Val Masino, Sondrio, Lombardia, Italia",
                 "detail": "Bidet della Contessa, Val Masino, Sondrio, Lombardia, Italia",
-                "id": "73"
+                "id": "72"
             }
         },
         {
@@ -1114,7 +1099,7 @@
             "properties": {
                 "label": "Sostegno, Biella, Piemonte, Italia",
                 "detail": "Sostegno, BI, Piemont, Italy",
-                "id": "74"
+                "id": "73"
             }
         },
         {
@@ -1129,7 +1114,7 @@
             "properties": {
                 "label": "Via Mussa, Piombino Dese, PD, Veneto, Italia",
                 "detail": "Via Mussa, Palù Alto, Piombino Dese, PD, Veneto, Italy",
-                "id": "75"
+                "id": "74"
             }
         },
         {
@@ -1144,6 +1129,21 @@
             "properties": {
                 "label": "Piscialembita, Sovicille, SI, TOS, Italia",
                 "detail": "Piscialembita, SI, Tuscany, Italia",
+                "id": "75"
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -43.9186,
+                    -19.6942
+                ]
+            },
+            "properties": {
+                "label": "Vespasiano",
+                "detail": "Vespasiano, Minas Gerais, Brasile",
                 "id": "76"
             }
         }
