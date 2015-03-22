@@ -1,22 +1,17 @@
+// Run with --target=dev for localhost or [--target=dist (the default)] for production
+
 module.exports = function(grunt) {
-    // require('load-grunt-tasks')(grunt);
-    grunt.loadNpmTasks('grunt-cdndeps');
-    grunt.loadNpmTasks('grunt-contrib-concat');
-    grunt.loadNpmTasks('grunt-contrib-copy');
-    grunt.loadNpmTasks('grunt-contrib-cssmin');
-    grunt.loadNpmTasks('grunt-contrib-jshint');
-    grunt.loadNpmTasks('grunt-contrib-sass');
-    grunt.loadNpmTasks('grunt-contrib-uglify');
-    grunt.loadNpmTasks('grunt-contrib-watch');
-    grunt.loadNpmTasks('grunt-jsonmin');
-    grunt.loadNpmTasks('grunt-shell');
+    require('load-grunt-tasks')(grunt);
 
     grunt.initConfig({
+        target: grunt.option('target') || 'dist',
         pkg: grunt.file.readJSON('package.json'),
         cdndeps: {
             options: {
                 src: 'src/data/cdn.json',
-                dest: 'src/js/cdn'
+                dest: 'src/js',
+                clean: true,
+                prune: false
             }
         },
         concat: {
@@ -25,6 +20,8 @@ module.exports = function(grunt) {
                     'bower_components/jquery/dist/jquery.js',
                     'bower_components/bootstrap-sass-official/assets/javascripts/bootstrap.js',
                     'bower_components/leaflet/dist/leaflet-src.js',
+                    'src/js/maptiks-leaflet.min.js',
+                    'src/js/maptiks-tracking-<%= target %>.js',
                     'bower_components/maps.stamen.com/js/tile.stamen.js',
                     'bower_components/leaflet.locatecontrol/src/L.Control.Locate.js',
                     'bower_components/leaflet.markercluster/dist/leaflet.markercluster.js',
@@ -32,8 +29,6 @@ module.exports = function(grunt) {
                     'bower_components/Leaflet.MousePosition/src/L.Control.MousePosition.js',
                     'bower_components/typeahead.js/dist/typeahead.bundle.js',
                     'bower_components/list.js/dist/list.js',
-                    'src/js/cdn/maptiks-leaflet.min.js',
-                    'src/js/maptiks-tracking.js',
                     'src/js/rude.js'
                 ],
                 dest: 'assets/js/rude.js'
@@ -44,6 +39,23 @@ module.exports = function(grunt) {
         },
         uglify: {
             dist: {
+                files: [
+                    {
+                        expand: true,
+                        cwd: 'assets/js',
+                        src: ['*.js', '!*.min.js'],
+                        dest: 'assets/js',
+                        ext: '.min.js'
+                    }
+                ]
+            },
+            dev: {
+                options: {
+                    mangle: false,
+                    compress: false,
+                    preserveComments: 'all',
+                    beautify: true
+                },
                 files: [
                     {
                         expand: true,
@@ -208,6 +220,8 @@ module.exports = function(grunt) {
         }
     });
 
+    var target = grunt.option('target') || 'dist';
+
     grunt.registerTask('default', ['watch']);
     grunt.registerTask('nodsstore', function() {
         grunt.file.expand({
@@ -217,6 +231,6 @@ module.exports = function(grunt) {
             grunt.file.delete(file);
         });
     });
-    grunt.registerTask('build', ['nodsstore', 'cdndeps', 'jshint', 'concat', 'copy:csstoscss', 'copy:img', 'copy:fonts', 'jsonmin', 'shell', 'sass', 'cssmin', 'uglify']);
+    grunt.registerTask('build', ['nodsstore', 'cdndeps', 'jshint', 'concat', 'copy:csstoscss', 'copy:img', 'copy:fonts', 'jsonmin', 'shell', 'sass', 'cssmin', 'uglify:' + target]);
     grunt.registerTask('deploy', ['build', 'copy:deploy']);
 };

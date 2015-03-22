@@ -38,3 +38,47 @@ If you're interested, the Vaguely Rude Places Map is built out of the following,
 * [Font Awesome](http://fortawesome.github.io/Font-Awesome/)
 * [List.js](http://www.listjs.com/)
 * [typeahead.js](https://twitter.github.io/typeahead.js/)
+
+## Building
+
+Either [fork](https://github.com/vicchi/vaguely-rude-places) or [clone](git@github.com:vicchi/vaguely-rude-places.git) the master GitHub repository.
+
+Install the map's [Bower](http://bower.io/) dependencies.
+
+```bash
+$ bower install
+```
+
+Install the map's [Grunt](http://bower.io/) dependencies.
+
+```bash
+$ npm install
+```
+
+Build the source.
+
+```bash
+$ grunt build
+```
+
+By default, the map's `Gruntfile.js` builds for a production environment, with a build target of `dist`, so that
+
+```bash
+$ grunt build
+```
+
+and
+
+```bash
+$ grunt build --target=dist
+```
+
+are synonymous.
+
+To build for a development environment, which includes the map's test [Maptiks](https://maptiks.com/) tracking code, and keeping the concatenated Javascript source uncompressed, use the `dev` build target.
+
+```bash
+$ grunt build --target=dev
+```
+
+If you don't want to use [Maptiks](https://maptiks.com/) map analytics, remove the corresponding dependencies from the `cdndeps` and `concat` Grunt tasks.

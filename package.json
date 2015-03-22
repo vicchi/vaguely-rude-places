@@ -11,14 +11,14 @@
     "url": "https://github.com/vicchi/vaguely-rude-places.git"
   },
   "author": "Gary Gale <gary@vicchi.org> (http://www.garygale.com)",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/vicchi/vaguely-rude-places/issues"
   },
   "homepage": "https://github.com/vicchi/vaguely-rude-places",
   "devDependencies": {
     "grunt": "^0.4.5",
-    "grunt-cdndeps": "^0.2.0",
+    "grunt-cdndeps": "git://github.com/vicchi/grunt-cdndeps",
     "grunt-contrib-clean": "^0.6.0",
     "grunt-contrib-concat": "^0.5.1",
     "grunt-contrib-copy": "^0.8.0",
