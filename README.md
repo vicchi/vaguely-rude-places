@@ -21,6 +21,7 @@ Thanks and credit is due to the following people and organisations:
 * [Mark Iliffe](https://twitter.com/markiliffe) for saying to me once that "*you should make a map out of that*"
 * [Simone Cortesi](https://twitter.com/simonecortesi) for forking the original map code and producing the [Mappa dei luoghi il cui nome suona vagamente volgare o bizzarro](http://maps.cortesi.com/volgari/index.php)
 * [Bryan McBride](https://twitter.com/brymcbride) for making [Bootleaf](https://github.com/bmcbride/bootleaf), which is the foundation on which I built the second version of the map.
+* [Steve Karmeinsky](https://twitter.com/stevekennedyuk) and [GB Net](http://www.gbnet.net/) for web hosting.
 * All the contributors to the map, on [GitHub](https://github.com/vicchi/vaguely-rude-places/graphs/contributors), by Twitter and by email; thank you one and all.
 
 ## Colophon
