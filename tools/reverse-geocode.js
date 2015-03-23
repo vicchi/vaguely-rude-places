@@ -25,19 +25,19 @@ features.forEach(function(feature) {
             console.log(feature.properties.id + ': ' + feature.properties.label);
             var elements = [];
             var res = results[0];
-            if (res.streetName) {
+            if (res.hasOwnProperty('streetname') && res.streetName) {
                 elements.push(res.streetName);
             }
-            if (res.city) {
+            if (res.hasOwnProperty('city') && res.city) {
                 elements.push(res.city);
             }
-            if (res.county) {
+            if (res.hasOwnProperty('county') && res.county) {
                 elements.push(res.county);
             }
-            if (res.state) {
+            if (res.hasOwnProperty('state') && res.state) {
                 elements.push(res.state);
             }
-            if (res.country) {
+            if (res.hasOwnProperty('country') && res.country) {
                 elements.push(res.country);
             }
             fs.appendFileSync(opts.output, feature.properties.id + ': ' + feature.properties.label + '(' + elements.join(', ') + ')\n');
