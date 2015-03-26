@@ -3,6 +3,8 @@
 module.exports = function(grunt) {
     require('load-grunt-tasks')(grunt);
 
+    var target = grunt.option('target') || 'dist';
+
     grunt.initConfig({
         target: grunt.option('target') || 'dist',
         pkg: grunt.file.readJSON('package.json'),
@@ -203,7 +205,7 @@ module.exports = function(grunt) {
             },
             js: {
                 files: ['src/js/*'],
-                tasks: ['jshint', 'concat', 'uglify']
+                tasks: ['jshint', 'concat', 'uglify:' + target]
             },
             sass: {
                 files: ['src/sass/*'],
@@ -219,8 +221,6 @@ module.exports = function(grunt) {
             }
         }
     });
-
-    var target = grunt.option('target') || 'dist';
 
     grunt.registerTask('default', ['watch']);
     grunt.registerTask('nodsstore', function() {
