@@ -70,7 +70,14 @@ module.exports = function(grunt) {
             }
         },
         copy: {
-            csstoscss: {
+            edit: {
+                options: {
+                    process: function(content, srcpath) {
+                        // fixup Leaflet image paths to use /assets/img and not /images
+                        return content.replace(/images\//g, '../../assets/img/');
+
+                    }
+                },
                 files: [
                     {
                         expand: true,
@@ -79,7 +86,11 @@ module.exports = function(grunt) {
                         dest: 'src/sass',
                         filter: 'isFile',
                         ext: '.scss'
-                    },
+                    }
+                ]
+            },
+            csstoscss: {
+                files: [
                     {
                         expand: true,
                         cwd: 'bower_components/leaflet.locatecontrol/dist',
@@ -123,6 +134,14 @@ module.exports = function(grunt) {
                     {
                         expand: true,
                         cwd: 'src/img',
+                        src: ['**/*.png'],
+                        dest: 'assets/img',
+                        filter: 'isFile',
+                        ext: '.png'
+                    },
+                    {
+                        expand: true,
+                        cwd: 'bower_components/leaflet/dist/images',
                         src: ['**/*.png'],
                         dest: 'assets/img',
                         filter: 'isFile',
@@ -231,6 +250,6 @@ module.exports = function(grunt) {
             grunt.file.delete(file);
         });
     });
-    grunt.registerTask('build', ['nodsstore', 'cdndeps', 'jshint', 'concat', 'copy:csstoscss', 'copy:img', 'copy:fonts', 'jsonmin', 'shell', 'sass', 'cssmin', 'uglify:' + target]);
+    grunt.registerTask('build', ['nodsstore', 'cdndeps', 'jshint', 'concat', 'copy:edit', 'copy:csstoscss', 'copy:img', 'copy:fonts', 'jsonmin', 'shell', 'sass', 'cssmin', 'uglify:' + target]);
     grunt.registerTask('deploy', ['build', 'copy:deploy']);
 };

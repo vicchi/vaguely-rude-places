@@ -25317,6 +25317,15 @@ $("#list-btn").click(function() {
 	return false;
 });
 
+$("#nav-btn").click(function() {
+	$(".navbar-collapse").collapse("toggle");
+});
+
+$("#sidebar-toggle-btn").click(function() {
+	$("#sidebar").toggle();
+	map.invalidateSize();
+	return false;
+});
 $("#sidebar-hide-btn").click(function() {
 	$('#sidebar').hide();
 	map.invalidateSize();
