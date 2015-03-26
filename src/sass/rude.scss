@@ -170,6 +170,10 @@ input[type="radio"], input[type="checkbox"] {
   .dropdown-menu a i{
     color: #FFFFFF;
   }
+
+  .leaflet-control-mouseposition, .leaflet-control-zoom {
+      display: none;
+  }
 }
 /* Print Handling */
 @media print {
