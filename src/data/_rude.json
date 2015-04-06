@@ -4120,3 +4120,17 @@
 
     ]
 }
+{
+        "type": "Feature",
+        "geometry": {
+            "type": "Point",
+            "coordinates": [
+            50.901069,
+            -1.030596
+            ]
+        },
+        "properties": {
+            "label": "Wecock Farm, Waterlooville, United Kingdom",
+            "detail": "Waterlooville, Hampshire, PO8",
+        }
+    },
