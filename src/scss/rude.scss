@@ -1,12 +1,12 @@
 @import "variables";
-@import "bower_components/fontawesome/scss/font-awesome";
-@import "bower_components/bootstrap-sass-official/assets/stylesheets/bootstrap";
+@import "fontawesome";
+@import "solid";
+@import "bootstrap";
 @import "leaflet";
 @import "L.Control.Locate";
 @import "MarkerCluster";
 @import "markercluster-custom";
 @import "leaflet.groupedlayercontrol";
-@import "L.Control.MousePosition";
 
 html, body, #container {
   height: 100%;
@@ -110,7 +110,7 @@ input[type="radio"], input[type="checkbox"] {
 .typeahead {
   background-color: #FFFFFF;
 }
-.tt-dropdown-menu {
+.tt-dropdown-menu, .tt-menu {
   background-color: #FFFFFF;
   border: 1px solid rgba(0, 0, 0, 0.2);
   border-radius: 4px 4px 4px 4px;
@@ -125,6 +125,12 @@ input[type="radio"], input[type="checkbox"] {
   font-size: 14px;
   line-height: 20px;
   padding: 3px 10px;
+
+  &:hover {
+      background-color: #0097CF;
+      color: #FFFFFF;
+      cursor: pointer;
+  }
 }
 .tt-suggestion.tt-cursor {
   background-color: #0097CF;

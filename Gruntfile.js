@@ -1,90 +1,117 @@
-// Run with --target=dev for localhost or [--target=dist (the default)] for production
+/* jshint -W069 */
 
+sass = require('node-sass');
 module.exports = function(grunt) {
     require('load-grunt-tasks')(grunt);
 
-    var target = grunt.option('target') || 'dist';
-
     grunt.initConfig({
-        target: grunt.option('target') || 'dist',
         pkg: grunt.file.readJSON('package.json'),
-        cdndeps: {
-            options: {
-                src: 'src/data/cdn.json',
-                dest: 'src/js',
-                clean: true,
-                prune: false
+        dirs: {
+            dist: 'dist/',
+            site: 'dist/<%= pkg.name %>/',
+            data: '<%= dirs.site %>assets/data/',
+            geojson: '<%= dirs.data %>geojson/',
+            shp: '<%= dirs.data %>shp'
+        },
+        files: {
+            dist: '<%= dirs.dist %><%= pkg.name %>-<%= pkg.version %>.tar.gz',
+            geojson: '<%= dirs.data %><%= pkg.name %>-geojson-<%= pkg.version %>.tar.gz',
+            shp: '<%= dirs.data %><%= pkg.name %>-shp-<%= pkg.version %>.tar.gz',
+            geojsonarchive: '<%= pkg.name %>-geojson-<%= pkg.version %>.tar.gz',
+            shparchive: '<%= pkg.name %>-geojson-<%= pkg.version %>.tar.gz'
+        },
+        clean: {
+            dist: [
+                '<%= dirs.dist %>',
+                'src/scss/leaflet*'
+            ]
+        },
+        compress: {
+            dist: {
+                options: {
+                    archive: '<%= files.dist %>',
+                    mode: 'tgz'
+                },
+                files: [
+                    {
+                        expand: true,
+                        cwd: '<%= dirs.site %>',
+                        src: ['**/*']
+                    }
+                ]
+            },
+            geojson: {
+                options: {
+                    archive: '<%= files.geojson %>',
+                    mode: 'tgz'
+                },
+                files: [
+                    {
+                        expand: true,
+                        cwd: '<%= dirs.data %>',
+                        src: ['geojson/**/*']
+                    }
+                ]
+            },
+            shp: {
+                options: {
+                    archive: '<%= files.shp %>',
+                    mode: 'tgz'
+                },
+                files: [
+                    {
+                        expand: true,
+                        cwd: '<%= dirs.data %>',
+                        src: ['shp/**/*']
+                    }
+                ]
             }
         },
         concat: {
             js: {
                 src: [
-                    'bower_components/jquery/dist/jquery.js',
-                    'bower_components/bootstrap-sass-official/assets/javascripts/bootstrap.js',
-                    'bower_components/leaflet/dist/leaflet-src.js',
-                    'src/js/maptiks-leaflet.min.js',
-                    'src/js/maptiks-tracking-<%= target %>.js',
-                    'bower_components/maps.stamen.com/js/tile.stamen.js',
-                    'bower_components/leaflet.locatecontrol/src/L.Control.Locate.js',
-                    'bower_components/leaflet.markercluster/dist/leaflet.markercluster.js',
-                    'bower_components/Leaflet.groupedlayercontrol/src/leaflet.groupedlayercontrol.js',
-                    'bower_components/Leaflet.MousePosition/src/L.Control.MousePosition.js',
-                    'bower_components/typeahead.js/dist/typeahead.bundle.js',
-                    'bower_components/list.js/dist/list.js',
+                    'node_modules/jquery/dist/jquery.js',
+                    'node_modules/bootstrap-sass/assets/javascripts/bootstrap.js',
+                    'node_modules/leaflet/dist/leaflet-src.js',
+                    'node_modules/leaflet-providers/leaflet-providers.js',
+                    'node_modules/leaflet-groupedlayercontrol/src/leaflet.groupedlayercontrol.js',
+                    'node_modules/leaflet.markercluster/dist/leaflet.markercluster.js',
+                    'node_modules/leaflet.locatecontrol/src/L.Control.Locate.js',
+                    'node_modules/list.js/dist/list.js',
+                    'node_modules/typeahead.js/dist/typeahead.bundle.js',
                     'src/js/rude.js'
                 ],
-                dest: 'assets/js/rude.js'
-            }
-        },
-        jshint: {
-            beforeconcat: ['src/js/rude.js']
-        },
-        uglify: {
-            dist: {
-                files: [
-                    {
-                        expand: true,
-                        cwd: 'assets/js',
-                        src: ['*.js', '!*.min.js'],
-                        dest: 'assets/js',
-                        ext: '.min.js'
-                    }
-                ]
-            },
-            dev: {
-                options: {
-                    mangle: false,
-                    compress: false,
-                    preserveComments: 'all',
-                    beautify: true
-                },
-                files: [
-                    {
-                        expand: true,
-                        cwd: 'assets/js',
-                        src: ['*.js', '!*.min.js'],
-                        dest: 'assets/js',
-                        ext: '.min.js'
-                    }
-                ]
+                dest: '<%= dirs.site %>/assets/js/site.js'
             }
         },
         copy: {
+            // html: {
+            //     files: [
+            //         {
+            //             expand: true,
+            //             cwd: 'src/html',
+            //             src: '**/*.html',
+            //             dest: '<%= dirs.site %>/'
+            //         }
+            //     ]
+            // },
             edit: {
                 options: {
                     process: function(content, srcpath) {
-                        // fixup Leaflet image paths to use /assets/img and not /images
+                        // fixup Leaflet image paths
                         return content.replace(/images\//g, '../../assets/img/');
-
                     }
                 },
                 files: [
                     {
                         expand: true,
-                        cwd: 'bower_components/leaflet/dist',
-                        src: ['**/*.css', '!**/*.min.css'],
-                        dest: 'src/sass',
+                        cwd: 'node_modules/leaflet/dist',
+                        src: ['*.css'],
+                        dest: 'src/scss/leaflet',
                         filter: 'isFile',
+                        rename: function(dest, src) {
+                            return dest + '/_' + src;
+                        },
                         ext: '.scss'
                     }
                 ]
@@ -93,125 +120,154 @@ module.exports = function(grunt) {
                 files: [
                     {
                         expand: true,
-                        cwd: 'bower_components/leaflet.locatecontrol/dist',
+                        cwd: 'node_modules/leaflet.locatecontrol/dist',
                         src: ['**/*.css', '!**/*.min.css'],
-                        dest: 'src/sass',
+                        dest: 'src/scss/leaflet.locatecontrol',
                         filter: 'isFile',
                         ext: '.scss',
-                        extDot: 'last'
+                        extDot: 'last',
+                        rename: function(dest, src) {
+                            return dest + '/_' + src;
+                        }
                     },
                     {
                         expand: true,
-                        cwd: 'bower_components/leaflet.markercluster/dist',
+                        cwd: 'node_modules/leaflet.markercluster/dist',
                         src: ['**/*.css', '!**/*.min.css'],
-                        dest: 'src/sass',
+                        dest: 'src/scss/leaflet.markercluster',
                         filter: 'isFile',
                         ext: '.scss',
-                        extDot: 'last'
+                        extDot: 'last',
+                        rename: function(dest, src) {
+                            return dest + '/_' + src;
+                        }
                     },
                     {
                         expand: true,
-                        cwd: 'bower_components/Leaflet.groupedlayercontrol/src',
+                        cwd: 'node_modules/leaflet-groupedlayercontrol/src',
                         src: ['**/*.css', '!**/*.min.css'],
-                        dest: 'src/sass',
+                        dest: 'src/scss/leaflet.groupedlayercontrol',
                         filter: 'isFile',
                         ext: '.scss',
-                        extDot: 'last'
-                    },
-                    {
-                        expand: true,
-                        cwd: 'bower_components/Leaflet.MousePosition/src',
-                        src: ['**/*.css', '!**/*.min.css'],
-                        dest: 'src/sass',
-                        filter: 'isFile',
-                        ext: '.scss',
-                        extDot: 'last'
+                        extDot: 'last',
+                        rename: function(dest, src) {
+                            return dest + '/_' + src;
+                        }
                     }
-                ]
-            },
-            img: {
-                files: [
-                    {
-                        expand: true,
-                        cwd: 'src/img',
-                        src: ['**/*.png'],
-                        dest: 'assets/img',
-                        filter: 'isFile',
-                        ext: '.png'
-                    },
-                    {
-                        expand: true,
-                        cwd: 'bower_components/leaflet/dist/images',
-                        src: ['**/*.png'],
-                        dest: 'assets/img',
-                        filter: 'isFile',
-                        ext: '.png'
-                    }
+
                 ]
             },
             fonts: {
                 files: [
                     {
                         expand: true,
-                        cwd: 'bower_components/fontawesome/fonts',
+                        cwd: 'node_modules/@fortawesome/fontawesome-free/webfonts',
                         src: ['**/*'],
-                        dest: 'assets/fonts',
+                        dest: '<%= dirs.site %>/assets/webfonts/',
                         filter: 'isFile'
                     }
                 ]
             },
-            deploy: {
+            images: {
                 files: [
                     {
                         expand: true,
-                        src: ['index.html', 'assets/**/*'],
-                        dest: 'deploy'
+                        cwd: 'src/img',
+                        src: ['**/*'],
+                        dest: '<%= dirs.site %>/assets/img',
+                        filter: 'isFile'
+                    },
+                    {
+                        expand: true,
+                        cwd: 'node_modules/leaflet/dist/images',
+                        src: ['**/*.png'],
+                        dest: '<%= dirs.site %>/assets/img/',
+                        filter: 'isFile',
+                        ext: '.png'
+                    }
+                ]
+            }
+        },
+        jshint: {
+            beforeconcat: ['src/js/rude.js'],
+            grunt: ['Gruntfile.js']
+        },
+        jsonmin: {
+            dist: {
+                files: {
+                    '<%= dirs.site %>/assets/data/geojson/rude-en.geojson': 'src/data/rude-en.geojson',
+                    '<%= dirs.site %>/assets/data/geojson/rude-it.geojson': 'src/data/rude-it.geojson'
+                }
+            }
+        },
+        mkdir: {
+            geojson: {
+                options: {
+                    create: [
+                        '<%= dirs.geojson %>'
+                    ]
+                }
+            },
+            shp: {
+                options: {
+                    create: [
+                        '<%= dirs.shp %>'
+                    ]
+                }
+            }
+        },
+        replace: {
+            html: {
+                options: {
+                    patterns: [
+                        {
+                            match: 'geojson',
+                            replacement: '<%= files.geojsonarchive %>'
+                        },
+                        {
+                            match: 'shp',
+                            replacement: '<%= files.shparchive %>'
+                        }
+                    ]
+                },
+                files: [
+                    {
+                        expand: true,
+                        cwd: 'src/html',
+                        src: '**/*.html',
+                        dest: '<%= dirs.site %>/'
                     }
                 ]
             }
         },
         sass: {
-            dist: {
-                files: [
-                    {
-                        'assets/css/rude.css': 'src/sass/rude.scss'
-                    }
+            options: {
+                implementation: sass,
+                outputStyle: 'expanded',
+                indentType: 'tab',
+                indentWidth: 1,
+                includePaths: [
+                    'node_modules/@fortawesome/fontawesome-free/scss',
+                    'node_modules/bootstrap-sass/assets/stylesheets',
+                    'src/scss',
+                    'src/scss/leaflet',
+                    'src/scss/leaflet.locatecontrol',
+                    'src/scss/leaflet.markercluster',
+                    'src/scss/leaflet.groupedlayercontrol'
                 ]
-            }
-        },
-        jsonmin: {
-            dist: {
+            },
+            site: {
                 files: {
-                    'assets/data/rude-en.geojson': 'src/data/rude-en.geojson',
-                    'assets/data/rude-it.geojson': 'src/data/rude-it.geojson'
+                    '<%= dirs.site %>/assets/css/site.css': 'src/scss/rude.scss'
                 }
             }
         },
         shell: {
             enshp: {
-                command: 'ogr2ogr -f "ESRI Shapefile" -overwrite assets/data/rude-en.shp assets/data/rude-en.geojson OGRGeoJSON'
+                command: 'ogr2ogr -f "ESRI Shapefile" -overwrite <%= dirs.site %>/assets/data/shp/rude-en.shp <%= dirs.site %>/assets/data/geojson/rude-en.geojson -lco ENCODING=UTF-8'
             },
             itshp: {
-                command: 'ogr2ogr -f "ESRI Shapefile" -overwrite assets/data/rude-it.shp assets/data/rude-it.geojson OGRGeoJSON'
-            },
-            enzip: {
-                command: 'zip assets/data/rude-it.zip assets/data/rude-en.zip assets/data/rude-en.dbf assets/data/rude-en.prj assets/data/rude-en.shx assets/data/rude-en.shp'
-            },
-            itzip: {
-                command: 'zip assets/data/rude-en.zip assets/data/rude-it.zip assets/data/rude-it.dbf assets/data/rude-it.prj assets/data/rude-it.shx assets/data/rude-it.shp'
-            }
-        },
-        cssmin: {
-            dist: {
-                files: [
-                    {
-                        expand: true,
-                        cwd: 'assets/css',
-                        src: ['*.css', '!*.min.css'],
-                        dest: 'assets/css',
-                        ext: '.min.css'
-                    }
-                ]
+                command: 'ogr2ogr -f "ESRI Shapefile" -overwrite <%= dirs.site %>/assets/data/shp/rude-it.shp <%= dirs.site %>/assets/data/geojson/rude-it.geojson -lco ENCODING=UTF-8'
             }
         },
         watch: {
@@ -219,37 +275,42 @@ module.exports = function(grunt) {
                 livereload: true
             },
             grunt: {
-                files: ['Gruntfile.js'],
-                tasks: ['build']
+                files: ['Gruntfile.js', 'package.json'],
+                tasks: ['clean', 'build']
             },
-            js: {
-                files: ['src/js/*'],
-                tasks: ['jshint', 'concat', 'uglify:' + target]
+            geojson: {
+                files: ['src/data/**/*.geojson'],
+                tasks: ['mkdir:geojson', 'mkdir:shp', 'jsonmin', 'shell', 'compress:geojson', 'compress:shp']
+            },
+            html: {
+                files: ['src/html/**/*.html'],
+                tasks: ['replace:html']
             },
             sass: {
-                files: ['src/sass/*'],
-                tasks: ['sass', 'cssmin']
+                files: ['src/scss/**/*.scss'],
+                tasks: ['sass']
             },
-            json: {
-                files: ['src/data/*.geojson'],
-                tasks: ['jsonmin']
+            images: {
+                files: ['src/img/**/*'],
+                tasks: ['copy:images']
             },
-            shape: {
-                files: ['assets/data/*.geojson'],
-                tasks: ['shell']
+            js: {
+                files: ['src/js/*.js'],
+                tasks: ['jshint', 'concat:js']
             }
         }
     });
 
-    grunt.registerTask('default', ['watch']);
+    grunt.registerTask('default', ['openport:watch.options.livereload:35729', 'watch']);
+    grunt.registerTask('build', ['nodsstore', 'mkdir', 'jshint', 'concat', 'copy', 'replace', 'jsonmin', 'sass', 'shell', 'compress:geojson', 'compress:shp']);
+    grunt.registerTask('rebuild', ['clean', 'build']);
+    grunt.registerTask('dist', ['rebuild', 'compress:dist']);
     grunt.registerTask('nodsstore', function() {
         grunt.file.expand({
-            filter: 'isFile',
-            cwd: '.'
+            'filter': 'isFile',
+            'cwd':  '.'
         }, ['**/.DS_Store']).forEach(function(file) {
             grunt.file.delete(file);
         });
     });
-    grunt.registerTask('build', ['nodsstore', 'cdndeps', 'jshint', 'concat', 'copy:edit', 'copy:csstoscss', 'copy:img', 'copy:fonts', 'jsonmin', 'shell', 'sass', 'cssmin', 'uglify:' + target]);
-    grunt.registerTask('deploy', ['build', 'copy:deploy']);
 };

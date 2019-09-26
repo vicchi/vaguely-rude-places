@@ -1,8 +1,13 @@
+/* jshint -W069 */
+
 var map;
 var toner;
 var tonerLite;
-var mapQuestOSM;
-var markers = [];
+var osmMapnik;
+var markers = {
+	'en': [],
+	'it': []
+};
 var coords = [];
 var english;
 var englishLayer;
@@ -27,7 +32,10 @@ $(window).resize(function() {
 });
 
 $(document).on('click', '.feature-row', function(e) {
-	sidebarClick(parseInt($(this).attr('id'), 10));
+	var id = $(this).data('id');
+	var lang = $(this).data('lang');
+	// console.log('.feature-row click fired for id ' + id + ' (' + lang + ')');
+	sidebarClick(id, lang);
 });
 
 icon = new L.Icon({
@@ -68,8 +76,9 @@ englishLayer = L.geoJson(null);
 english = L.geoJson(null, {
 	pointToLayer: function(feature, latlng) {
 		var marker = new L.Marker(latlng, { icon: icons.en });
+		marker.id = feature.properties.id;
 		coords.push(latlng);
-		markers[feature.properties.id] = marker;
+		markers['en'][feature.properties.id] = marker;
 		return marker;
 	},
 	onEachFeature: function(feature, layer) {
@@ -81,30 +90,42 @@ english = L.geoJson(null, {
 			popup += '</div>';
 
 			layer.bindPopup(popup);
-			layer.on('click', function(e) {
-				e.target.openPopup();
-			});
+			// layer.on('click', function(e) {
+			// 	console.log('click fired for id ' + e.target.id);
+			// 	// console.log(e);
+			// 	// e.target.openPopup();
+			// 	markers['en'][e.target.id].openPopup();
+			// });
+			// layer.on('popupopen', function(e) {
+			// 	console.log('popup open fired for id ' + e.target.id);
+			// });
+			// layer.on('popupclose', function(e) {
+			// 	console.log('popup close fired for id ' + e.target.id);
+			// });
+			// layer.on('add', function(e) {
+			// 	console.log('marker add fired for id ' + e.target.id);
+			// });
+			// layer.on('remove', function(e) {
+			// 	console.log('marker remove fired for id ' + e.target.id);
+			// });
 
 			englishLabels[feature.properties.id] = {
-				stamp: L.stamp(layer),
-				feature: feature,
-				layer: layer
+				lang: 'en',
+				id: feature.properties.id,
+				feature: feature
 			};
 
 			englishSearch.push({
-				source: 'English',
-				label: feature.properties.label,
+				lang: 'en',
 				id: feature.properties.id,
-				lat: feature.geometry.coordinates[1],
-				lng: feature.geometry.coordinates[0],
-				popup: popup,
-				marker: layer,
+				source: 'English',
+				label: feature.properties.label
 			});
 		}
 	}
 });
 
-$.getJSON('assets/data/rude-en.geojson', function(data) {
+$.getJSON('assets/data/geojson/rude-en.geojson', function(data) {
 	english.addData(data);
 	map.addLayer(englishLayer);
 });
@@ -114,7 +135,7 @@ italian = L.geoJson(null, {
 	pointToLayer: function(feature, latlng) {
 		var marker = new L.Marker(latlng, { icon: icons.it });
 		coords.push(latlng);
-		markers[feature.properties.id] = marker;
+		markers['it'][feature.properties.id] = marker;
 		return marker;
 	},
 	onEachFeature: function(feature, layer) {
@@ -126,30 +147,27 @@ italian = L.geoJson(null, {
 			popup += '</div>';
 
 			layer.bindPopup(popup);
-			layer.on('click', function(e) {
-				e.target.openPopup();
-			});
+			// layer.on('click', function(e) {
+			// 	e.target.openPopup();
+			// });
 
 			italianLabels[feature.properties.id] = {
-				stamp: L.stamp(layer),
-				feature: feature,
-				layer: layer
+				lang: 'it',
+				id: feature.properties.id,
+				feature: feature
 			};
 
 			italianSearch.push({
-				source: 'Italian',
-				label: feature.properties.label,
+				lang: 'it',
 				id: feature.properties.id,
-				lat: feature.geometry.coordinates[1],
-				lng: feature.geometry.coordinates[0],
-				popup: popup,
-				marker: layer,
+				source: 'Italian',
+				label: feature.properties.label
 			});
 		}
 	}
 });
 
-$.getJSON('assets/data/rude-it.geojson', function(data) {
+$.getJSON('assets/data/geojson/rude-it.geojson', function(data) {
 	italian.addData(data);
 });
 
@@ -199,15 +217,27 @@ $(document).one('ajaxStop', function() {
 			header: '<h4 class="typeahead-header"><img src="' + iconURLs.it + '" width="24" height="28">&nbsp;Italian</h4>'
 		}
 	}).on("typeahead:selected", function (obj, datum) {
+		var target;
 		if (datum.source === 'English') {
+			// console.log('obj');
+			// console.log(obj);
+			// console.log('datum');
+			// console.log(datum);
 			if (!map.hasLayer(englishLayer)) {
 				map.addLayer(englishLayer);
 			}
 			if (map.hasLayer(italianLayer)) {
 				map.removeLayer(italianLayer);
 			}
-			markerClusters.zoomToShowLayer(datum.marker, function() {});
-			datum.marker.fire('click');
+			// markerClusters.zoomToShowLayer(datum.marker, function() {});
+			// datum.marker.fire('click');
+			target = markers['en'][datum.id];
+			// console.log('target');
+			// console.log(target);
+			// markerClusters.zoomToShowLayer(markers['en'][datum.id], function() {});
+			// markers['en'][datum.id].fire('click');
+			markerClusters.zoomToShowLayer(target, function() {});
+			target.fire('click');
 		}
 
 		if (datum.source === 'Italian') {
@@ -217,8 +247,13 @@ $(document).one('ajaxStop', function() {
 			if (map.hasLayer(englishLayer)) {
 				map.removeLayer(englishLayer);
 			}
-			markerClusters.zoomToShowLayer(datum.marker, function() {});
-			datum.marker.fire('click');
+			// markerClusters.zoomToShowLayer(datum.marker, function() {});
+			// datum.marker.fire('click');
+			// markerClusters.zoomToShowLayer(markers['it'][datum.id], function() {});
+			// markers['it'][datum.id].fire('click');
+			target = markers['it'][datum.id];
+			markerClusters.zoomToShowLayer(target, function() {});
+			target.fire('click');
 		}
 
 		if ($(".navbar-collapse").height() > 50) {
@@ -245,9 +280,13 @@ $(document).one('ajaxStop', function() {
 			if (map.hasLayer(italianLayer)) {
 				map.removeLayer(italianLayer);
 			}
-			datum = englishLabels[permaLink.id];
-			markerClusters.zoomToShowLayer(datum.layer, function() {});
-			datum.layer.fire('click');
+			// datum = englishLabels[permaLink.id];
+			// markerClusters.zoomToShowLayer(datum.layer, function() {});
+			// datum.layer.fire('click');
+			datum = markers['en'][permaLink.id];
+			markerClusters.zoomToShowLayer(datum, function() {});
+			// console.log('firing click for ' + permaLink.id);
+			datum.fire('click');
 		}
 
 		if (permaLink.lang === 'it' && italianLabels.hasOwnProperty(permaLink.id)) {
@@ -257,9 +296,12 @@ $(document).one('ajaxStop', function() {
 			if (map.hasLayer(englishLayer)) {
 				map.removeLayer(englishLayer);
 			}
-			datum = italianLabels[permaLink.id];
-			markerClusters.zoomToShowLayer(datum.layer, function() {});
-			datum.layer.fire('click');
+			// datum = italianLabels[permaLink.id];
+			// markerClusters.zoomToShowLayer(datum.layer, function() {});
+			// datum.layer.fire('click');
+			datum = markers['it'][permaLink.id];
+			markerClusters.zoomToShowLayer(datum, function() {});
+			datum.fire('click');
 		}
 	}
 });
@@ -267,6 +309,11 @@ $(document).one('ajaxStop', function() {
 $("#list-btn").click(function() {
 	$('#sidebar').toggle();
 	map.invalidateSize();
+	return false;
+});
+
+$('#credits-btn').click(function() {
+	$('#attributionModal').modal('show');
 	return false;
 });
 
@@ -317,9 +364,11 @@ $("#full-extent-btn").click(function() {
 	return false;
 });
 
-function sidebarClick(id) {
-	var layer = markerClusters.getLayer(id);
+function sidebarClick(id, lang) {
+	// var layer = markerClusters.getLayer(id);
+	var layer = markers[lang][id];
 	markerClusters.zoomToShowLayer(layer, function() {});
+	// console.log('firing click for ' + id);
 	layer.fire("click");
 	/* Hide sidebar and go to the map on small screens */
 	if (document.body.clientWidth <= 767) {
@@ -335,7 +384,7 @@ function syncSidebar() {
 		$.each(englishLabels, function(index, obj) {
 			var stamp = obj.stamp;
 			var feature = obj.feature;
-			$("#feature-list tbody").append('<tr class="feature-row" id="' + stamp + '" permalink="' + feature.properties.id + '" lang="en" lat="' + feature.geometry.coordinates[1] + '" lng="' + feature.geometry.coordinates[0] + '"><td style="vertical-align: middle;"><img width="16" height="18" src="' + iconURLs.en + '"></td><td class="feature-name">' + feature.properties.label + '</td><td style="vertical-align: middle;"><i class="fa fa-chevron-right pull-right"></i></td></tr>');
+			$("#feature-list tbody").append('<tr class="feature-row" data-id="' + obj.id + '" data-permalink="' + feature.properties.id + '" data-lang="en"><td style="vertical-align: middle;"><img width="16" height="18" src="' + iconURLs.en + '"></td><td class="feature-name">' + feature.properties.label + '</td><td style="vertical-align: middle;"><i class="fa fa-chevron-right pull-right"></i></td></tr>');
 		});
 		rebuildFeatureList(englishLabels);
 	}
@@ -382,28 +431,31 @@ function sizeLayerControl() {
 }
 
 // Map Base Layers
-toner = L.stamenTileLayer('toner', {
-	maptiks_id: 'Vaguely Rude Places Map - Stamen Toner'
-});
+toner = L.tileLayer.provider('Stamen.Toner');
+tonerLite = L.tileLayer.provider('Stamen.TonerLite');
+osmMapnik = L.tileLayer.provider('OpenStreetMap.Mapnik');
 
-tonerLite = L.stamenTileLayer('toner-lite', {
-	maptiks_id: 'Vaguely Rude Places Map - Stamen Toner Lite'
-});
-
-mapQuestOSM = L.tileLayer("http://{s}.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png", {
-	maxZoom: 19,
-	subdomains: ["otile1", "otile2", "otile3", "otile4"],
-	attribution: 'Tiles courtesy of <a href="http://www.mapquest.com/" target="_blank">MapQuest</a> <img src="http://developer.mapquest.com/content/osm/mq_logo.png">. Map data (c) <a href="http://www.openstreetmap.org/" target="_blank">OpenStreetMap</a> contributors, CC-BY-SA.',
-	maptiks_id: 'Vaguely Rude Places Map - MapQuest OSM'
-});
+// toner = L.stamenTileLayer('toner', {
+// 	maptiks_id: 'Vaguely Rude Places Map - Stamen Toner'
+// });
+//
+// tonerLite = L.stamenTileLayer('toner-lite', {
+// 	maptiks_id: 'Vaguely Rude Places Map - Stamen Toner Lite'
+// });
+//
+// mapQuestOSM = L.tileLayer("http://{s}.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png", {
+// 	maxZoom: 19,
+// 	subdomains: ["otile1", "otile2", "otile3", "otile4"],
+// 	attribution: 'Tiles courtesy of <a href="http://www.mapquest.com/" target="_blank">MapQuest</a> <img src="http://developer.mapquest.com/content/osm/mq_logo.png">. Map data (c) <a href="http://www.openstreetmap.org/" target="_blank">OpenStreetMap</a> contributors, CC-BY-SA.',
+// 	maptiks_id: 'Vaguely Rude Places Map - MapQuest OSM'
+// });
 
 map = L.map('map', {
 	zoom: 3,
 	center: [0,0],
 	layers: [tonerLite, markerClusters],
 	zoomControl: false,
-	attributionControl: false,
-	maptiks_id: 'Vaguely Rude Places Map'
+	attributionControl: false
 });
 
 /* Layer control listeners that allow for a single markerClusters layer */
@@ -439,7 +491,7 @@ if (document.body.clientWidth <= 767) {
 var baseLayers = {
 	"Toner Lite": tonerLite,
 	"Toner": toner,
-	"Street Map": mapQuestOSM
+	"OSM": osmMapnik
 };
 
 var groupedOverlays = {
@@ -470,15 +522,15 @@ var attributionControl = L.control({
 });
 attributionControl.onAdd = function(map) {
 	var div = L.DomUtil.create('div', 'leaflet-control-attribution');
-	div.innerHTML = '<span class="hidden-hs"><a href="http://maps.geotastic.org">More Maps?</a> | This is a thing by <a href="http://www.garygale.com">Gary Gale</a> | </span><a href="#" onclick="$(\'#attributionModal\').modal(\'show\'); return false;">Credits &amp; Attribution</a>';
+	div.innerHTML = '<span class="hidden-hs">Hosting courtesy of <a href="https://opencagedata.com/" target="_blank">OpenCage</a> | This is a thing by <a href="http://www.garygale.com">Gary Gale</a> | </span><a href="#" onclick="$(\'#attributionModal\').modal(\'show\'); return false;">Credits &amp; Attribution</a>';
 	return div;
 };
 map.addControl(attributionControl);
 
-L.control.mousePosition({
-	position: 'topleft',
-	emptyString: 'Position Unavailable'
-}).addTo(map);
+// L.control.mousePosition({
+// 	position: 'topleft',
+// 	emptyString: 'Position Unavailable'
+// }).addTo(map);
 
 var zoomControl = L.control.zoom({
 	position: "bottomright"

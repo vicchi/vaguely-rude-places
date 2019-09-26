@@ -1,7 +1,0 @@
-{
-    "cdnDeps": {
-        "default": [
-            "//cdn.maptiks.com/maptiks-leaflet.min.js"
-        ]
-    }
-}

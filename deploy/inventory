@@ -1,0 +1,10 @@
+[production]
+geotastic.org
+
+[production:vars]
+ansible_python_interpreter=/usr/bin/python3
+deploy_owner=www-data
+deploy_group=www-data
+deploy_root=/var/www/domains/www.vaguelyrudeplacesmap.com
+nginx_sites_dir=/etc/nginx/sites-available
+nginx_conf_glob=*.conf
