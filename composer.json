@@ -1,0 +1,15 @@
+{
+    "name": "vicchi/vaguely-rude-places",
+    "description": "The Vaguely Rude Places Map",
+    "type": "project",
+    "require": {
+        "ulrichsg/getopt-php": "^3.2"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Gary Gale",
+            "email": "gary@vicchi.org"
+        }
+    ]
+}

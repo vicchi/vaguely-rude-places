@@ -26,6 +26,7 @@
         "grunt-contrib-copy": "^1.0.0",
         "grunt-contrib-jshint": "^2.1.0",
         "grunt-contrib-watch": "^1.1.0",
+        "grunt-jsonlint": "^2.0.0",
         "grunt-jsonmin": "^0.2.4",
         "grunt-mkdir": "^1.0.0",
         "grunt-openport": "^1.0.0",

@@ -192,6 +192,14 @@ module.exports = function(grunt) {
             beforeconcat: ['src/js/rude.js'],
             grunt: ['Gruntfile.js']
         },
+        jsonlint: {
+            dist: {
+                src: [
+                    'src/data/rude-en.geojson',
+                    'src/data/rude-it.geojson'
+                ]
+            }
+        },
         jsonmin: {
             dist: {
                 files: {
@@ -280,7 +288,7 @@ module.exports = function(grunt) {
             },
             geojson: {
                 files: ['src/data/**/*.geojson'],
-                tasks: ['mkdir:geojson', 'mkdir:shp', 'jsonmin', 'shell', 'compress:geojson', 'compress:shp']
+                tasks: ['jsonlint', 'mkdir:geojson', 'mkdir:shp', 'jsonmin', 'shell', 'compress:geojson', 'compress:shp']
             },
             html: {
                 files: ['src/html/**/*.html'],
@@ -302,7 +310,7 @@ module.exports = function(grunt) {
     });
 
     grunt.registerTask('default', ['openport:watch.options.livereload:35729', 'watch']);
-    grunt.registerTask('build', ['nodsstore', 'mkdir', 'jshint', 'concat', 'copy', 'replace', 'jsonmin', 'sass', 'shell', 'compress:geojson', 'compress:shp']);
+    grunt.registerTask('build', ['nodsstore', 'mkdir', 'jshint', 'concat', 'copy', 'replace', 'jsonlint', 'jsonmin', 'sass', 'shell', 'compress:geojson', 'compress:shp']);
     grunt.registerTask('rebuild', ['clean', 'build']);
     grunt.registerTask('dist', ['rebuild', 'compress:dist']);
     grunt.registerTask('nodsstore', function() {
