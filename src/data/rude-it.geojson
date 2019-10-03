@@ -1,8 +1,3 @@
-// CODE HEALTH WARNING ...
-// GeoJSON point coordinates are long,lat and not lat,long
-// Don't update the "last_id" property, this is done by ../tools/assign-ids.php
-// When adding new places, don't create an "id" property ... this is done by ../tools/assign-ids.php
-
 {
     "last_id": "76",
     "type": "FeatureCollection",
