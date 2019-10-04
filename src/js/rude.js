@@ -34,7 +34,6 @@ $(window).resize(function() {
 $(document).on('click', '.feature-row', function(e) {
 	var id = $(this).data('id');
 	var lang = $(this).data('lang');
-	// console.log('.feature-row click fired for id ' + id + ' (' + lang + ')');
 	sidebarClick(id, lang);
 });
 
@@ -66,7 +65,7 @@ icons = {
 };
 
 markerClusters = new L.MarkerClusterGroup({
-	spiderfyOnMaxZoom: true,
+	spiderfyOnMaxZoom: false,
 	showCoverageOnHover: false,
 	zoomToBoundsOnClick: true,
 	disableClusteringAtZoom: 16
@@ -90,24 +89,6 @@ english = L.geoJson(null, {
 			popup += '</div>';
 
 			layer.bindPopup(popup);
-			// layer.on('click', function(e) {
-			// 	console.log('click fired for id ' + e.target.id);
-			// 	// console.log(e);
-			// 	// e.target.openPopup();
-			// 	markers['en'][e.target.id].openPopup();
-			// });
-			// layer.on('popupopen', function(e) {
-			// 	console.log('popup open fired for id ' + e.target.id);
-			// });
-			// layer.on('popupclose', function(e) {
-			// 	console.log('popup close fired for id ' + e.target.id);
-			// });
-			// layer.on('add', function(e) {
-			// 	console.log('marker add fired for id ' + e.target.id);
-			// });
-			// layer.on('remove', function(e) {
-			// 	console.log('marker remove fired for id ' + e.target.id);
-			// });
 
 			englishLabels[feature.properties.id] = {
 				lang: 'en',
@@ -147,9 +128,6 @@ italian = L.geoJson(null, {
 			popup += '</div>';
 
 			layer.bindPopup(popup);
-			// layer.on('click', function(e) {
-			// 	e.target.openPopup();
-			// });
 
 			italianLabels[feature.properties.id] = {
 				lang: 'it',
@@ -219,25 +197,14 @@ $(document).one('ajaxStop', function() {
 	}).on("typeahead:selected", function (obj, datum) {
 		var target;
 		if (datum.source === 'English') {
-			// console.log('obj');
-			// console.log(obj);
-			// console.log('datum');
-			// console.log(datum);
 			if (!map.hasLayer(englishLayer)) {
 				map.addLayer(englishLayer);
 			}
 			if (map.hasLayer(italianLayer)) {
 				map.removeLayer(italianLayer);
 			}
-			// markerClusters.zoomToShowLayer(datum.marker, function() {});
-			// datum.marker.fire('click');
 			target = markers['en'][datum.id];
-			// console.log('target');
-			// console.log(target);
-			// markerClusters.zoomToShowLayer(markers['en'][datum.id], function() {});
-			// markers['en'][datum.id].fire('click');
-			markerClusters.zoomToShowLayer(target, function() {});
-			target.fire('click');
+			zoomAndPopup(target);
 		}
 
 		if (datum.source === 'Italian') {
@@ -247,13 +214,8 @@ $(document).one('ajaxStop', function() {
 			if (map.hasLayer(englishLayer)) {
 				map.removeLayer(englishLayer);
 			}
-			// markerClusters.zoomToShowLayer(datum.marker, function() {});
-			// datum.marker.fire('click');
-			// markerClusters.zoomToShowLayer(markers['it'][datum.id], function() {});
-			// markers['it'][datum.id].fire('click');
 			target = markers['it'][datum.id];
-			markerClusters.zoomToShowLayer(target, function() {});
-			target.fire('click');
+			zoomAndPopup(target);
 		}
 
 		if ($(".navbar-collapse").height() > 50) {
@@ -280,13 +242,8 @@ $(document).one('ajaxStop', function() {
 			if (map.hasLayer(italianLayer)) {
 				map.removeLayer(italianLayer);
 			}
-			// datum = englishLabels[permaLink.id];
-			// markerClusters.zoomToShowLayer(datum.layer, function() {});
-			// datum.layer.fire('click');
 			datum = markers['en'][permaLink.id];
-			markerClusters.zoomToShowLayer(datum, function() {});
-			// console.log('firing click for ' + permaLink.id);
-			datum.fire('click');
+			zoomAndPopup(datum);
 		}
 
 		if (permaLink.lang === 'it' && italianLabels.hasOwnProperty(permaLink.id)) {
@@ -296,12 +253,8 @@ $(document).one('ajaxStop', function() {
 			if (map.hasLayer(englishLayer)) {
 				map.removeLayer(englishLayer);
 			}
-			// datum = italianLabels[permaLink.id];
-			// markerClusters.zoomToShowLayer(datum.layer, function() {});
-			// datum.layer.fire('click');
 			datum = markers['it'][permaLink.id];
-			markerClusters.zoomToShowLayer(datum, function() {});
-			datum.fire('click');
+			zoomAndPopup(datum);
 		}
 	}
 });
@@ -365,12 +318,8 @@ $("#full-extent-btn").click(function() {
 });
 
 function sidebarClick(id, lang) {
-	// var layer = markerClusters.getLayer(id);
 	var layer = markers[lang][id];
-	markerClusters.zoomToShowLayer(layer, function() {});
-	// console.log('firing click for ' + id);
-	layer.fire("click");
-	/* Hide sidebar and go to the map on small screens */
+	zoomAndPopup(layer);
 	if (document.body.clientWidth <= 767) {
 		$("#sidebar").hide();
 		map.invalidateSize();
@@ -435,21 +384,6 @@ toner = L.tileLayer.provider('Stamen.Toner');
 tonerLite = L.tileLayer.provider('Stamen.TonerLite');
 osmMapnik = L.tileLayer.provider('OpenStreetMap.Mapnik');
 
-// toner = L.stamenTileLayer('toner', {
-// 	maptiks_id: 'Vaguely Rude Places Map - Stamen Toner'
-// });
-//
-// tonerLite = L.stamenTileLayer('toner-lite', {
-// 	maptiks_id: 'Vaguely Rude Places Map - Stamen Toner Lite'
-// });
-//
-// mapQuestOSM = L.tileLayer("http://{s}.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png", {
-// 	maxZoom: 19,
-// 	subdomains: ["otile1", "otile2", "otile3", "otile4"],
-// 	attribution: 'Tiles courtesy of <a href="http://www.mapquest.com/" target="_blank">MapQuest</a> <img src="http://developer.mapquest.com/content/osm/mq_logo.png">. Map data (c) <a href="http://www.openstreetmap.org/" target="_blank">OpenStreetMap</a> contributors, CC-BY-SA.',
-// 	maptiks_id: 'Vaguely Rude Places Map - MapQuest OSM'
-// });
-
 map = L.map('map', {
 	zoom: 3,
 	center: [0,0],
@@ -482,10 +416,9 @@ map.on("overlayremove", function(e) {
 });
 
 /* Larger screens get expanded layer control and visible sidebar */
+var isCollapsed = false;
 if (document.body.clientWidth <= 767) {
 	var isCollapsed = true;
-} else {
-	var isCollapsed = false;
 }
 
 var baseLayers = {
@@ -526,11 +459,6 @@ attributionControl.onAdd = function(map) {
 	return div;
 };
 map.addControl(attributionControl);
-
-// L.control.mousePosition({
-// 	position: 'topleft',
-// 	emptyString: 'Position Unavailable'
-// }).addTo(map);
 
 var zoomControl = L.control.zoom({
 	position: "bottomright"
@@ -593,6 +521,12 @@ function paramParser(key, value) {
 		default:
 			break;
 	}
+}
+
+function zoomAndPopup(marker) {
+	markerClusters.zoomToShowLayer(marker, function() {
+		marker.fire('click');
+	});
 }
 
 $(document).ready(function() {
