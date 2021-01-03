@@ -1,5 +1,5 @@
 {
-    "last_id": 299,
+    "last_id": 303,
     "type": "FeatureCollection",
     "features": [
         {
@@ -1302,8 +1302,8 @@
                 ]
             },
             "properties": {
-                "label": "Fucking, Tarsdorf, Austria",
-                "detail": "5121 Fucking, Austria",
+                "label": "Fugging (previously Fucking), Tarsdorf, Austria",
+                "detail": "5121 Fugging, Austria",
                 "id": 87
             }
         },
@@ -4482,10 +4482,70 @@
                 ]
             },
             "properties": {
-                "label": "Morón, Distrito Cedeño, Venezuela",
-                "detail": "Morón, Distrito Cedeño, Venezuela",
+                "label": "Mor\u00f3n, Distrito Cede\u00f1o, Venezuela",
+                "detail": "Mor\u00f3n, Distrito Cede\u00f1o, Venezuela",
                 "id": 299
             }
-        }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -116.7109805,
+                    46.3168302
+                ]
+            },
+            "properties": {
+                "label": "Slickpoo, Idaho, United States of America",
+                "detail": "Slickpoo, ID, United States of America",
+                "id": 300
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -116.0232265,
+                    47.7135337
+                ]
+            },
+            "properties": {
+                "label": "Uranus Peak, Idaho, United States of America",
+                "detail": "Uranus Peak, Shoshone County, ID, United States of America",
+                "id": 301
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -123.200034,
+                    48.083898
+                ]
+            },
+            "properties": {
+                "label": "Kitchen Dick Rd, Sequim, Washington, United States of America",
+                "detail": "Kitchen Dick Rd, Sequim, WA, United States of America",
+                "id": 302
+            }
+        },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        8.146650129372116,
+                        47.90303143292456
+                    ]
+                },
+                "properties": {
+                    "label": "Titisee, 79822 Titisee-Neustadt, Germany",
+                    "detail": "Titisee, 79822 Titisee-Neustadt, Germany",
+                    "id": 303
+                }
+            }
     ]
 }
