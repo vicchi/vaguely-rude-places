@@ -1,6 +1,6 @@
 {
     "name": "vaguely-rude-places",
-    "version": "2.1.0",
+    "version": "2.1.1",
     "description": "The Vaguely Rude Places Map",
     "main": "index.html",
     "scripts": {
@@ -41,7 +41,7 @@
         "leaflet.markercluster": "^1.4.1",
         "list.js": "^1.5.0",
         "load-grunt-tasks": "^5.1.0",
-        "node-sass": "^4.12.0",
+        "node-sass": "^5.0.0",
         "typeahead.js": "^0.11.1"
     }
 }
