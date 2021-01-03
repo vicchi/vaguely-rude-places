@@ -1,4 +1,6 @@
 # Vaguely Rude Place Names Map
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fvicchi%2Fvaguely-rude-places.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fvicchi%2Fvaguely-rude-places?ref=badge_shield)
+
 
 ## Gentle Introduction
 
@@ -18,6 +20,9 @@ The source code for the Vaguely Rude Places Map is licensed under the [MIT Licen
 All [site content](http://maps.geotastic.org/rude/) is licensed under the [Creative Commons Attribution ShareAlike](http://creativecommons.org/licenses/by-sa/4.0/) license.
 
 All GeoJSON and ShapeFile downloads are licensed under the [Open Data Commons Attribution](http://opendatacommons.org/licenses/by/summary/) license.
+
+
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fvicchi%2Fvaguely-rude-places.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fvicchi%2Fvaguely-rude-places?ref=badge_large)
 
 ## Credits
 
