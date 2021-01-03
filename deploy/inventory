@@ -1,5 +1,5 @@
 [production]
-geotastic.org
+www.vaguelyrudeplacesmap.com
 
 [production:vars]
 ansible_python_interpreter=/usr/bin/python3
