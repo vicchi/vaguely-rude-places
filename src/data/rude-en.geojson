@@ -4532,20 +4532,50 @@
                 "id": 302
             }
         },
-            {
-                "type": "Feature",
-                "geometry": {
-                    "type": "Point",
-                    "coordinates": [
-                        8.146650129372116,
-                        47.90303143292456
-                    ]
-                },
-                "properties": {
-                    "label": "Titisee, 79822 Titisee-Neustadt, Germany",
-                    "detail": "Titisee, 79822 Titisee-Neustadt, Germany",
-                    "id": 303
-                }
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    8.146650129372116,
+                    47.90303143292456
+                ]
+            },
+            "properties": {
+                "label": "Titisee, 79822 Titisee-Neustadt, Germany",
+                "detail": "Titisee, 79822 Titisee-Neustadt, Germany",
+                "id": 303
             }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    5.454444,
+                    51.658056
+                ]
+            },
+            "properties": {
+                "label": "Fokkershoek, Netherlands",
+                "detail": "Fokkershoek, Netherlands",
+                "id": 304
+            }
+        },
+                {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    5.5391,
+                    52.2333
+                ]
+            },
+            "properties": {
+                "label": "Hell, Netherlands",
+                "detail": "Hell, Netherlands",
+                "id": 305
+            }
+        }
     ]
 }
