@@ -4532,20 +4532,125 @@
                 "id": 302
             }
         },
-            {
-                "type": "Feature",
-                "geometry": {
-                    "type": "Point",
-                    "coordinates": [
-                        8.146650129372116,
-                        47.90303143292456
-                    ]
-                },
-                "properties": {
-                    "label": "Titisee, 79822 Titisee-Neustadt, Germany",
-                    "detail": "Titisee, 79822 Titisee-Neustadt, Germany",
-                    "id": 303
-                }
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    8.146650129372116,
+                    47.90303143292456
+                ]
+            },
+            "properties": {
+                "label": "Titisee, 79822 Titisee-Neustadt, Germany",
+                "detail": "Titisee, 79822 Titisee-Neustadt, Germany",
+                "id": 303
             }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    0.3745929,
+                    43.9564563
+                ]
+            },
+            "properties": {
+                "label": "Condom, Gers, Occitanie, France",
+                "detail": "Condom, 32100 Condom, France",
+                "id": 304
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    3.5328312,
+                    47.5981484
+                ]
+            },
+            "properties": {
+                "label": "Anus, Yonne, Bourgogne-Franche-Comt\u00e9, France",
+                "detail": "Anus, 89560 Fouronnes, France",
+                "id": 305
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    6.6091539,
+                    49.1414564
+                ]
+            },
+            "properties": {
+                "label": "Boucheporn, Moselle, Grand Est, France",
+                "detail": "Boucheporn, 57220 Boucheporn, France",
+                "id": 306
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    3.5074462,
+                    47.7638043
+                ]
+            },
+            "properties": {
+                "label": "Orgy, Yonne, Bourgogne-Franche-Comt\u00e9, France",
+                "detail": "Orgy, 89240 Chevannes, France",
+                "id": 307
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    1.2032212,
+                    42.8656826
+                ]
+            },
+            "properties": {
+                "label": "Seix, Ari\u00e8ge, Occitanie, France",
+                "detail": "Seix, 09140 Seix, France",
+                "id": 308
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    1.9917237,
+                    48.3495575
+                ]
+            },
+            "properties": {
+                "label": "Pussay, Essonne, Ile-de-France, France",
+                "detail": "Pussay, 91740 Pussay, France",
+                "id": 309
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -0.2399800,
+                    44.6129300
+                ]
+            },
+            "properties": {
+                "label": "Semens, Gironde, Nouvelle-Aquitaine, France",
+                "detail": "Semens, 33490 Semens, France",
+                "id": 310
+            }
+        }
     ]
 }
