@@ -1,20 +1,21 @@
 services:
-  vaguely-rude-places:
+  map:
     image: sebp/lighttpd
     networks:
       - vicchi-backend
     expose:
       - 80
-    ports:
-      - 8080:80
     restart: unless-stopped
+    tty: true
     volumes:
         - ./dist/vaguely-rude-places:/var/www/localhost/htdocs
     labels:
       - traefik.enable=true
       - traefik.http.routers.vaguely-rude-places.rule=Host(`${SITE_HOST:?Site host not defined}`)
       - traefik.http.routers.vaguely-rude-places.entrypoints=websecure
-      - traefik.http.routers.vaguely-rude-places.tls.certresolver=reverse-proxy-ssl
+      - traefik.http.routers.vaguely-rude-places.tls.certresolver=reverse-proxy
+      - traefik.http.routers.vaguely-rude-places.tls.options=proxy-default@file
+      - traefik.http.routers.vaguely-rude-places.middlewares=secHeaders@file
 
 networks:
     vicchi-backend:
