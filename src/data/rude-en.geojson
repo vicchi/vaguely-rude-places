@@ -1762,6 +1762,21 @@
             "geometry": {
                 "type": "Point",
                 "coordinates": [
+                    7.1874210,
+                    47.2612841
+                ]
+            },
+            "properties": {
+                "label": "Moron, Switzerland",
+                "detail": "Moron, 2712, Switzerland",
+                "id": 118
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
                     -96.7678039,
                     46.8737648
                 ]
