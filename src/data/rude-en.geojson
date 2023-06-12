@@ -3262,6 +3262,20 @@
             "geometry": {
                 "type": "Point",
                 "coordinates": [
+                    7.5892367,
+                    47.4783333,
+                ]
+            },
+            "properties": {
+                "label": "Butthollenring, Aesch, Switzerland",
+                "detail": "Butthollenring, Aesch, Bezirk Arlesheim, Basel-Landschaft, 4147, Switzerland",
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
                     -77.7373582,
                     37.9635374
                 ]
