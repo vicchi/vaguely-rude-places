@@ -1,5 +1,5 @@
 {
-    "last_id": 303,
+    "last_id": 305,
     "type": "FeatureCollection",
     "features": [
         {
@@ -4532,36 +4532,50 @@
                 "id": 302
             }
         },
-            {
-                "type": "Feature",
-                "geometry": {
-                    "type": "Point",
-                    "coordinates": [
-                        8.146650129372116,
-                        47.90303143292456
-                    ]
-                },
-                "properties": {
-                    "label": "Titisee, 79822 Titisee-Neustadt, Germany",
-                    "detail": "Titisee, 79822 Titisee-Neustadt, Germany",
-                    "id": 303
-                }
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    8.146650129372116,
+                    47.90303143292456
+                ]
             },
-            {
-                "type": "Feature",
-                "geometry": {
-                    "type": "Point",
-                    "coordinates": [
-                        147.82915,
-                        -37.65764
-                    ]
-                },
-                "properties": {
-                    "label": "Mount Little Dick, Victoria, Australia",
-                    "detail": "Mount Little Dick, Victoria, Australia",
-                    "id": 304
-                }
+            "properties": {
+                "label": "Titisee, 79822 Titisee-Neustadt, Germany",
+                "detail": "Titisee, 79822 Titisee-Neustadt, Germany",
+                "id": 303
             }
-
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    147.82915,
+                    -37.65764
+                ]
+            },
+            "properties": {
+                "label": "Mount Little Dick, Victoria, Australia",
+                "detail": "Mount Little Dick, Victoria, Australia",
+                "id": 304
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    7.5892367,
+                    47.4783333
+                ]
+            },
+            "properties": {
+                "label": "Butthollenring, Aesch, Switzerland",
+                "detail": "Butthollenring, Aesch, Bezirk Arlesheim, Basel-Landschaft, 4147, Switzerland",
+                "id": 305
+            }
+        }
     ]
 }
