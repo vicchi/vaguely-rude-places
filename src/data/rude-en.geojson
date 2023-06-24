@@ -1,5 +1,5 @@
 {
-    "last_id": 308,
+    "last_id": 318,
     "type": "FeatureCollection",
     "features": [
         {
@@ -2962,13 +2962,13 @@
             "geometry": {
                 "type": "Point",
                 "coordinates": [
-                    146.633333,
-                    -37.133333
+                    146.743313,
+                    -36.902438
                 ]
             },
             "properties": {
-                "label": "Mount Buggery, Victoria, Australia",
-                "detail": "Mount Buggery, Victoria, Australia",
+                "label": "Mount Buggery, Dandongadale, Victoria, Australia",
+                "detail": "Mount Buggery, Dandongadale, VIC 3737, Australia",
                 "id": 198
             }
         },
@@ -4725,6 +4725,36 @@
                 "label": "Semens, Gironde, Nouvelle-Aquitaine, France",
                 "detail": "Semens, 33490 Semens, France",
                 "id": 315
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    146.641062,
+                    -37.143313
+                ]
+            },
+            "properties": {
+                "label": "Mount Buggery, Wabonga, Victoria, Australia",
+                "detail": "Mount Buggery, Wabonga, VIC 3678, Australia",
+                "id": 316
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    140.173063,
+                    -34.943812
+                ]
+            },
+            "properties": {
+                "label": "Mount Buggery, Sandlewood, South Australia, Australia",
+                "detail": "Mount Buggery, Sandlewood, SA, Australia",
+                "id": 317
             }
         }
     ]
