@@ -11,3 +11,4 @@
 /src/scss/leaflet.locatecontrol
 /src/scss/leaflet.markercluster
 /vendor/
+.env
