@@ -4756,6 +4756,21 @@
                 "detail": "Mount Buggery, Sandlewood, SA, Australia",
                 "id": 317
             }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -102.78978239074691,
+                    46.8961783639246
+                ]
+            },
+            "properties": {
+                "label": "Dickinson, North Dakota, USA",
+                "detail": "Dickinson, ND, USA",
+                "id": 318
+            }
         }
     ]
 }
