@@ -4546,6 +4546,22 @@
                     "detail": "Titisee, 79822 Titisee-Neustadt, Germany",
                     "id": 303
                 }
+            },
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [
+                        147.82915,
+                        -37.65764
+                    ]
+                },
+                "properties": {
+                    "label": "Mount Little Dick, Victoria, Australia",
+                    "detail": "Mount Little Dick, Victoria, Australia",
+                    "id": 304
+                }
             }
+
     ]
 }
