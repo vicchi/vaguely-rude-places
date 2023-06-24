@@ -1,5 +1,5 @@
 {
-    "last_id": 305,
+    "last_id": 306,
     "type": "FeatureCollection",
     "features": [
         {
@@ -4575,6 +4575,21 @@
                 "label": "Butthollenring, Aesch, Switzerland",
                 "detail": "Butthollenring, Aesch, Bezirk Arlesheim, Basel-Landschaft, 4147, Switzerland",
                 "id": 305
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    7.1874210,
+                    47.2612841
+                ]
+            },
+            "properties": {
+                "label": "Moron, Switzerland",
+                "detail": "Moron, 2712, Switzerland",
+                "id": 306
             }
         }
     ]
