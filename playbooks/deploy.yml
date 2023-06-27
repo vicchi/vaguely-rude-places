@@ -1,0 +1,5 @@
+---
+- name: Deploy site
+  hosts: all
+  roles:
+    - deploy

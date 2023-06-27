@@ -2,21 +2,21 @@ services:
   map:
     image: sebp/lighttpd
     networks:
-      - vicchi-backend
+      - {{ traefik_network }}
     expose:
       - 80
     restart: unless-stopped
     tty: true
     volumes:
-        - ./dist/vaguely-rude-places:/var/www/localhost/htdocs
+        - {{ deploy_root }}/{{ site_bare }}/vaguely-rude-places:/var/www/localhost/htdocs
     labels:
       - traefik.enable=true
-      - traefik.http.routers.vaguely-rude-places.rule=Host(`${SITE_HOST:?Site host not defined}`)
+      - traefik.http.routers.vaguely-rude-places.rule=Host(`{{ site_fqdn }}`) || Host(`{{ site_bare }}`)
       - traefik.http.routers.vaguely-rude-places.entrypoints=websecure
       - traefik.http.routers.vaguely-rude-places.tls.certresolver=reverse-proxy
       - traefik.http.routers.vaguely-rude-places.tls.options=proxy-default@file
       - traefik.http.routers.vaguely-rude-places.middlewares=secHeaders@file
 
 networks:
-    vicchi-backend:
+    {{ traefik_network }}:
       external: true

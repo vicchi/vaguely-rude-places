@@ -1,0 +1,39 @@
+---
+# Deployment tasks
+
+- name: Create deployment directory
+  become: true
+  ansible.builtin.file:
+    path: "{{ deploy_root }}/{{ site_bare }}"
+    state: directory
+    owner: "{{ deploy_user }}"
+    group: "{{ deploy_group }}"
+    mode: "700"
+
+- name: Install templated docker-compose.yml
+  ansible.builtin.template:
+    src: docker-compose.yml.j2
+    dest: "{{ deploy_root }}/{{ site_bare }}/docker-compose.yml"
+    owner: "{{ deploy_user }}"
+    group: "{{ deploy_group }}"
+    mode: "700"
+
+- name: Install site's public directory
+  ansible.posix.synchronize:
+    archive: true
+    compress: true
+    delete: true
+    dest: "{{ deploy_root }}/{{ site_bare }}"
+    partial: true
+    recursive: true
+    src: ../../../../dist/vaguely-rude-places
+
+- name: Setup docker compose
+  ansible.builtin.pip:
+    name: docker-compose
+
+- name: Bring up site container
+  community.general.docker_compose:
+    project_name: "{{ compose_project }}"
+    project_src: "{{ deploy_root }}/{{ site_bare }}"
+    state: present
