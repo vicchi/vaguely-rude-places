@@ -27,11 +27,11 @@ var permaLink = {
 	lang: 'en'
 };
 
-$(window).resize(function() {
+$(window).resize(function () {
 	sizeLayerControl();
 });
 
-$(document).on('click', '.feature-row', function(e) {
+$(document).on('click', '.feature-row', function (e) {
 	var id = $(this).data('id');
 	var lang = $(this).data('lang');
 	sidebarClick(id, lang);
@@ -73,14 +73,14 @@ markerClusters = new L.MarkerClusterGroup({
 
 englishLayer = L.geoJson(null);
 english = L.geoJson(null, {
-	pointToLayer: function(feature, latlng) {
+	pointToLayer: function (feature, latlng) {
 		var marker = new L.Marker(latlng, { icon: icons.en });
 		marker.id = feature.properties.id;
 		coords.push(latlng);
 		markers['en'][feature.properties.id] = marker;
 		return marker;
 	},
-	onEachFeature: function(feature, layer) {
+	onEachFeature: function (feature, layer) {
 		if (feature.properties && feature.properties.label) {
 			var permalink = window.location.pathname + '?id=' + feature.properties.id + '&lang=en';
 			var popup = '<div class="rude-place-popup">';
@@ -106,20 +106,20 @@ english = L.geoJson(null, {
 	}
 });
 
-$.getJSON('assets/data/geojson/rude-en.geojson', function(data) {
+$.getJSON('assets/data/geojson/rude-en.geojson', function (data) {
 	english.addData(data);
 	map.addLayer(englishLayer);
 });
 
 italianLayer = L.geoJson(null);
 italian = L.geoJson(null, {
-	pointToLayer: function(feature, latlng) {
+	pointToLayer: function (feature, latlng) {
 		var marker = new L.Marker(latlng, { icon: icons.it });
 		coords.push(latlng);
 		markers['it'][feature.properties.id] = marker;
 		return marker;
 	},
-	onEachFeature: function(feature, layer) {
+	onEachFeature: function (feature, layer) {
 		if (feature.properties && feature.properties.label) {
 			var permalink = window.location.pathname + '?id=' + feature.properties.id + '&lang=it';
 			var popup = '<div class="rude-place-popup">';
@@ -145,17 +145,17 @@ italian = L.geoJson(null, {
 	}
 });
 
-$.getJSON('assets/data/geojson/rude-it.geojson', function(data) {
+$.getJSON('assets/data/geojson/rude-it.geojson', function (data) {
 	italian.addData(data);
 });
 
-$(document).one('ajaxStop', function() {
+$(document).one('ajaxStop', function () {
 	$('#loading').hide();
 	rebuildFeatureList(englishLabels);
 
 	var englishBH = new Bloodhound({
 		name: 'English',
-		datumTokenizer: function(d) {
+		datumTokenizer: function (d) {
 			return Bloodhound.tokenizers.whitespace(d.label);
 		},
 		queryTokenizer: Bloodhound.tokenizers.whitespace,
@@ -165,7 +165,7 @@ $(document).one('ajaxStop', function() {
 
 	var italianBH = new Bloodhound({
 		name: 'Italian',
-		datumTokenizer: function(d) {
+		datumTokenizer: function (d) {
 			return Bloodhound.tokenizers.whitespace(d.label);
 		},
 		queryTokenizer: Bloodhound.tokenizers.whitespace,
@@ -259,27 +259,27 @@ $(document).one('ajaxStop', function() {
 	}
 });
 
-$("#list-btn").click(function() {
+$("#list-btn").click(function () {
 	$('#sidebar').toggle();
 	map.invalidateSize();
 	return false;
 });
 
-$('#credits-btn').click(function() {
+$('#credits-btn').click(function () {
 	$('#attributionModal').modal('show');
 	return false;
 });
 
-$("#nav-btn").click(function() {
+$("#nav-btn").click(function () {
 	$(".navbar-collapse").collapse("toggle");
 });
 
-$("#sidebar-toggle-btn").click(function() {
+$("#sidebar-toggle-btn").click(function () {
 	$("#sidebar").toggle();
 	map.invalidateSize();
 	return false;
 });
-$("#sidebar-hide-btn").click(function() {
+$("#sidebar-hide-btn").click(function () {
 	$('#sidebar').hide();
 	map.invalidateSize();
 });
@@ -296,13 +296,13 @@ $("#searchbox").keypress(function (e) {
 	}
 });
 
-$("#about-btn").click(function() {
+$("#about-btn").click(function () {
 	$("#aboutModal").modal("show");
 	$(".navbar-collapse.in").collapse("hide");
 	return false;
 });
 
-$("#full-extent-btn").click(function() {
+$("#full-extent-btn").click(function () {
 	var layer;
 	if (map.hasLayer(englishLayer)) {
 		layer = english;
@@ -330,7 +330,7 @@ function syncSidebar() {
 	/* Empty sidebar features */
 	$("#feature-list tbody").empty();
 	if (map.hasLayer(englishLayer)) {
-		$.each(englishLabels, function(index, obj) {
+		$.each(englishLabels, function (index, obj) {
 			var stamp = obj.stamp;
 			var feature = obj.feature;
 			$("#feature-list tbody").append('<tr class="feature-row" data-id="' + obj.id + '" data-permalink="' + feature.properties.id + '" data-lang="en"><td style="vertical-align: middle;"><img width="16" height="18" src="' + iconURLs.en + '"></td><td class="feature-name">' + feature.properties.label + '</td><td style="vertical-align: middle;"><i class="fa fa-chevron-right pull-right"></i></td></tr>');
@@ -339,7 +339,7 @@ function syncSidebar() {
 	}
 
 	if (map.hasLayer(italianLayer)) {
-		$.each(italianLabels, function(index, obj) {
+		$.each(italianLabels, function (index, obj) {
 			var stamp = obj.stamp;
 			var feature = obj.feature;
 			$("#feature-list tbody").append('<tr class="feature-row" id="' + stamp + '" permalink="' + feature.properties.id + '" lang="it" lat="' + feature.geometry.coordinates[1] + '" lng="' + feature.geometry.coordinates[0] + '"><td style="vertical-align: middle;"><img width="16" height="18" src="' + iconURLs.it + '"></td><td class="feature-name">' + feature.properties.label + '</td><td style="vertical-align: middle;"><i class="fa fa-chevron-right pull-right"></i></td></tr>');
@@ -349,9 +349,9 @@ function syncSidebar() {
 }
 
 function sortLabels(labels) {
-	labels = $.grep(labels,function(n){ return(n); });
+	labels = $.grep(labels, function (n) { return (n); });
 
-	labels.sort(function(a, b) {
+	labels.sort(function (a, b) {
 		if (a.feature.properties.label < b.feature.properties.label) {
 			return -1;
 		}
@@ -380,20 +380,20 @@ function sizeLayerControl() {
 }
 
 // Map Base Layers
-toner = L.tileLayer.provider('Stamen.Toner');
-tonerLite = L.tileLayer.provider('Stamen.TonerLite');
+toner = L.tileLayer.provider('Stadia.StamenToner');
+tonerLite = L.tileLayer.provider('Stadia.StamenTonerLite');
 osmMapnik = L.tileLayer.provider('OpenStreetMap.Mapnik');
 
 map = L.map('map', {
 	zoom: 3,
-	center: [0,0],
+	center: [0, 0],
 	layers: [tonerLite, markerClusters],
 	zoomControl: false,
 	attributionControl: false
 });
 
 /* Layer control listeners that allow for a single markerClusters layer */
-map.on("overlayadd", function(e) {
+map.on("overlayadd", function (e) {
 	if (e.layer === englishLayer) {
 		markerClusters.addLayer(english);
 		syncSidebar();
@@ -404,7 +404,7 @@ map.on("overlayadd", function(e) {
 	}
 });
 
-map.on("overlayremove", function(e) {
+map.on("overlayremove", function (e) {
 	if (e.layer === englishLayer) {
 		markerClusters.removeLayer(english);
 		syncSidebar();
@@ -440,7 +440,7 @@ var layerControl = L.control.groupedLayers(baseLayers, groupedOverlays, {
 }).addTo(map);
 
 function updateAttribution(e) {
-	$.each(map._layers, function(index, layer) {
+	$.each(map._layers, function (index, layer) {
 		if (layer.getAttribution) {
 			$('#attribution').html(layer.getAttribution());
 		}
@@ -453,7 +453,7 @@ map.on('layerremove', updateAttribution);
 var attributionControl = L.control({
 	position: 'bottomright'
 });
-attributionControl.onAdd = function(map) {
+attributionControl.onAdd = function (map) {
 	var div = L.DomUtil.create('div', 'leaflet-control-attribution');
 	div.innerHTML = '<span class="hidden-hs">Hosting courtesy of <a href="https://opencagedata.com/" target="_blank">OpenCage</a> | This is a thing by <a href="http://www.garygale.com">Gary Gale</a> | </span><a href="#" onclick="$(\'#attributionModal\').modal(\'show\'); return false;">Credits &amp; Attribution</a>';
 	return div;
@@ -503,7 +503,7 @@ function parsePermaLink(parser) {
 
 	if (url !== '') {
 		nvps = url.split('&');
-		$.each(nvps, function(index, value) {
+		$.each(nvps, function (index, value) {
 			var nvp = value.split('=');
 			parser(nvp[0], nvp[1]);
 		});
@@ -524,11 +524,11 @@ function paramParser(key, value) {
 }
 
 function zoomAndPopup(marker) {
-	markerClusters.zoomToShowLayer(marker, function() {
+	markerClusters.zoomToShowLayer(marker, function () {
 		marker.fire('click');
 	});
 }
 
-$(document).ready(function() {
+$(document).ready(function () {
 	parsePermaLink(paramParser);
 });
