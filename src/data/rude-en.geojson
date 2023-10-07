@@ -4772,5 +4772,20 @@
                 "id": 318
             }
         }
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    43.9070244,
+                    -78.6105937
+                ]
+            },
+            "properties": {
+                "label": "Cobbledick Road, Clarington, Ontario, Canada",
+                "detail": "Cobbledick Rd, ON, CA",
+                "id": 319
+            }
+        }
     ]
 }
