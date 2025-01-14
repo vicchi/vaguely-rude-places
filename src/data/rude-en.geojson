@@ -1782,7 +1782,7 @@
                 ]
             },
             "properties": {
-                "label": "Muff, Northern Ireland",
+                "label": "Muff, Donegal, Ireland",
                 "detail": "Muff, Co. Donegal, Ireland",
                 "id": 119
             }
@@ -1800,21 +1800,6 @@
                 "label": "Muff, Armstrong, Pennsylvania, United States",
                 "detail": "Muff, Wayne, PA 16222, USA",
                 "id": 120
-            }
-        },
-        {
-            "type": "Feature",
-            "geometry": {
-                "type": "Point",
-                "coordinates": [
-                    -7.2689498,
-                    55.0680564
-                ]
-            },
-            "properties": {
-                "label": "Muff, Donegal, Ireland",
-                "detail": "Muff, Co. Donegal, Ireland",
-                "id": 121
             }
         },
         {
@@ -4771,7 +4756,7 @@
                 "detail": "Dickinson, ND, USA",
                 "id": 318
             }
-        }
+        },
         {
             "type": "Feature",
             "geometry": {
