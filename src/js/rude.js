@@ -382,6 +382,8 @@ function sizeLayerControl() {
 // Map Base Layers
 voyager = L.tileLayer.provider('CartoDB.Voyager');
 positron = L.tileLayer.provider('CartoDB.Positron');
+toner = L.tileLayer.provider('Stadia.StamenToner');
+tonerLite = L.tileLayer.provider('Stadia.StamenTonerLite');
 osmMapnik = L.tileLayer.provider('OpenStreetMap.Mapnik');
 
 map = L.map('map', {
@@ -424,6 +426,8 @@ if (document.body.clientWidth <= 767) {
 var baseLayers = {
 	"Positron": positron,
 	"Voyager": voyager,
+	"Toner Lite": tonerLite,
+	"Toner": toner,
 	"OSM": osmMapnik
 };
 
