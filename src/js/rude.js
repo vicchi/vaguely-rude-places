@@ -1,8 +1,8 @@
 /* jshint -W069 */
 
 var map;
-var toner;
-var tonerLite;
+var voyager;
+var positron;
 var osmMapnik;
 var markers = {
 	'en': [],
@@ -380,14 +380,14 @@ function sizeLayerControl() {
 }
 
 // Map Base Layers
-toner = L.tileLayer.provider('Stadia.StamenToner');
-tonerLite = L.tileLayer.provider('Stadia.StamenTonerLite');
+voyager = L.tileLayer.provider('CartoDB.Voyager');
+positron = L.tileLayer.provider('CartoDB.Positron');
 osmMapnik = L.tileLayer.provider('OpenStreetMap.Mapnik');
 
 map = L.map('map', {
 	zoom: 3,
 	center: [0, 0],
-	layers: [tonerLite, markerClusters],
+	layers: [positron, markerClusters],
 	zoomControl: false,
 	attributionControl: false
 });
@@ -422,8 +422,8 @@ if (document.body.clientWidth <= 767) {
 }
 
 var baseLayers = {
-	"Toner Lite": tonerLite,
-	"Toner": toner,
+	"Positron": positron,
+	"Voyager": voyager,
 	"OSM": osmMapnik
 };
 
