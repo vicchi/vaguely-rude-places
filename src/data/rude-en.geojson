@@ -1,5 +1,5 @@
 {
-    "last_id": 318,
+    "last_id": 322,
     "type": "FeatureCollection",
     "features": [
         {
@@ -4770,6 +4770,66 @@
                 "label": "Cobbledick Road, Clarington, Ontario, Canada",
                 "detail": "Cobbledick Rd, ON, CA",
                 "id": 319
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    2.831944,
+                    50.428889
+                ]
+            },
+            "properties": {
+                "label": "Lens, France",
+                "detail": "Lens, France",
+                "id": 320
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    1.217784,
+                    43.574535,
+                ]
+            },
+            "properties": {
+                "label": "Moncuq, Leguevin, France",
+                "detail": "Moncuq, Leguevin, France",
+                "id": 321
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    2.126927,
+                    49.863333, 
+                ]
+            },
+            "properties": {
+                "label": "Pissy, France",
+                "detail": "Pissy, France",
+                "id": 322
+            }
+        },
+        {
+            "type": "Feature",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    0.996944,
+                    49.529167,
+                ]
+            },
+            "properties": {
+                "label": "Pissy-Pôville, Normandie, France",
+                "detail": "Pissy-Pôville, France",
+                "id": 323
             }
         }
     ]
